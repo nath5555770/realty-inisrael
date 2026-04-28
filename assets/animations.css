@@ -1,0 +1,403 @@
+/* ==========================================================================
+   SHAHAR LEVI REAL ESTATE — Animation System (niveau premium)
+   ========================================================================== */
+
+/* === LOADING SCREEN === */
+.page-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--teal, #0e2722);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.3s,
+              transform 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.3s;
+}
+.page-loader.is-hidden {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.page-loader-logo {
+  text-align: center;
+  color: var(--gold, #c4a877);
+  opacity: 0;
+  animation: loaderFade 0.6s cubic-bezier(0.2, 0.85, 0.2, 1) 0.1s forwards;
+}
+.page-loader-logo .ll-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  line-height: 1;
+}
+.page-loader-logo .ll-desc {
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+  letter-spacing: 0.4em;
+  font-size: 0.4em;
+  margin-top: 0.7em;
+  color: var(--gold-deep, #a78c5c);
+}
+.page-loader-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--gold, #c4a877);
+  width: 0%;
+  animation: loaderBar 1.1s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+@keyframes loaderFade {
+  to { opacity: 1; }
+}
+@keyframes loaderBar {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* === CUSTOM CURSOR === */
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+.cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--gold, #c4a877);
+  border-radius: 50%;
+  transition: width 0.3s, height 0.3s, background 0.3s;
+}
+.cursor-ring {
+  width: 38px; height: 38px;
+  border: 1px solid var(--gold, #c4a877);
+  border-radius: 50%;
+  transition: width 0.4s cubic-bezier(0.2, 0.85, 0.2, 1),
+              height 0.4s cubic-bezier(0.2, 0.85, 0.2, 1),
+              border-color 0.3s,
+              background 0.3s,
+              transform 0.18s cubic-bezier(0.2, 0.85, 0.2, 1);
+}
+.cursor-link .cursor-ring {
+  width: 60px; height: 60px;
+  background: rgba(196, 168, 119, 0.12);
+}
+.cursor-link .cursor-dot {
+  width: 0; height: 0;
+}
+@media (max-width: 1023px), (hover: none) {
+  .cursor-dot, .cursor-ring { display: none; }
+}
+
+/* === SCROLL REVEAL === */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.2s cubic-bezier(0.2, 0.85, 0.2, 1),
+              transform 1.2s cubic-bezier(0.2, 0.85, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-reveal="left"] { transform: translateX(-40px); }
+[data-reveal="left"].is-revealed { transform: translateX(0); }
+[data-reveal="right"] { transform: translateX(40px); }
+[data-reveal="right"].is-revealed { transform: translateX(0); }
+[data-reveal="scale"] { transform: scale(0.95); }
+[data-reveal="scale"].is-revealed { transform: scale(1); }
+[data-reveal="fade"] { transform: none; }
+
+/* === SPLIT TEXT REVEAL === */
+.split-line {
+  display: block;
+  overflow: hidden;
+}
+.split-line .split-inner {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 1.4s cubic-bezier(0.2, 0.85, 0.2, 1);
+  transition-delay: var(--split-delay, 0s);
+}
+.split-line.is-revealed .split-inner {
+  transform: translateY(0);
+}
+
+/* === MAGNETIC BUTTONS === */
+.magnetic {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.2, 0.85, 0.2, 1);
+  will-change: transform;
+}
+
+/* === IMAGE PARALLAX === */
+[data-parallax] {
+  will-change: transform;
+}
+
+/* === PAGE TRANSITION === */
+.page-transition {
+  position: fixed;
+  inset: 0;
+  background: var(--teal, #0e2722);
+  z-index: 9997;
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+  pointer-events: none;
+}
+.page-transition.is-active {
+  transform: translateY(0);
+}
+
+/* === MARQUEE === */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  animation: marquee 60s linear infinite;
+  width: max-content;
+}
+
+/* === IMAGE HOVER ZOOM === */
+.zoom-on-hover {
+  overflow: hidden;
+  position: relative;
+}
+.zoom-on-hover img {
+  transition: transform 1.6s cubic-bezier(0.2, 0.85, 0.2, 1),
+              filter 0.8s ease;
+  will-change: transform;
+}
+.zoom-on-hover:hover img {
+  transform: scale(1.06);
+}
+
+/* === STAGGERED LIST === */
+.stagger-list > * {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.stagger-list.is-revealed > * {
+  animation: staggerIn 1.2s cubic-bezier(0.2, 0.85, 0.2, 1) forwards;
+}
+.stagger-list.is-revealed > *:nth-child(1)  { animation-delay: 0.05s; }
+.stagger-list.is-revealed > *:nth-child(2)  { animation-delay: 0.1s; }
+.stagger-list.is-revealed > *:nth-child(3)  { animation-delay: 0.15s; }
+.stagger-list.is-revealed > *:nth-child(4)  { animation-delay: 0.2s; }
+.stagger-list.is-revealed > *:nth-child(5)  { animation-delay: 0.25s; }
+.stagger-list.is-revealed > *:nth-child(6)  { animation-delay: 0.3s; }
+.stagger-list.is-revealed > *:nth-child(7)  { animation-delay: 0.35s; }
+.stagger-list.is-revealed > *:nth-child(8)  { animation-delay: 0.4s; }
+.stagger-list.is-revealed > *:nth-child(9)  { animation-delay: 0.45s; }
+@keyframes staggerIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === HOVER LINK UNDERLINE GLIDE === */
+.glide-link {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+.glide-link::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 1px;
+  background: currentColor;
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
+}
+.glide-link:hover::after {
+  transform: scaleX(0);
+}
+.glide-link:hover::before {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 1px;
+  background: currentColor;
+  transform: scaleX(1);
+  transform-origin: left;
+  animation: glideRedraw 0.6s 0.3s cubic-bezier(0.7, 0, 0.3, 1);
+}
+@keyframes glideRedraw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* === COUNTER === */
+[data-count] { display: inline-block; }
+
+/* === SMOOTH FADE FOR SECTIONS === */
+section[data-fade] {
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+section[data-fade].is-revealed {
+  opacity: 1;
+}
+
+/* === SMOOTH SCROLL HTML === */
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [data-reveal], .split-line .split-inner {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .page-loader { display: none; }
+  .cursor-dot, .cursor-ring { display: none; }
+}
+
+/* === COOKIE BANNER === */
+.cookie-banner {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  z-index: 9996;
+  background: var(--teal, #0e2722);
+  color: var(--gold-pale, #e0c89a);
+  border: 1px solid rgba(196, 168, 119, 0.3);
+  padding: 1.5rem 1.75rem;
+  max-width: 720px;
+  margin: 0 auto;
+  transform: translateY(150%);
+  transition: transform 0.7s cubic-bezier(0.7, 0, 0.3, 1);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+.cookie-banner.is-visible { transform: translateY(0); }
+.cookie-banner-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+@media (min-width: 768px) {
+  .cookie-banner-inner { flex-direction: row; align-items: center; gap: 2rem; }
+}
+.cookie-banner-text strong {
+  font-family: 'Cinzel', serif;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--gold, #c4a877);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.cookie-banner-text p {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgba(244, 237, 224, 0.85);
+}
+.cookie-banner-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+.cookie-btn {
+  padding: 0.7rem 1.4rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid var(--gold, #c4a877);
+  transition: all 0.4s ease;
+}
+.cookie-btn-primary {
+  background: var(--gold, #c4a877);
+  color: var(--teal, #0e2722);
+}
+.cookie-btn-primary:hover {
+  background: var(--gold-deep, #a78c5c);
+  letter-spacing: 0.32em;
+}
+.cookie-btn-secondary {
+  background: transparent;
+  color: var(--gold-pale, #e0c89a);
+}
+.cookie-btn-secondary:hover {
+  background: rgba(196, 168, 119, 0.1);
+}
+
+/* === SCROLL PROGRESS BAR === */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--gold, #c4a877);
+  width: 0%;
+  z-index: 9995;
+  transition: width 0.05s linear;
+}
+
+/* === SECTION INDEX (LIVE TABLE OF CONTENTS) === */
+.section-index {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+@media (min-width: 1280px) {
+  .section-index.is-active { display: flex; }
+}
+.section-index a {
+  pointer-events: auto;
+  width: 32px;
+  height: 6px;
+  background: rgba(20, 17, 13, 0.2);
+  transition: background 0.4s, width 0.4s, transform 0.4s;
+  cursor: pointer;
+  position: relative;
+}
+.section-index a:hover, .section-index a.is-current {
+  background: var(--gold-deep, #a78c5c);
+  width: 48px;
+}
+
+/* === IMAGE REVEAL CLIP === */
+.img-clip {
+  overflow: hidden;
+  position: relative;
+}
+.img-clip img {
+  transform: scale(1.15);
+  transition: transform 1.6s cubic-bezier(0.7, 0, 0.3, 1) 0.1s;
+}
+.img-clip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--teal, #0e2722);
+  transform-origin: bottom;
+  transition: transform 1.4s cubic-bezier(0.7, 0, 0.3, 1);
+}
+.img-clip.is-revealed::after {
+  transform: scaleY(0);
+  transform-origin: top;
+}
+.img-clip.is-revealed img {
+  transform: scale(1);
+}

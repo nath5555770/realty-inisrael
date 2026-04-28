@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://myzehut01-bot.github.io/shahar-levi-real-estate/sitemap.xml

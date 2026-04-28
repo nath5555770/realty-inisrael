@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page introuvable — SHAHAR LEVI Real Estate</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<meta name="theme-color" content="#0e2722">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/animations.css">
+<style>
+  :root { --paper:#f4ede0; --teal:#0e2722; --teal-deep:#061814; --gold:#c4a877; --gold-deep:#a78c5c; --gold-pale:#e0c89a; --ink:#14110d; --ink-soft:#4a3f33; --muted:#8a7d6a; --line:rgba(20,17,13,0.13); --line-gold:rgba(196,168,119,0.3); }
+  * { margin:0; padding:0; box-sizing: border-box; }
+  body { background: var(--teal); color: var(--gold-pale); font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  .cinzel { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.16em; }
+  .display { font-family: 'Playfair Display', serif; font-weight: 400; letter-spacing: -0.022em; }
+  .display-i { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; }
+  .brand-logo .name { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.18em; line-height: 1; }
+  .brand-logo .desc { font-family: 'Cinzel', serif; font-weight: 400; letter-spacing: 0.4em; margin-top: 0.5em; font-size: 0.4em; }
+  .btn-gold { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; background: var(--gold); color: var(--teal); font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; transition: all 0.6s; }
+  .btn-gold:hover { background: var(--gold-deep); color: var(--paper); letter-spacing: 0.4em; }
+  .btn-line { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; border: 1px solid var(--gold); color: var(--gold); font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; transition: all 0.6s; background: transparent; }
+  .btn-line:hover { background: var(--gold); color: var(--teal); letter-spacing: 0.4em; }
+  body::before { content:''; position: fixed; inset: 0; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"); opacity: 0.05; mix-blend-mode: overlay; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  .float { animation: float 4s ease-in-out infinite; }
+  @keyframes pulse-gold { 0%,100% { opacity: 0.3; } 50% { opacity: 0.6; } }
+  .pulse-gold { animation: pulse-gold 3s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<header class="px-6 md:px-10 py-6 flex justify-center border-b border-[var(--line-gold)]">
+  <a href="index.html" class="brand-logo text-center">
+    <div class="name text-2xl" style="color: var(--gold)">SHAHAR LEVI</div>
+    <div class="desc text-[10px]" style="color: var(--gold-deep)">REAL ESTATE</div>
+  </a>
+</header>
+
+<main class="flex-1 flex items-center justify-center px-6 py-20 relative overflow-hidden">
+
+  <!-- Decorative giant 404 -->
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none pulse-gold" style="font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(20rem, 60vw, 50rem); color: var(--gold); opacity: 0.04; line-height: 1; user-select: none">404</div>
+
+  <div class="relative max-w-2xl text-center">
+
+    <div class="cinzel text-[11px] tracking-[0.5em] text-[var(--gold)] mb-6">— ERREUR 404 · PAGE INTROUVABLE</div>
+
+    <div class="float mb-8">
+      <div class="display" style="font-size: clamp(8rem, 20vw, 14rem); line-height: 1; color: var(--gold)">
+        <span class="display-i">4</span><span>0</span><span class="display-i">4</span>
+      </div>
+    </div>
+
+    <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; color: var(--paper)">
+      Cette pièce <em class="display-i text-[var(--gold)]">n'est plus</em><br>au portefeuille.
+    </h1>
+
+    <p class="text-lg mt-8 leading-relaxed text-[var(--gold-pale)]/80 max-w-md mx-auto font-light">
+      Comme certains biens off-market, cette page a peut-être été retirée de la circulation. Reprenons la visite depuis le début.
+    </p>
+
+    <div class="mt-12 flex flex-wrap justify-center gap-4">
+      <a href="index.html" class="btn-gold">Retour à l'accueil →</a>
+      <a href="portefeuille.html" class="btn-line">Voir le portefeuille</a>
+    </div>
+
+    <div class="mt-16 pt-12 border-t border-[var(--line-gold)] text-sm text-[var(--gold-pale)]/60">
+      <p>Si le problème persiste, contactez-nous : <a href="mailto:nathalie@shaharlevi.co.il" class="text-[var(--gold)] underline-offset-4 hover:underline">nathalie@shaharlevi.co.il</a></p>
+    </div>
+
+  </div>
+</main>
+
+<footer class="px-6 py-6 text-center text-xs cinzel tracking-[0.2em] text-[var(--gold-pale)]/40 border-t border-[var(--line-gold)]">
+  © MMXXVI SHAHAR LEVI REAL ESTATE · MOSSI'A #4218
+</footer>
+
+</body>
+</html>
