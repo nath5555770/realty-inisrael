@@ -11,10 +11,17 @@
   function initLoader() {
     const loader = document.querySelector('.page-loader');
     if (!loader) return;
+    // First visit only — subsequent navigations skip the loader
+    const seen = sessionStorage.getItem('sl-visited');
+    if (seen) {
+      loader.style.display = 'none';
+      return;
+    }
+    sessionStorage.setItem('sl-visited', '1');
     window.addEventListener('load', () => {
-      setTimeout(() => loader.classList.add('is-hidden'), 600);
+      setTimeout(() => loader.classList.add('is-hidden'), 200);
     });
-    setTimeout(() => loader.classList.add('is-hidden'), 1800);
+    setTimeout(() => loader.classList.add('is-hidden'), 1200);
   }
 
   /* === CUSTOM CURSOR === */
@@ -272,7 +279,7 @@
 
   function startup() {
     initLoader();
-    initCursor();
+    // initCursor();           // disabled — user feedback: not preferred
     splitText();
     initReveal();
     initCounters();
@@ -281,8 +288,7 @@
     initSmoothAnchors();
     initCookieBanner();
     initMobileMenu();
-    // Page transitions last to avoid blocking other init
-    setTimeout(initPageTransitions, 200);
+    // initPageTransitions();  // disabled — user feedback: hurts fluidity
   }
 
 })();
