@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHAHAR LEVI REAL ESTATE · Choisir un modèle de site</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0e2722;
+    --teal-deep: #061814;
+    --paper: #f3ead4;
+    --paper-light: #f9f1dd;
+    --gold: #c4a877;
+    --gold-deep: #a78c5c;
+    --gold-pale: #e0c89a;
+    --line-gold: rgba(196, 168, 119, 0.25);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--teal);
+    color: var(--gold-pale);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.005em;
+  }
+  .cinzel { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.16em; }
+  .display { font-family: 'Cormorant', serif; font-weight: 300; }
+  .display-i { font-family: 'Cormorant', serif; font-style: italic; font-weight: 300; }
+
+  ::selection { background: var(--gold); color: var(--teal); }
+
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 100; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.05; mix-blend-mode: overlay;
+  }
+
+  @keyframes fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { opacity: 0; animation: fade-up 1.2s cubic-bezier(0.2, 0.85, 0.2, 1) forwards; }
+
+  .brand-logo .name { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.18em; line-height: 1; }
+  .brand-logo .desc { font-family: 'Cinzel', serif; font-weight: 400; letter-spacing: 0.4em; margin-top: 0.5em; font-size: 0.4em; }
+
+  /* Model card — uniform, simple, clear */
+  .model-card {
+    background: var(--paper);
+    color: var(--teal);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.2, 0.85, 0.2, 1);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .model-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.5);
+  }
+  .model-card .preview {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+  .model-card .preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.2, 0.85, 0.2, 1);
+  }
+  .model-card:hover .preview img { transform: scale(1.06); }
+  .model-card .preview .badge-num {
+    position: absolute;
+    top: 1rem; left: 1rem;
+    background: var(--teal);
+    color: var(--gold);
+    padding: 0.35rem 0.85rem;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+  .model-card .body { padding: 1.75rem 1.75rem 2rem; flex: 1; display: flex; flex-direction: column; }
+  .model-card .name {
+    font-family: 'Cormorant', serif;
+    font-weight: 400;
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .model-card .name em { font-style: italic; color: var(--gold-deep); }
+  .model-card .desc {
+    font-size: 0.95rem;
+    color: rgba(14, 39, 34, 0.7);
+    line-height: 1.55;
+    margin-top: 0.85rem;
+    flex: 1;
+  }
+  .model-card .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+  .model-card .meta span {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid rgba(14, 39, 34, 0.18);
+    color: rgba(14, 39, 34, 0.7);
+    border-radius: 2px;
+  }
+  .model-card .footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(14, 39, 34, 0.13);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-weight: 500;
+  }
+  .model-card .footer .arrow { transition: transform 0.4s; }
+  .model-card:hover .footer .arrow { transform: translateX(6px); color: var(--gold-deep); }
+
+  .label-gold { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- Top thin bar -->
+<div class="border-b border-[var(--line-gold)] px-6 md:px-12 py-3 flex items-center justify-between text-xs cinzel">
+  <span class="text-[var(--gold)]">— PRÉSENTATION CLIENTE</span>
+  <span class="text-[var(--gold)] hidden md:inline">7 MODÈLES À CHOISIR · MMXXVI</span>
+  <span class="text-[var(--gold)]">FR · EN · HE</span>
+</div>
+
+<!-- Header with brand -->
+<header class="border-b border-[var(--line-gold)] py-12 md:py-16">
+  <div class="max-w-3xl mx-auto px-6 text-center">
+    <div class="cinzel text-[10px] tracking-[0.5em] text-[var(--gold)]/70 mb-3">— PRÉPARÉ POUR NATHALIE HAIK —</div>
+    <div class="brand-logo">
+      <div class="name" style="font-size: clamp(2.25rem, 7vw, 5.5rem); color: var(--gold)">SHAHAR LEVI</div>
+      <div class="desc text-[10px] md:text-sm" style="color: var(--gold-deep)">REAL ESTATE</div>
+    </div>
+    <div class="mt-8 mx-auto h-px bg-[var(--line-gold)]" style="max-width: 200px"></div>
+    <p class="display-i text-xl md:text-2xl mt-8 text-[var(--gold-pale)]/85">
+      Sept directions visuelles. Choisissez celle qui parle à votre clientèle.
+    </p>
+  </div>
+</header>
+
+<!-- Instructions -->
+<section class="px-6 md:px-12 py-12 md:py-16 border-b border-[var(--line-gold)]">
+  <div class="max-w-4xl mx-auto text-center">
+    <p class="text-base md:text-lg text-[var(--gold-pale)]/80 leading-relaxed font-light">
+      Cliquez sur chaque modèle pour le voir <span class="text-[var(--gold)]">en plein écran</span>. Notez ceux qui vous plaisent. Éliminez ceux qui ne correspondent pas. <em class="display-i text-[var(--gold)]">On itère ensuite sur celui que vous préférez.</em>
+    </p>
+  </div>
+</section>
+
+<!-- Grid of 7 models -->
+<section class="px-6 md:px-12 py-16 md:py-24">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+
+      <!-- 01 BLEU PROFOND -->
+      <a href="01-editorial.html" class="model-card fade-up" style="animation-delay: 0.05s">
+        <div class="preview" style="background: #0e2722">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85" alt="Bleu profond">
+          <div class="badge-num">№ 01</div>
+        </div>
+        <div class="body">
+          <div class="name">Bleu <em>profond.</em></div>
+          <p class="desc">Yacht-club, plein écran cinématique sur l'océan. La direction la plus proche de votre logo : navy + doré. Sophistiquée, exclusive.</p>
+          <div class="meta">
+            <span>Cinéma</span><span>Navy + or</span><span>Cinzel</span>
+          </div>
+          <div class="footer"><span>Voir le modèle</span><span class="arrow">→</span></div>
+        </div>
+      </a>
+
+      <!-- 02 SABLE NATUREL -->
+      <a href="02-architectural.html" class="model-card fade-up" style="animation-delay: 0.1s">
+        <div class="preview" style="background: #ede2c9">
+          <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=85" alt="Sable naturel">
+          <div class="badge-num">№ 02</div>
+        </div>
+        <div class="body">
+          <div class="name">Sable <em>naturel.</em></div>
+          <p class="desc">Lin, sable, bois flotté. Approche organique style AESOP / Aman. Pour une lecture artisanale, lente et lumineuse du bord de mer.</p>
+          <div class="meta">
+            <span>Naturel</span><span>Sable + or</span><span>AESOP</span>
+          </div>
+          <div class="footer"><span>Voir le modèle</span><span class="arrow">→</span></div>
+        </div>
+      </a>
+
+      <!-- 03 LAGUNE -->
+      <a href="03-boutique.html" class="model-card fade-up" style="animation-delay: 0.15s">
+        <div class="preview" style="background: #f5ecd6">
+          <img src="https://images.unsplash.com/photo-1500964757637-c85e8a162699?w=1200&q=85" alt="Lagune">
+          <div class="badge-num">№ 03</div>
+        </div>
+        <div class="body">
+          <div class="name">Lagune <em>solaire.</em></div>
+          <p class="desc">Turquoise, corail, soleil. Riviera vive et joyeuse. Pour une marque éclatante, joviale, méditerranéenne — qui célèbre la couleur.</p>
+          <div class="meta">
+            <span>Vif</span><span>Turquoise</span><span>Riviera</span>
+          </div>
+          <div class="footer"><span>Voir le modèle</span><span class="arrow">→</span></div>
+        </div>
+      </a>
+
+      <!-- 04 MARINE EDITORIAL -->
+      <a href="04-suisse.html" class="model-card fade-up" style="animation-delay: 0.2s">
+        <div class="preview" style="background: #f4ede0">
+          <img src="https://images.unsplash.com/photo-1582719371017-a1abc1c3b3ab?w=1200&q=85" alt="Marine editorial" style="filter: grayscale(40%)">
+          <div class="badge-num">№ 04</div>
+        </div>
+        <div class="body">
+          <div class="name">Marine, <em>éditorial.</em></div>
+          <p class="desc">Esprit revue de yacht-club. Magazine trimestriel imprimé. Cover story, sommaire, reportage — pour une marque qui aime raconter.</p>
+          <div class="meta">
+            <span>Magazine</span><span>Crème + encre</span><span>Bodoni</span>
+          </div>
+          <div class="footer"><span>Voir le modèle</span><span class="arrow">→</span></div>
+        </div>
+      </a>
+
+      <!-- 05 HEURE DORÉE -->
+      <a href="05-contemporain.html" class="model-card fade-up" style="animation-delay: 0.25s">
+        <div class="preview" style="background: #f7ebd5">
+          <img src="https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=1200&q=85" alt="Heure dorée">
+          <div class="badge-num">№ 05</div>
+        </div>
+        <div class="body">
+          <div class="name">Heure <em>dorée.</em></div>
+          <p class="desc">Sunset cinéma. Pêche, corail, océan profond. L'instant magique du coucher de soleil sur la Méditerranée — chaque jour.</p>
+          <div class="meta">
+            <span>Sunset</span><span>Pêche + océan</span><span>Cinéma</span>
+          </div>
+          <div class="footer"><span>Voir le modèle</span><span class="arrow">→</span></div>
+        </div>
+      </a>
+
+      <!-- 06 PROFESSIONNELLE -->
+      <a href="06-professional.html" class="model-card fade-up" style="animation-delay: 0.3s">
+        <div class="preview" style="background: #fcfbf8">
+          <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&q=85" alt="Professionnelle">
+          <div class="badge-num">№ 06</div>
+        </div>
+        <div class="body">
+          <div class="name">Professionnelle <em>classique.</em></div>
+          <p class="desc">Ultra-sérieuse, niveau Knight Frank / Sotheby's International. Heritage, presse, équipe, méthode, témoignages — la maquette la plus complète.</p>
+          <div class="meta">
+            <span>Corporate</span><span>Slate + brass</span><span>Knight Frank</span>
+          </div>
+          <div class="footer"><span>Voir le modèle</span><span class="arrow">→</span></div>
+        </div>
+      </a>
+
+      <!-- 07 MARINA -->
+      <a href="07-marina.html" class="model-card fade-up" style="animation-delay: 0.35s">
+        <div class="preview" style="background: #f7f7f3">
+          <img src="https://images.unsplash.com/photo-1549144511-f099e773c147?w=1200&q=85" alt="Marina">
+          <div class="badge-num">№ 07</div>
+        </div>
+        <div class="body">
+          <div class="name">Marina <em>privée.</em></div>
+          <p class="desc">Yacht harbour. Tel Aviv Marina, Herzliya Marina. Penthouses face aux voiliers, villas avec ponton. Pour ceux qui aiment voir les voiles.</p>
+          <div class="meta">
+            <span>Yacht</span><span>Navy clair</span><span>Plaisance</span>
+          </div>
+          <div class="footer"><span>Voir le modèle</span><span class="arrow">→</span></div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- Quick guide -->
+<section class="px-6 md:px-12 py-16 md:py-24 border-t border-[var(--line-gold)]">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="label-gold">— COMMENT CHOISIR ?</div>
+    <h2 class="display mt-6 leading-[0.95]" style="font-size: clamp(2rem, 4.5vw, 3.5rem); color: var(--gold-pale)">
+      En trois temps, <em class="display-i text-[var(--gold)]">simplement.</em>
+    </h2>
+    <div class="grid md:grid-cols-3 gap-8 mt-12 text-left">
+      <div>
+        <div class="display-i text-5xl text-[var(--gold)]">01.</div>
+        <div class="cinzel text-sm tracking-[0.3em] mt-3 text-[var(--gold-pale)]">REGARDER</div>
+        <p class="text-sm mt-3 text-[var(--gold-pale)]/70 leading-relaxed font-light">
+          Cliquez chaque carte ci-dessus. Faites défiler le site en entier sur votre téléphone ou ordinateur. Pas de presse — prenez le temps.
+        </p>
+      </div>
+      <div>
+        <div class="display-i text-5xl text-[var(--gold)]">02.</div>
+        <div class="cinzel text-sm tracking-[0.3em] mt-3 text-[var(--gold-pale)]">ÉLIMINER</div>
+        <p class="text-sm mt-3 text-[var(--gold-pale)]/70 leading-relaxed font-light">
+          Notez ceux qui ne vous parlent pas, sans expliquer pourquoi. À l'instinct. On garde les 2 ou 3 qui restent.
+        </p>
+      </div>
+      <div>
+        <div class="display-i text-5xl text-[var(--gold)]">03.</div>
+        <div class="cinzel text-sm tracking-[0.3em] mt-3 text-[var(--gold-pale)]">CHOISIR</div>
+        <p class="text-sm mt-3 text-[var(--gold-pale)]/70 leading-relaxed font-light">
+          On itère sur le préféré : vos vrais biens, vos vraies photos, votre vrai contenu. Mise en ligne en 2 à 3 semaines.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="border-t border-[var(--line-gold)] px-6 md:px-12 py-10">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-[10px] uppercase tracking-[0.4em] text-[var(--gold)]/60 cinzel">
+    <div>SHAHAR LEVI REAL ESTATE · PRÉSENTATION DES MODÈLES · PRINTEMPS MMXXVI</div>
+    <div class="display-i text-base text-[var(--gold)]" style="text-transform: none; letter-spacing: 0">— les sept attendent votre choix</div>
+  </div>
+</footer>
+
+</body>
+</html>

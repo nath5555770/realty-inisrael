@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — SHAHAR LEVI REAL ESTATE</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root { --paper:#f4ede0; --paper-light:#faf5ea; --paper-deep:#ebe1c5; --surface:#fff; --teal:#0e2722; --teal-deep:#061814; --gold:#c4a877; --gold-deep:#a78c5c; --gold-pale:#e0c89a; --ink:#14110d; --ink-soft:#4a3f33; --muted:#8a7d6a; --line:rgba(20,17,13,0.13); --line-gold:rgba(196,168,119,0.3); }
+  * { margin:0; padding:0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; overflow-x: hidden; -webkit-font-smoothing: antialiased; letter-spacing: -0.005em; opacity: 0; animation: page-in 0.8s ease forwards; }
+  @keyframes page-in { to { opacity: 1; } }
+  .cinzel { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.16em; }
+  .display { font-family: 'Playfair Display', serif; font-weight: 400; letter-spacing: -0.022em; }
+  .display-i { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  ::selection { background: var(--teal); color: var(--gold); }
+  body::before { content:''; position: fixed; inset: 0; z-index: 100; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"); opacity: 0.22; mix-blend-mode: multiply; }
+  @keyframes fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { opacity: 0; animation: fade-up 1.4s cubic-bezier(0.2,0.85,0.2,1) forwards; }
+
+  .brand-logo .name { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.18em; line-height: 1; }
+  .brand-logo .desc { font-family: 'Cinzel', serif; font-weight: 400; letter-spacing: 0.4em; margin-top: 0.5em; font-size: 0.4em; }
+
+  .pro-link { position: relative; display: inline-block; color: var(--ink); transition: color 0.4s; }
+  .pro-link::after { content:''; position: absolute; left: 0; bottom: -4px; width: 100%; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: right; transition: transform 0.6s; }
+  .pro-link:hover { color: var(--gold-deep); } .pro-link:hover::after { transform: scaleX(1); transform-origin: left; }
+  .pro-link.active { color: var(--gold-deep); } .pro-link.active::after { background: var(--gold-deep); transform: scaleX(1); }
+
+  .btn-teal { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; background: var(--teal); color: var(--gold); font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; transition: all 0.6s; }
+  .btn-teal:hover { letter-spacing: 0.4em; }
+  .btn-line { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; border: 1px solid currentColor; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; transition: all 0.6s; background: transparent; }
+  .btn-line:hover { letter-spacing: 0.4em; }
+
+  .label { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--muted); }
+  .label-gold { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--gold-deep); }
+  .hr-thin { height: 1px; background: var(--line); width: 100%; }
+  .hr-gold { height: 1px; background: var(--line-gold); width: 100%; }
+
+  .form-input { width: 100%; padding: 1rem 0; background: transparent; border: none; border-bottom: 1px solid var(--line); color: var(--ink); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; transition: border-color 0.4s; outline: none; }
+  .form-input:focus { border-color: var(--gold); }
+  .form-input::placeholder { color: var(--muted); }
+  textarea.form-input { resize: vertical; }
+
+  .faq summary { cursor: pointer; list-style: none; padding: 1.5rem 0; display: flex; justify-content: space-between; align-items: center; font-family: 'Playfair Display', serif; font-weight: 400; font-size: 1.4rem; color: var(--ink); transition: color 0.3s; border-top: 1px solid var(--line); }
+  .faq summary:hover { color: var(--gold-deep); }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; font-family: 'Cinzel', serif; transition: transform 0.4s; font-size: 1.5rem; color: var(--gold-deep); }
+  .faq[open] summary::after { transform: rotate(45deg); }
+  .faq[open] summary { color: var(--gold-deep); }
+  .faq p { padding: 0 0 1.5rem; color: var(--ink-soft); line-height: 1.7; max-width: 700px; }
+
+  .burger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 44px; height: 44px; cursor: pointer; background: transparent; border: 1px solid var(--teal); transition: all 0.4s; }
+  .burger span { display: block; width: 20px; height: 1px; background: var(--teal); transition: all 0.4s; }
+  body.menu-open .burger { background: var(--teal); border-color: var(--teal); } body.menu-open .burger span { background: var(--gold); }
+  body.menu-open .burger span:nth-child(1) { transform: translateY(3px) rotate(45deg); } body.menu-open .burger span:nth-child(2) { transform: translateY(-3px) rotate(-45deg); }
+  @media (max-width: 1023px) { .burger { display: flex; } }
+  .mobile-menu { position: fixed; inset: 0; z-index: 55; background: var(--teal); transform: translateY(-100%); transition: transform 0.7s; display: flex; flex-direction: column; padding: 6rem 2rem 3rem; overflow-y: auto; }
+  body.menu-open .mobile-menu { transform: translateY(0); } body.menu-open { overflow: hidden; }
+  .mobile-menu .menu-link { display: block; font-family: 'Cinzel', serif; font-weight: 400; font-size: clamp(1.5rem, 5vw, 2.5rem); color: var(--gold); padding: 1rem 0; border-bottom: 1px solid var(--line-gold); transition: all 0.4s; letter-spacing: 0.15em; text-transform: uppercase; }
+  .mobile-menu .menu-link:hover, .mobile-menu .menu-link.active { padding-left: 1rem; color: var(--paper); }
+  .mobile-menu .menu-foot { margin-top: auto; padding-top: 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(196,168,119,0.6); }
+
+  .live-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 0 4px rgba(34,197,94,0.2); }
+  @keyframes pulse-soft { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .pulse-soft { animation: pulse-soft 2.4s ease-in-out infinite; }
+
+  ::-webkit-scrollbar { width: 10px; } ::-webkit-scrollbar-track { background: var(--paper); } ::-webkit-scrollbar-thumb { background: var(--gold-deep); }
+</style>
+</head>
+<body>
+
+<div class="bg-[var(--teal)] text-[var(--gold)]"><div class="max-w-[1500px] mx-auto px-6 md:px-10 py-2.5 flex items-center justify-between text-xs"><div class="flex items-center gap-3 mono"><span class="live-dot pulse-soft"></span><span class="opacity-90">RÉPONSE SOUS 24H OUVRÉES · LUN—JEU 9H—18H IST</span></div><div class="flex items-center gap-4 mono"><a class="opacity-90 hover:opacity-100">+972 50 000 0000</a><span class="opacity-40">·</span><a class="underline-offset-4 underline">FR</a></div></div></div>
+
+<header class="sticky top-0 z-50 bg-[var(--paper)]/92 backdrop-blur-xl border-b border-[var(--line)]">
+  <div class="max-w-[1500px] mx-auto px-6 md:px-10 py-5 flex items-center justify-between gap-6">
+    <a href="06-professional.html" class="brand-logo text-left">
+      <div class="name text-[20px] md:text-[24px]" style="color: var(--teal)">SHAHAR LEVI</div>
+      <div class="desc text-[8px] md:text-[9px] !mt-1" style="color: var(--gold-deep)">REAL ESTATE</div>
+    </a>
+    <nav class="hidden lg:flex items-center gap-9 text-sm">
+      <a href="06-professional.html" class="pro-link">Accueil</a>
+      <a href="06-portefeuille.html" class="pro-link">Portefeuille</a>
+      <a href="06-agence.html" class="pro-link">L'Agence</a>
+      <a href="06-aliyah.html" class="pro-link">Aliyah</a>
+      <a href="06-journal.html" class="pro-link">Journal</a>
+      <a href="06-contact.html" class="pro-link active">Contact</a>
+    </nav>
+    <button class="burger" onclick="document.body.classList.toggle('menu-open')" aria-label="Menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="mobile-menu lg:hidden">
+  <div class="brand-logo mb-12 text-center"><div class="name text-2xl" style="color: var(--gold)">SHAHAR LEVI</div><div class="desc text-[10px]" style="color: var(--gold-deep)">REAL ESTATE</div></div>
+  <a href="06-professional.html" class="menu-link">Accueil</a>
+  <a href="06-portefeuille.html" class="menu-link">Portefeuille</a>
+  <a href="06-agence.html" class="menu-link">L'Agence</a>
+  <a href="06-aliyah.html" class="menu-link"><em>Aliyah</em></a>
+  <a href="06-journal.html" class="menu-link">Journal</a>
+  <a href="06-contact.html" class="menu-link active">Contact</a>
+  <div class="menu-foot">+972 50 000 0000 · nathalie@shaharlevi.co.il</div>
+</div>
+
+<!-- Page hero -->
+<section class="px-6 md:px-10 py-20 md:py-28 border-b border-[var(--line)]">
+  <div class="max-w-[1500px] mx-auto">
+    <div class="grid md:grid-cols-12 gap-10 items-end">
+      <div class="md:col-span-8 fade-up">
+        <div class="label-gold">— Cabinet privé</div>
+        <h1 class="mt-6 leading-[0.92]" style="font-size: clamp(3rem, 8vw, 7rem)">
+          <span class="display">Un rendez-vous,</span><br><span class="display-i text-[var(--gold-deep)]">en confidence.</span>
+        </h1>
+      </div>
+      <div class="md:col-span-4 fade-up" style="animation-delay: 0.2s">
+        <p class="text-base text-[var(--ink-soft)] leading-relaxed">À Tel Aviv, Paris (sur rendez-vous), ou en visioconférence. Sans engagement, sans frais initiaux. Toujours en français.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact form + offices -->
+<section class="px-6 md:px-10 py-24 md:py-32">
+  <div class="max-w-[1500px] mx-auto grid md:grid-cols-12 gap-12 lg:gap-16">
+
+    <div class="md:col-span-5">
+      <div class="space-y-8">
+        <div>
+          <div class="label-gold mb-3">— TEL AVIV (SIÈGE)</div>
+          <div class="display text-3xl">14 Rothschild Boulevard</div>
+          <div class="text-base text-[var(--ink-soft)] mt-1">Tel Aviv 6688314 · Israël</div>
+          <div class="hr-thin my-4"></div>
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div><div class="label">— TÉLÉPHONE</div><div class="mono mt-2 text-[var(--ink)]">+972 50 000 0000</div></div>
+            <div><div class="label">— HORAIRES</div><div class="mono mt-2 text-[var(--ink)]">LUN—JEU 9H—18H<br>VEN 9H—14H</div></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="label-gold mb-3">— PARIS (SUR RENDEZ-VOUS)</div>
+          <div class="display text-3xl">VIIᵉ arrondissement</div>
+          <div class="text-base text-[var(--ink-soft)] mt-1">14 Rue de Lille · 75007 Paris</div>
+          <div class="hr-thin my-4"></div>
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div><div class="label">— TÉLÉPHONE</div><div class="mono mt-2 text-[var(--ink)]">+33 6 00 00 00 00</div></div>
+            <div><div class="label">— DISPONIBILITÉ</div><div class="mono mt-2 text-[var(--ink)]">UNE FOIS<br>PAR MOIS</div></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="label-gold mb-3">— EMAIL DIRECT</div>
+          <a class="display-i text-2xl text-[var(--gold-deep)] hover:text-[var(--teal)] transition">nathalie@shaharlevi.co.il</a>
+          <div class="hr-thin my-4"></div>
+          <div class="text-sm text-[var(--ink-soft)] leading-relaxed">Pour les sollicitations confidentielles. Réponse personnelle de Nathalie sous 24h ouvrées.</div>
+        </div>
+
+        <div>
+          <div class="label-gold mb-3">— RÉSEAUX</div>
+          <div class="space-y-2 text-sm">
+            <div class="flex items-center justify-between py-2 border-b border-[var(--line)]"><span class="display">Instagram</span><a class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">@SHAHARLEVI.RE →</a></div>
+            <div class="flex items-center justify-between py-2 border-b border-[var(--line)]"><span class="display">LinkedIn</span><a class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">/SHAHARLEVIREALESTATE →</a></div>
+            <div class="flex items-center justify-between py-2 border-b border-[var(--line)]"><span class="display">YouTube · Le journal</span><a class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">@SHAHAR.LEVI →</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="md:col-span-7">
+      <div class="bg-[var(--surface)] border border-[var(--line)] p-8 md:p-10">
+        <div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold-deep)]">— FORMULAIRE DE PRISE DE RENDEZ-VOUS</div>
+        <h2 class="display text-3xl md:text-4xl mt-3 leading-tight">Réponse <span class="display-i text-[var(--gold-deep)]">sous 24h ouvrées.</span></h2>
+        <div class="hr-thin my-8"></div>
+
+        <form class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-5">
+            <div>
+              <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">— PRÉNOM *</label>
+              <input type="text" class="form-input" placeholder="Votre prénom" required>
+            </div>
+            <div>
+              <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">— NOM *</label>
+              <input type="text" class="form-input" placeholder="Votre nom" required>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-5">
+            <div>
+              <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">— EMAIL *</label>
+              <input type="email" class="form-input" placeholder="prenom@nom.fr" required>
+            </div>
+            <div>
+              <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">— TÉLÉPHONE</label>
+              <input type="tel" class="form-input" placeholder="+33 6 ...">
+            </div>
+          </div>
+
+          <div>
+            <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">— PAYS DE RÉSIDENCE ACTUEL</label>
+            <select class="form-input">
+              <option>France</option>
+              <option>Belgique</option>
+              <option>Suisse</option>
+              <option>Israël</option>
+              <option>Autre</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">— OBJET DU RENDEZ-VOUS *</label>
+            <select class="form-input" required>
+              <option>Acquisition · résidence secondaire</option>
+              <option>Acquisition · aliyah patrimoniale</option>
+              <option>Acquisition · investissement locatif</option>
+              <option>Cession · vente de mon bien</option>
+              <option>Conseil · estimation discrète</option>
+              <option>Conseil · fiscalité FR/IL</option>
+              <option>Autre</option>
+            </select>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-5">
+            <div>
+              <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">— ENVELOPPE BUDGÉTAIRE</label>
+              <select class="form-input">
+                <option>Préfère ne pas dire</option>
+                <option>&lt; $2M</option>
+                <option>$2M — $5M</option>
+                <option>$5M — $10M</option>
+                <option>$10M — $20M</option>
+                <option>&gt; $20M</option>
+              </select>
+            </div>
+            <div>
+              <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">— ZONE GÉOGRAPHIQUE</label>
+              <select class="form-input">
+                <option>Pas de préférence</option>
+                <option>Tel Aviv</option>
+                <option>Herzliya Pituach</option>
+                <option>Caesarea</option>
+                <option>Netanya</option>
+                <option>Jérusalem</option>
+                <option>Plusieurs zones</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">— VOTRE PROJET</label>
+            <textarea class="form-input" rows="5" placeholder="Quelques lignes sur votre projet, vos contraintes, vos questions..."></textarea>
+          </div>
+
+          <div>
+            <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">— FORMAT DU RENDEZ-VOUS PRÉFÉRÉ</label>
+            <div class="flex flex-wrap gap-3 mt-3">
+              <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="format" class="accent-[var(--teal)]"><span>Visioconférence</span></label>
+              <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="format" class="accent-[var(--teal)]"><span>Tel Aviv</span></label>
+              <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="format" class="accent-[var(--teal)]"><span>Paris</span></label>
+              <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="format" class="accent-[var(--teal)]"><span>Téléphone</span></label>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 mt-8 pt-4 border-t border-[var(--line)]">
+            <input type="checkbox" id="rgpd" class="w-4 h-4 mt-1 accent-[var(--teal)]" required>
+            <label for="rgpd" class="text-xs text-[var(--ink-soft)] leading-relaxed">J'accepte que mes données soient traitées conformément à la <a class="underline text-[var(--gold-deep)]">politique RGPD</a> de la maison. Aucun partage avec des tiers.</label>
+          </div>
+
+          <button type="submit" class="btn-teal w-full justify-center mt-4">Envoyer la demande →</button>
+
+          <div class="mono text-xs text-[var(--muted)] text-center mt-4">⊕ Réponse personnelle de Nathalie sous 24h ouvrées</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="px-6 md:px-10 py-24 md:py-32 border-t border-[var(--line)] bg-[var(--paper-light)]">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="label-gold">— Questions fréquentes</div>
+      <h2 class="display mt-4" style="font-size: clamp(2rem, 4.5vw, 3.5rem)">Avant de nous contacter, <em class="display-i text-[var(--gold-deep)]">peut-être ces réponses ?</em></h2>
+    </div>
+
+    <details class="faq"><summary>Faut-il être citoyen israélien pour acheter en Israël ?</summary><p>Non. Tout étranger peut acheter librement. En revanche, un acquéreur étranger paie 8% de Mas Rechisha (taxe d'achat) au lieu de 0—5% pour un olé hadash. C'est pourquoi l'aliyah patrimoniale (acheter avant ou pendant la procédure) est intéressante.</p></details>
+    <details class="faq"><summary>Quels sont vos honoraires ?</summary><p>Sur les acquisitions, nos honoraires sont à la charge du vendeur (commission inscrite au mandat). Pour le client acquéreur, nos services sont sans frais directs. Sur les cessions, nos honoraires varient selon la complexité du dossier — discutés et fixés au mandat. Grille publique disponible sur demande.</p></details>
+    <details class="faq"><summary>Combien de temps prend une transaction en Israël ?</summary><p>Le délai médian est de 52 jours entre le heskem zikaron (compromis) et le heskem mekher avec inscription au Tabu. Pour un acquéreur depuis la France, le parcours complet dure en moyenne 8 à 14 mois.</p></details>
+    <details class="faq"><summary>Travaillez-vous avec un notaire spécifique ?</summary><p>Oui — Maître Eitan Cohen, notaire bilingue inscrit aux barreaux de Tel Aviv et Paris. Toutes les transactions de la maison passent par son cabinet. Vous lisez ce que vous signez.</p></details>
+    <details class="faq"><summary>Les biens du portefeuille sont-ils tous off-market ?</summary><p>La majorité (environ 70%) ne sont pas publiés sur les portails publics israéliens. Les autres 30% sont aussi visibles sur Yad2/Madlan mais nous accompagnons exclusivement en français.</p></details>
+    <details class="faq" style="border-bottom: 1px solid var(--line)"><summary>Quelle fiscalité s'applique en France pour un bien en Israël ?</summary><p>La convention fiscale franco-israélienne du 31 juillet 1995 évite la double imposition. Revenus locatifs déclarés en France, IFI au-delà de 1.3 M€ de patrimoine immobilier, plus-value imposable en France. Nous travaillons avec un fiscaliste FR/IL si nécessaire.</p></details>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="px-6 md:px-10 py-20 md:py-24 bg-[var(--paper-deep)] border-y border-[var(--line)]">
+  <div class="max-w-3xl mx-auto text-center">
+    <div class="label-gold">— Le carnet privé</div>
+    <h2 class="display mt-4" style="font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 400">Recevoir les pièces <em class="display-i text-[var(--gold-deep)]">avant publication.</em></h2>
+    <div class="mt-8 flex flex-col md:flex-row gap-3 max-w-xl mx-auto">
+      <input type="email" placeholder="prenom@nom.fr" class="flex-1 bg-[var(--paper)] border border-[var(--line)] px-5 py-4 text-base outline-none focus:border-[var(--gold)] transition">
+      <button class="btn-teal justify-center">S'inscrire →</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-[var(--teal-deep)] text-[var(--paper)] px-6 md:px-10 py-16">
+  <div class="max-w-[1500px] mx-auto">
+    <div class="text-center mb-12 pb-12 border-b border-[var(--line-gold)]">
+      <div class="brand-logo"><div class="name text-3xl md:text-4xl" style="color: var(--gold)">SHAHAR LEVI</div><div class="desc text-[10px] md:text-xs" style="color: var(--gold-deep)">REAL ESTATE</div></div>
+    </div>
+    <div class="grid md:grid-cols-12 gap-10 mb-12">
+      <div class="md:col-span-4"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-3">— LA MAISON</div><p class="text-base text-[var(--paper)]/75 max-w-md leading-relaxed font-light">Maison indépendante de courtage immobilier. Tel Aviv depuis 2014. Mossi'a #4218.</p></div>
+      <div class="md:col-span-3"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4">PAGES</div><ul class="space-y-2 text-sm text-[var(--paper)]/80"><li><a href="06-professional.html" class="hover:text-[var(--gold)]">Accueil</a></li><li><a href="06-portefeuille.html" class="hover:text-[var(--gold)]">Portefeuille</a></li><li><a href="06-agence.html" class="hover:text-[var(--gold)]">L'Agence</a></li><li><a href="06-aliyah.html" class="hover:text-[var(--gold)]">Aliyah</a></li><li><a href="06-journal.html" class="hover:text-[var(--gold)]">Journal</a></li><li><a href="06-contact.html" class="hover:text-[var(--gold)]">Contact</a></li></ul></div>
+      <div class="md:col-span-5"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4">CONTACT</div><div class="text-sm text-[var(--paper)]/80 leading-relaxed">14 Rothschild Boulevard · Tel Aviv 6688314<br>+972 50 000 0000 · <span class="text-[var(--gold)]">nathalie@shaharlevi.co.il</span></div></div>
+    </div>
+    <div class="border-t border-[var(--line-gold)] pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs cinzel tracking-[0.2em] text-[var(--paper)]/50"><div>© MMXXVI SHAHAR LEVI REAL ESTATE · MOSSI'A #4218</div><div class="flex gap-6"><a class="hover:text-[var(--gold)]">MENTIONS</a><a class="hover:text-[var(--gold)]">RGPD</a><a class="hover:text-[var(--gold)]">HONORAIRES</a></div></div>
+  </div>
+</footer>
+
+</body>
+</html>

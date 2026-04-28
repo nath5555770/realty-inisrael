@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portefeuille — SHAHAR LEVI REAL ESTATE</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4ede0; --paper-light: #faf5ea; --paper-deep: #ebe1c5; --surface: #ffffff;
+    --teal: #0e2722; --teal-deep: #061814; --gold: #c4a877; --gold-deep: #a78c5c; --gold-pale: #e0c89a;
+    --ink: #14110d; --ink-soft: #4a3f33; --muted: #8a7d6a;
+    --line: rgba(20, 17, 13, 0.13); --line-gold: rgba(196, 168, 119, 0.3);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; overflow-x: hidden; -webkit-font-smoothing: antialiased; letter-spacing: -0.005em; opacity: 0; animation: page-in 0.8s ease forwards; }
+  @keyframes page-in { to { opacity: 1; } }
+  .cinzel { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.16em; }
+  .display { font-family: 'Playfair Display', serif; font-weight: 400; letter-spacing: -0.022em; }
+  .display-i { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  ::selection { background: var(--teal); color: var(--gold); }
+
+  body::before { content:''; position: fixed; inset: 0; z-index: 100; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"); opacity: 0.22; mix-blend-mode: multiply; }
+
+  @keyframes fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { opacity: 0; animation: fade-up 1.4s cubic-bezier(0.2, 0.85, 0.2, 1) forwards; }
+
+  .brand-logo .name { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.18em; line-height: 1; }
+  .brand-logo .desc { font-family: 'Cinzel', serif; font-weight: 400; letter-spacing: 0.4em; margin-top: 0.5em; font-size: 0.4em; }
+
+  .pro-link { position: relative; display: inline-block; color: var(--ink); transition: color 0.4s; }
+  .pro-link::after { content:''; position: absolute; left: 0; bottom: -4px; width: 100%; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: right; transition: transform 0.6s cubic-bezier(0.65,0,0.35,1); }
+  .pro-link:hover { color: var(--gold-deep); }
+  .pro-link:hover::after { transform: scaleX(1); transform-origin: left; }
+  .pro-link.active { color: var(--gold-deep); }
+  .pro-link.active::after { background: var(--gold-deep); transform: scaleX(1); }
+
+  .btn-teal { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; background: var(--teal); color: var(--gold); font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; transition: all 0.6s cubic-bezier(0.2,0.85,0.2,1); }
+  .btn-teal:hover { background: var(--teal-deep); letter-spacing: 0.4em; }
+  .btn-line { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; border: 1px solid currentColor; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; transition: all 0.6s ease; background: transparent; }
+  .btn-line:hover { letter-spacing: 0.4em; }
+
+  .estate { cursor: pointer; }
+  .estate .frame { overflow: hidden; position: relative; }
+  .estate img { transition: transform 1.6s cubic-bezier(0.2,0.85,0.2,1); }
+  .estate:hover img { transform: scale(1.05); }
+  .estate .ref-tag { position: absolute; top: 1rem; left: 1rem; background: var(--paper); color: var(--teal); padding: 0.4rem 0.85rem; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; }
+  .estate .like-btn { position: absolute; top: 1rem; right: 1rem; width: 38px; height: 38px; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s; color: var(--teal); }
+  .estate .like-btn:hover { background: var(--gold); transform: scale(1.05); }
+
+  .label { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--muted); }
+  .label-teal { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--teal); }
+  .label-gold { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--gold-deep); }
+  .hr-thin { height: 1px; background: var(--line); width: 100%; }
+  .hr-gold { height: 1px; background: var(--line-gold); width: 100%; }
+
+  /* Burger */
+  .burger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 44px; height: 44px; cursor: pointer; background: transparent; border: 1px solid var(--teal); transition: all 0.4s; }
+  .burger span { display: block; width: 20px; height: 1px; background: var(--teal); transition: all 0.4s cubic-bezier(0.2,0.85,0.2,1); }
+  body.menu-open .burger { background: var(--teal); border-color: var(--teal); }
+  body.menu-open .burger span { background: var(--gold); }
+  body.menu-open .burger span:nth-child(1) { transform: translateY(3px) rotate(45deg); }
+  body.menu-open .burger span:nth-child(2) { transform: translateY(-3px) rotate(-45deg); }
+  @media (max-width: 1023px) { .burger { display: flex; } }
+  .mobile-menu { position: fixed; inset: 0; z-index: 55; background: var(--teal); transform: translateY(-100%); transition: transform 0.7s cubic-bezier(0.7,0,0.3,1); display: flex; flex-direction: column; padding: 6rem 2rem 3rem; overflow-y: auto; }
+  body.menu-open .mobile-menu { transform: translateY(0); }
+  body.menu-open { overflow: hidden; }
+  .mobile-menu .menu-link { display: block; font-family: 'Cinzel', serif; font-weight: 400; font-size: clamp(1.5rem, 5vw, 2.5rem); color: var(--gold); padding: 1rem 0; border-bottom: 1px solid var(--line-gold); transition: padding 0.4s, color 0.4s; letter-spacing: 0.15em; text-transform: uppercase; }
+  .mobile-menu .menu-link:hover { padding-left: 1rem; color: var(--paper); }
+  .mobile-menu .menu-link.active { color: var(--paper); padding-left: 1rem; }
+  .mobile-menu .menu-foot { margin-top: auto; padding-top: 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(196,168,119,0.6); }
+
+  .live-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 0 4px rgba(34,197,94,0.2); }
+  @keyframes pulse-soft { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .pulse-soft { animation: pulse-soft 2.4s ease-in-out infinite; }
+
+  .filter-pill { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; padding: 0.5rem 1rem; border: 1px solid var(--line); background: transparent; color: var(--ink-soft); cursor: pointer; transition: all 0.4s; }
+  .filter-pill:hover { border-color: var(--teal); color: var(--teal); }
+  .filter-pill.active { background: var(--teal); color: var(--gold); border-color: var(--teal); }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--paper); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-deep); }
+</style>
+</head>
+<body>
+
+<!-- Top thin bar -->
+<div class="bg-[var(--teal)] text-[var(--gold)]">
+  <div class="max-w-[1500px] mx-auto px-6 md:px-10 py-2.5 flex items-center justify-between text-xs">
+    <div class="flex items-center gap-5 mono">
+      <div class="flex items-center gap-2"><span class="live-dot pulse-soft"></span><span class="opacity-90">PORTEFEUILLE · MAJ 28.04.MMXXVI</span></div>
+      <span class="hidden md:inline opacity-50">·</span>
+      <span class="hidden md:inline opacity-90">19 PIÈCES À CÉDER · 13 EN OFF-MARKET</span>
+    </div>
+    <div class="flex items-center gap-4 mono">
+      <a class="opacity-90 hover:opacity-100">+972 50 000 0000</a>
+      <span class="opacity-40">·</span>
+      <a class="underline-offset-4 underline">FR</a>
+      <span class="opacity-40">/</span>
+      <a class="opacity-50 hover:opacity-100">EN</a>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-[var(--paper)]/92 backdrop-blur-xl border-b border-[var(--line)]">
+  <div class="max-w-[1500px] mx-auto px-6 md:px-10 py-5 flex items-center justify-between gap-6">
+    <a href="06-professional.html" class="brand-logo text-left">
+      <div class="name text-[20px] md:text-[24px]" style="color: var(--teal)">SHAHAR LEVI</div>
+      <div class="desc text-[8px] md:text-[9px] !mt-1" style="color: var(--gold-deep)">REAL ESTATE</div>
+    </a>
+    <nav class="hidden lg:flex items-center gap-9 text-sm">
+      <a href="06-professional.html" class="pro-link">Accueil</a>
+      <a href="06-portefeuille.html" class="pro-link active">Portefeuille</a>
+      <a href="06-agence.html" class="pro-link">L'Agence</a>
+      <a href="06-aliyah.html" class="pro-link">Aliyah</a>
+      <a href="06-journal.html" class="pro-link">Journal</a>
+      <a href="06-contact.html" class="pro-link">Contact</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="06-contact.html" class="hidden md:inline-flex btn-teal text-[10px]">Cabinet privé</a>
+      <button class="burger" onclick="document.body.classList.toggle('menu-open')" aria-label="Menu"><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div class="mobile-menu lg:hidden">
+  <div class="brand-logo mb-12 text-center">
+    <div class="name text-2xl" style="color: var(--gold)">SHAHAR LEVI</div>
+    <div class="desc text-[10px]" style="color: var(--gold-deep)">REAL ESTATE</div>
+  </div>
+  <a href="06-professional.html" class="menu-link">Accueil</a>
+  <a href="06-portefeuille.html" class="menu-link active">Portefeuille</a>
+  <a href="06-agence.html" class="menu-link">L'Agence</a>
+  <a href="06-aliyah.html" class="menu-link"><em>Aliyah</em></a>
+  <a href="06-journal.html" class="menu-link">Journal</a>
+  <a href="06-contact.html" class="menu-link">Contact</a>
+  <div class="menu-foot">+972 50 000 0000 · nathalie@shaharlevi.co.il</div>
+</div>
+
+<!-- PAGE TITLE -->
+<section class="px-6 md:px-10 py-16 md:py-24 border-b border-[var(--line)]">
+  <div class="max-w-[1500px] mx-auto">
+    <div class="grid md:grid-cols-12 gap-10 items-end">
+      <div class="md:col-span-7 fade-up">
+        <div class="label-gold">— Le portefeuille · printemps MMXXVI</div>
+        <h1 class="mt-6 leading-[0.92]" style="font-size: clamp(3rem, 8vw, 7rem)">
+          <span class="display">Dix-neuf pièces</span><br>
+          <span class="display-i text-[var(--gold-deep)]">à céder discrètement.</span>
+        </h1>
+      </div>
+      <div class="md:col-span-5 fade-up" style="animation-delay: 0.2s">
+        <p class="text-base text-[var(--ink-soft)] leading-relaxed">
+          Chaque bien du portefeuille porte une référence, une provenance et l'accord explicite des propriétaires. La majorité ne sera jamais publiée publiquement — réservée à notre clientèle qualifiée.
+        </p>
+        <div class="mt-6 flex items-center gap-6 text-sm">
+          <div><div class="display text-3xl text-[var(--teal)]">19</div><div class="label !tracking-[0.2em] mt-1">PIÈCES TOTAL</div></div>
+          <div class="h-12 w-px bg-[var(--line)]"></div>
+          <div><div class="display text-3xl text-[var(--gold-deep)]">13</div><div class="label !tracking-[0.2em] mt-1">OFF-MARKET</div></div>
+          <div class="h-12 w-px bg-[var(--line)]"></div>
+          <div><div class="display text-3xl text-[var(--teal)]">5</div><div class="label !tracking-[0.2em] mt-1">VILLES</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTERS BAR -->
+<section class="px-6 md:px-10 py-8 border-b border-[var(--line)] bg-[var(--paper-light)] sticky top-[81px] z-40 backdrop-blur-md">
+  <div class="max-w-[1500px] mx-auto flex flex-wrap items-center gap-3 md:gap-5">
+    <div class="label-gold mr-2 hidden md:block">— FILTRER</div>
+    <button class="filter-pill active">Tous · 19</button>
+    <button class="filter-pill">Tel Aviv · 8</button>
+    <button class="filter-pill">Herzliya · 4</button>
+    <button class="filter-pill">Caesarea · 3</button>
+    <button class="filter-pill">Netanya · 2</button>
+    <button class="filter-pill">Jérusalem · 2</button>
+    <span class="hidden md:inline-block h-6 w-px bg-[var(--line)] mx-2"></span>
+    <button class="filter-pill">Penthouse</button>
+    <button class="filter-pill">Villa</button>
+    <button class="filter-pill">Appartement</button>
+    <span class="ml-auto label hidden md:inline">— TRI · PRIX DÉCROISSANT</span>
+  </div>
+</section>
+
+<!-- LISTINGS GRID — All 19 -->
+<section class="px-6 md:px-10 py-16 md:py-24">
+  <div class="max-w-[1500px] mx-auto">
+
+    <!-- Featured large -->
+    <article class="estate mb-16">
+      <div class="grid md:grid-cols-12 gap-10 items-center">
+        <div class="md:col-span-7 frame aspect-[16/10]">
+          <img src="https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=2000&q=92" class="w-full h-full object-cover">
+          <div class="ref-tag">★ SL.0001 · PIÈCE SIGNATURE</div>
+          <button class="like-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          <div class="absolute bottom-4 right-4 bg-[var(--paper)]/95 backdrop-blur px-3 py-1.5 mono text-xs text-[var(--teal)]">📐 Visite virtuelle 360°</div>
+        </div>
+        <div class="md:col-span-5">
+          <div class="label-teal">RÉF. SL.0001 · TEL AVIV · AKIROV TOWERS · TOUR B</div>
+          <h3 class="display mt-4" style="font-size: clamp(2.25rem, 4vw, 3.5rem); line-height: 0.95">
+            Penthouse <span class="display-i text-[var(--gold-deep)]">Akirov.</span>
+          </h3>
+          <p class="text-base text-[var(--ink-soft)] mt-5 leading-relaxed">
+            Cinq pièces au 28ᵉ étage avec terrasse de 180 m² et piscine privée. Vue Méditerranée et parc Yarkon. Conciergerie 24/7, services hôteliers Akirov, sécurité absolue.
+          </p>
+          <div class="grid grid-cols-3 gap-4 mt-6 border-t border-[var(--line)] pt-5">
+            <div><div class="label">SURFACE</div><div class="display text-xl mt-1.5">320 m²</div></div>
+            <div><div class="label">TERRASSE</div><div class="display text-xl mt-1.5">180 m²</div></div>
+            <div><div class="label">ÉTAGE</div><div class="display text-xl mt-1.5">28/32</div></div>
+          </div>
+          <div class="mt-6 border-t border-[var(--line)] pt-5 flex items-end justify-between">
+            <div>
+              <div class="label">PRIX</div>
+              <div class="display text-3xl mt-1.5 text-[var(--teal)]">$14 800 000</div>
+              <div class="mono text-xs text-[var(--muted)] mt-1">≈ 13.6 M€ · ≈ 53.5 M ₪</div>
+            </div>
+            <a class="btn-line text-[var(--teal)]">Visiter →</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Grid of all other 18 -->
+    <div class="grid md:grid-cols-3 gap-x-6 gap-y-12">
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0002</div><button class="like-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div><div class="label-teal">TEL AVIV · ROTHSCHILD</div><h3 class="display text-2xl mt-3 leading-tight">Meier on <span class="display-i text-[var(--gold-deep)]">Rothschild.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">215 m² · 22ᵉ étage · Richard Meier · DPE B</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">4 P · CONCIERGERIE</span><span class="display text-2xl text-[var(--teal)]">$8.2M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0003</div><button class="like-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div><div class="label-teal">CAESAREA · QUARTIER 13</div><h3 class="display text-2xl mt-3 leading-tight">Villa <span class="display-i text-[var(--gold-deep)]">Carmel.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">540 m² · sur le golf · 1 800 m² terrain</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">9 P · VUE MER</span><span class="display text-2xl text-[var(--teal)]">$18.0M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0004</div><button class="like-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div><div class="label-teal">HERZLIYA · GALEI TCHELET</div><h3 class="display text-2xl mt-3 leading-tight">Villa <span class="display-i text-[var(--gold-deep)]">front de mer.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">340 m² · accès direct plage · piscine</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">8 P · 600 M²</span><span class="display text-2xl text-[var(--teal)]">$8.2M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0005</div></div><div><div class="label-teal">TEL AVIV · NEVE TZEDEK</div><h3 class="display text-2xl mt-3 leading-tight">Loft <span class="display-i text-[var(--gold-deep)]">d'artiste.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">155 m² · plafonds 4m · roof 90 m²</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">4 P · DPE A</span><span class="display text-2xl text-[var(--teal)]">$3.95M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0006</div></div><div><div class="label-teal">TEL AVIV · PARK TZAMERET</div><h3 class="display text-2xl mt-3 leading-tight">YOO <span class="display-i text-[var(--gold-deep)]">Tower.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">240 m² · architecture P. Starck · piscine</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">5 P</span><span class="display text-2xl text-[var(--teal)]">$9.4M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0007</div></div><div><div class="label-teal">JÉRUSALEM · MAMILLA</div><h3 class="display text-2xl mt-3 leading-tight">David's <span class="display-i text-[var(--gold-deep)]">Village.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">195 m² · pierre de Jérusalem · vue Vieille Ville</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">5 P · TERRASSE</span><span class="display text-2xl text-[var(--teal)]">$11.0M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0008</div></div><div><div class="label-teal">TEL AVIV · W RESIDENCES</div><h3 class="display text-2xl mt-3 leading-tight">W <span class="display-i text-[var(--gold-deep)]">Sea View.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">165 m² · 32ᵉ étage · service W</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">4 P · VUE MER</span><span class="display text-2xl text-[var(--teal)]">$6.8M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0009</div></div><div><div class="label-teal">NETANYA · PUNDAK SANDS</div><h3 class="display text-2xl mt-3 leading-tight">Penthouse <span class="display-i text-[var(--gold-deep)]">Pundak.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">240 m² · roof 90 m² · vue 180°</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">5 P · ROOF</span><span class="display text-2xl text-[var(--teal)]">$4.5M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0010</div></div><div><div class="label-teal">CAESAREA · CÔTÉ NORD</div><h3 class="display text-2xl mt-3 leading-tight">Villa <span class="display-i text-[var(--gold-deep)]">Aqua.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">420 m² · accès plage privé · ponton</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">7 P · 1 200 M²</span><span class="display text-2xl text-[var(--teal)]">$15.4M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0011</div></div><div><div class="label-teal">TEL AVIV · SEA ONE</div><h3 class="display text-2xl mt-3 leading-tight">Sea One <span class="display-i text-[var(--gold-deep)]">Sky.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">220 m² · 38ᵉ étage · double exposition</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">5 P · MER + VILLE</span><span class="display text-2xl text-[var(--teal)]">$11.5M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1505904267569-f02eaeb87fc1?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0012</div></div><div><div class="label-teal">HERZLIYA · RESHEF</div><h3 class="display text-2xl mt-3 leading-tight">Villa <span class="display-i text-[var(--gold-deep)]">Reshef.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">280 m² · jardin 450 m² · piscine</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">6 P</span><span class="display text-2xl text-[var(--teal)]">$5.4M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0013</div></div><div><div class="label-teal">TEL AVIV · LEV HA'IR</div><h3 class="display text-2xl mt-3 leading-tight">Bauhaus <span class="display-i text-[var(--gold-deep)]">restauré.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">130 m² · UNESCO · rénovation 2023</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">3 P · 4ᵉ ÉTAGE</span><span class="display text-2xl text-[var(--teal)]">$3.2M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0014</div></div><div><div class="label-teal">JÉRUSALEM · TALBIEH</div><h3 class="display text-2xl mt-3 leading-tight">Maison <span class="display-i text-[var(--gold-deep)]">Talbieh.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">385 m² · jardin · pierre de Jérusalem</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">7 P</span><span class="display text-2xl text-[var(--teal)]">$7.8M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1582719371017-a1abc1c3b3ab?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0015</div></div><div><div class="label-teal">TEL AVIV · ROYAL BEACH</div><h3 class="display text-2xl mt-3 leading-tight">Royal <span class="display-i text-[var(--gold-deep)]">Beach.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">340 m² · 32ᵉ étage · piscine privée</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">5 P · TERRASSE 120</span><span class="display text-2xl text-[var(--teal)]">$14.8M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0016</div></div><div><div class="label-teal">CAESAREA · Q.13</div><h3 class="display text-2xl mt-3 leading-tight">Domaine <span class="display-i text-[var(--gold-deep)]">Carmel Sud.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">680 m² · 2 400 m² terrain · golf</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">11 P · VUE MER</span><span class="display text-2xl text-[var(--teal)]">$24.0M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0017</div></div><div><div class="label-teal">NETANYA · RAMAT POLEG</div><h3 class="display text-2xl mt-3 leading-tight">Villa <span class="display-i text-[var(--gold-deep)]">Poleg.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">320 m² · piscine · vue mer</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">7 P · 800 M²</span><span class="display text-2xl text-[var(--teal)]">$3.8M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1500964757637-c85e8a162699?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0018</div></div><div><div class="label-teal">TEL AVIV · HATSAFON</div><h3 class="display text-2xl mt-3 leading-tight">Penthouse <span class="display-i text-[var(--gold-deep)]">Pinkas.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">180 m² · 22ᵉ étage · vue mer</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">4 P</span><span class="display text-2xl text-[var(--teal)]">$5.6M</span></div></div></article>
+
+      <article class="estate"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0019</div></div><div><div class="label-teal">HERZLIYA · GALEI TCHELET</div><h3 class="display text-2xl mt-3 leading-tight">Villa <span class="display-i text-[var(--gold-deep)]">Reichman.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">395 m² · piscine · cinéma privé</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">8 P · 700 M²</span><span class="display text-2xl text-[var(--teal)]">$11.5M</span></div></div></article>
+    </div>
+
+    <!-- Off-market block -->
+    <div class="mt-24 bg-[var(--teal)] text-[var(--paper)] p-10 md:p-14">
+      <div class="grid md:grid-cols-12 gap-8 items-center">
+        <div class="md:col-span-7">
+          <div class="cinzel text-[11px] tracking-[0.4em] text-[var(--gold)]">— BIENS OFF-MARKET</div>
+          <h2 class="display mt-4" style="font-size: clamp(2rem, 4vw, 3.5rem); color: var(--paper)">
+            Treize biens <em class="display-i text-[var(--gold)]">supplémentaires</em> ne figurent pas ici.
+          </h2>
+          <p class="text-base mt-4 text-[var(--paper)]/85 leading-relaxed font-light max-w-2xl">
+            Ils sont confiés à notre maison sous condition de discrétion absolue. Nous ne les présentons qu'à des acquéreurs qualifiés, après un premier rendez-vous.
+          </p>
+        </div>
+        <div class="md:col-span-5 flex flex-wrap gap-3 justify-start md:justify-end">
+          <a href="06-contact.html" class="btn-line text-[var(--gold)] border-[var(--gold)] hover:!bg-[var(--gold)] hover:!text-[var(--teal)]">Solliciter le carnet privé →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-[var(--teal-deep)] text-[var(--paper)] px-6 md:px-10 py-16">
+  <div class="max-w-[1500px] mx-auto">
+    <div class="text-center mb-12 pb-12 border-b border-[var(--line-gold)]">
+      <div class="brand-logo">
+        <div class="name text-3xl md:text-4xl" style="color: var(--gold)">SHAHAR LEVI</div>
+        <div class="desc text-[10px] md:text-xs" style="color: var(--gold-deep)">REAL ESTATE</div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-12 gap-10 mb-12">
+      <div class="md:col-span-4">
+        <div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-3">— LA MAISON</div>
+        <p class="text-base text-[var(--paper)]/75 max-w-md leading-relaxed font-light">Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014. Mossi'a #4218 · FNAIM partenaire · FIABCI.</p>
+      </div>
+      <div class="md:col-span-2">
+        <div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4">PAGES</div>
+        <ul class="space-y-2 text-sm text-[var(--paper)]/80">
+          <li><a href="06-professional.html" class="hover:text-[var(--gold)]">Accueil</a></li>
+          <li><a href="06-portefeuille.html" class="hover:text-[var(--gold)]">Portefeuille</a></li>
+          <li><a href="06-agence.html" class="hover:text-[var(--gold)]">L'Agence</a></li>
+          <li><a href="06-aliyah.html" class="hover:text-[var(--gold)]">Aliyah</a></li>
+          <li><a href="06-journal.html" class="hover:text-[var(--gold)]">Journal</a></li>
+          <li><a href="06-contact.html" class="hover:text-[var(--gold)]">Contact</a></li>
+        </ul>
+      </div>
+      <div class="md:col-span-3">
+        <div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4">VILLES</div>
+        <ul class="space-y-2 text-sm text-[var(--paper)]/80">
+          <li>Tel Aviv · Herzliya · Caesarea</li>
+          <li>Netanya · Jérusalem · Ashkelon</li>
+        </ul>
+      </div>
+      <div class="md:col-span-3">
+        <div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4">CONTACT</div>
+        <div class="text-sm text-[var(--paper)]/80 leading-relaxed">14 Rothschild Boulevard<br>Tel Aviv 6688314 · Israël<br>+972 50 000 0000<br><span class="text-[var(--gold)]">nathalie@shaharlevi.co.il</span></div>
+      </div>
+    </div>
+    <div class="border-t border-[var(--line-gold)] pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs cinzel tracking-[0.2em] text-[var(--paper)]/50">
+      <div>© MMXXVI SHAHAR LEVI REAL ESTATE · TEL AVIV · MOSSI'A #4218</div>
+      <div class="flex gap-6"><a class="hover:text-[var(--gold)]">MENTIONS</a><a class="hover:text-[var(--gold)]">RGPD</a><a class="hover:text-[var(--gold)]">HONORAIRES</a></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

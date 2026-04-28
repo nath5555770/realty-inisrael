@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Journal — SHAHAR LEVI REAL ESTATE</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root { --paper:#f4ede0; --paper-light:#faf5ea; --paper-deep:#ebe1c5; --surface:#fff; --teal:#0e2722; --teal-deep:#061814; --gold:#c4a877; --gold-deep:#a78c5c; --gold-pale:#e0c89a; --ink:#14110d; --ink-soft:#4a3f33; --muted:#8a7d6a; --line:rgba(20,17,13,0.13); --line-gold:rgba(196,168,119,0.3); }
+  * { margin:0; padding:0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; overflow-x: hidden; -webkit-font-smoothing: antialiased; letter-spacing: -0.005em; opacity: 0; animation: page-in 0.8s ease forwards; }
+  @keyframes page-in { to { opacity: 1; } }
+  .cinzel { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.16em; }
+  .display { font-family: 'Playfair Display', serif; font-weight: 400; letter-spacing: -0.022em; }
+  .display-i { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  ::selection { background: var(--teal); color: var(--gold); }
+  body::before { content:''; position: fixed; inset: 0; z-index: 100; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"); opacity: 0.22; mix-blend-mode: multiply; }
+  @keyframes fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { opacity: 0; animation: fade-up 1.4s cubic-bezier(0.2,0.85,0.2,1) forwards; }
+
+  .brand-logo .name { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.18em; line-height: 1; }
+  .brand-logo .desc { font-family: 'Cinzel', serif; font-weight: 400; letter-spacing: 0.4em; margin-top: 0.5em; font-size: 0.4em; }
+
+  .pro-link { position: relative; display: inline-block; color: var(--ink); transition: color 0.4s; }
+  .pro-link::after { content:''; position: absolute; left: 0; bottom: -4px; width: 100%; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: right; transition: transform 0.6s; }
+  .pro-link:hover { color: var(--gold-deep); } .pro-link:hover::after { transform: scaleX(1); transform-origin: left; }
+  .pro-link.active { color: var(--gold-deep); } .pro-link.active::after { background: var(--gold-deep); transform: scaleX(1); }
+
+  .btn-teal { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; background: var(--teal); color: var(--gold); font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; transition: all 0.6s; }
+  .btn-teal:hover { letter-spacing: 0.4em; }
+  .btn-line { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; border: 1px solid currentColor; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; transition: all 0.6s; background: transparent; }
+  .btn-line:hover { letter-spacing: 0.4em; }
+
+  .label { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--muted); }
+  .label-teal { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--teal); }
+  .label-gold { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--gold-deep); }
+  .hr-thin { height: 1px; background: var(--line); width: 100%; }
+  .hr-gold { height: 1px; background: var(--line-gold); width: 100%; }
+
+  .article-card { background: var(--surface); border: 1px solid var(--line); transition: all 0.5s cubic-bezier(0.2,0.85,0.2,1); cursor: pointer; }
+  .article-card:hover { transform: translateY(-3px); box-shadow: 0 24px 48px -16px rgba(14,39,34,0.15); border-color: var(--gold); }
+  .article-card .img-wrap { overflow: hidden; }
+  .article-card img { transition: transform 1.4s; }
+  .article-card:hover img { transform: scale(1.05); }
+
+  .topic-pill { display: inline-flex; align-items: center; padding: 0.4rem 0.95rem; background: var(--paper-deep); font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-deep); }
+
+  .burger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 44px; height: 44px; cursor: pointer; background: transparent; border: 1px solid var(--teal); transition: all 0.4s; }
+  .burger span { display: block; width: 20px; height: 1px; background: var(--teal); transition: all 0.4s; }
+  body.menu-open .burger { background: var(--teal); border-color: var(--teal); } body.menu-open .burger span { background: var(--gold); }
+  body.menu-open .burger span:nth-child(1) { transform: translateY(3px) rotate(45deg); } body.menu-open .burger span:nth-child(2) { transform: translateY(-3px) rotate(-45deg); }
+  @media (max-width: 1023px) { .burger { display: flex; } }
+  .mobile-menu { position: fixed; inset: 0; z-index: 55; background: var(--teal); transform: translateY(-100%); transition: transform 0.7s; display: flex; flex-direction: column; padding: 6rem 2rem 3rem; overflow-y: auto; }
+  body.menu-open .mobile-menu { transform: translateY(0); } body.menu-open { overflow: hidden; }
+  .mobile-menu .menu-link { display: block; font-family: 'Cinzel', serif; font-weight: 400; font-size: clamp(1.5rem, 5vw, 2.5rem); color: var(--gold); padding: 1rem 0; border-bottom: 1px solid var(--line-gold); transition: all 0.4s; letter-spacing: 0.15em; text-transform: uppercase; }
+  .mobile-menu .menu-link:hover, .mobile-menu .menu-link.active { padding-left: 1rem; color: var(--paper); }
+  .mobile-menu .menu-foot { margin-top: auto; padding-top: 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(196,168,119,0.6); }
+  ::-webkit-scrollbar { width: 10px; } ::-webkit-scrollbar-track { background: var(--paper); } ::-webkit-scrollbar-thumb { background: var(--gold-deep); }
+</style>
+</head>
+<body>
+
+<div class="bg-[var(--teal)] text-[var(--gold)]"><div class="max-w-[1500px] mx-auto px-6 md:px-10 py-2.5 flex items-center justify-between text-xs"><span class="mono opacity-90">— LE JOURNAL · ANALYSES, CONSEILS, REPORTAGES</span><div class="flex items-center gap-4 mono"><a class="opacity-90 hover:opacity-100">+972 50 000 0000</a><span class="opacity-40">·</span><a class="underline-offset-4 underline">FR</a></div></div></div>
+
+<header class="sticky top-0 z-50 bg-[var(--paper)]/92 backdrop-blur-xl border-b border-[var(--line)]">
+  <div class="max-w-[1500px] mx-auto px-6 md:px-10 py-5 flex items-center justify-between gap-6">
+    <a href="06-professional.html" class="brand-logo text-left">
+      <div class="name text-[20px] md:text-[24px]" style="color: var(--teal)">SHAHAR LEVI</div>
+      <div class="desc text-[8px] md:text-[9px] !mt-1" style="color: var(--gold-deep)">REAL ESTATE</div>
+    </a>
+    <nav class="hidden lg:flex items-center gap-9 text-sm">
+      <a href="06-professional.html" class="pro-link">Accueil</a>
+      <a href="06-portefeuille.html" class="pro-link">Portefeuille</a>
+      <a href="06-agence.html" class="pro-link">L'Agence</a>
+      <a href="06-aliyah.html" class="pro-link">Aliyah</a>
+      <a href="06-journal.html" class="pro-link active">Journal</a>
+      <a href="06-contact.html" class="pro-link">Contact</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="06-contact.html" class="hidden md:inline-flex btn-teal text-[10px]">Cabinet privé</a>
+      <button class="burger" onclick="document.body.classList.toggle('menu-open')" aria-label="Menu"><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu lg:hidden">
+  <div class="brand-logo mb-12 text-center"><div class="name text-2xl" style="color: var(--gold)">SHAHAR LEVI</div><div class="desc text-[10px]" style="color: var(--gold-deep)">REAL ESTATE</div></div>
+  <a href="06-professional.html" class="menu-link">Accueil</a>
+  <a href="06-portefeuille.html" class="menu-link">Portefeuille</a>
+  <a href="06-agence.html" class="menu-link">L'Agence</a>
+  <a href="06-aliyah.html" class="menu-link"><em>Aliyah</em></a>
+  <a href="06-journal.html" class="menu-link active">Journal</a>
+  <a href="06-contact.html" class="menu-link">Contact</a>
+  <div class="menu-foot">+972 50 000 0000 · nathalie@shaharlevi.co.il</div>
+</div>
+
+<!-- Page hero -->
+<section class="px-6 md:px-10 py-20 md:py-28 border-b border-[var(--line)]">
+  <div class="max-w-[1500px] mx-auto">
+    <div class="grid md:grid-cols-12 gap-10 items-end">
+      <div class="md:col-span-8 fade-up">
+        <div class="label-gold">— Le journal · MMXXVI</div>
+        <h1 class="mt-6 leading-[0.92]" style="font-size: clamp(3rem, 8vw, 7rem)">
+          <span class="display">Analyses, conseils,</span><br><span class="display-i text-[var(--gold-deep)]">reportages.</span>
+        </h1>
+      </div>
+      <div class="md:col-span-4 fade-up" style="animation-delay: 0.2s">
+        <p class="text-base text-[var(--ink-soft)] leading-relaxed">Quarante-sept articles publiés depuis 2019 — sur l'immobilier israélien, l'aliyah, la fiscalité FR/IL, les quartiers, les notaires. Des analyses honnêtes, jamais commerciales.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Topic filters -->
+<section class="px-6 md:px-10 py-8 border-b border-[var(--line)] bg-[var(--paper-light)] sticky top-[81px] z-40 backdrop-blur-md">
+  <div class="max-w-[1500px] mx-auto flex flex-wrap items-center gap-3">
+    <div class="label-gold mr-3 hidden md:block">— THÈMES</div>
+    <button class="topic-pill" style="background: var(--teal); color: var(--gold)">Tous · 47</button>
+    <button class="topic-pill">Marché · 12</button>
+    <button class="topic-pill">Fiscalité · 9</button>
+    <button class="topic-pill">Aliyah · 14</button>
+    <button class="topic-pill">Notarial · 5</button>
+    <button class="topic-pill">Quartiers · 7</button>
+  </div>
+</section>
+
+<!-- Featured article -->
+<section class="px-6 md:px-10 py-20 md:py-24">
+  <div class="max-w-[1500px] mx-auto">
+    <article class="article-card">
+      <div class="grid md:grid-cols-12 gap-0 items-stretch">
+        <div class="md:col-span-7 img-wrap aspect-[16/10] md:aspect-auto">
+          <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=2000&q=92" class="w-full h-full object-cover">
+        </div>
+        <div class="md:col-span-5 p-8 md:p-12 flex flex-col justify-center">
+          <div class="topic-pill self-start">★ À LA UNE · FISCALITÉ</div>
+          <h2 class="display mt-6 leading-[0.95]" style="font-size: clamp(2rem, 4vw, 3.5rem)">
+            Fiscalité <span class="display-i text-[var(--gold-deep)]">FR/IL</span> en clair.
+          </h2>
+          <p class="text-base text-[var(--ink-soft)] mt-5 leading-relaxed">IFI, plus-value, double imposition, déclaration des comptes israéliens — un guide complet de 47 pages illustré d'exemples chiffrés. Lecture indispensable avant toute acquisition.</p>
+          <div class="flex items-center gap-4 mt-6 text-sm text-[var(--muted)]">
+            <span class="cinzel text-[10px] tracking-[0.3em]">— 11 MIN</span>
+            <span>·</span>
+            <span class="cinzel text-[10px] tracking-[0.3em]">PUBLIÉ LE 18 AVRIL MMXXVI</span>
+          </div>
+          <a class="btn-teal mt-6 self-start">Lire l'article →</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- Articles grid -->
+<section class="px-6 md:px-10 pb-24 md:pb-32">
+  <div class="max-w-[1500px] mx-auto">
+    <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+
+      <article class="article-card">
+        <div class="img-wrap aspect-[16/10]"><img src="https://images.unsplash.com/photo-1499678329028-101435549a4e?w=1000&q=90" class="w-full h-full object-cover"></div>
+        <div class="p-7">
+          <div class="topic-pill" style="background: var(--gold); color: var(--teal)">ALIYAH · 8 MIN</div>
+          <h3 class="display text-2xl mt-4 leading-tight">Aliyah <span class="display-i text-[var(--gold-deep)]">patrimoniale.</span></h3>
+          <p class="text-sm mt-3 leading-relaxed text-[var(--ink-soft)]">Quand acheter, où acheter, et pourquoi le faire avant l'aliyah officielle peut faire économiser jusqu'à 6% de Mas Rechisha.</p>
+          <div class="flex items-center justify-between mt-5 pt-4 border-t border-[var(--line)]"><span class="cinzel text-[10px] tracking-[0.3em] text-[var(--muted)]">12 AVRIL MMXXVI</span><a class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold-deep)]">LIRE →</a></div>
+        </div>
+      </article>
+
+      <article class="article-card">
+        <div class="img-wrap aspect-[16/10]"><img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1000&q=90" class="w-full h-full object-cover"></div>
+        <div class="p-7">
+          <div class="topic-pill">NOTARIAL · 7 MIN</div>
+          <h3 class="display text-2xl mt-4 leading-tight">Heskem zikaron, <span class="display-i text-[var(--gold-deep)]">décodé.</span></h3>
+          <p class="text-sm mt-3 leading-relaxed text-[var(--ink-soft)]">Avec Maître Eitan Cohen, notaire à Tel Aviv et Paris. Un entretien de référence sur la phase la plus tendue d'une acquisition.</p>
+          <div class="flex items-center justify-between mt-5 pt-4 border-t border-[var(--line)]"><span class="cinzel text-[10px] tracking-[0.3em] text-[var(--muted)]">5 AVRIL MMXXVI</span><a class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold-deep)]">LIRE →</a></div>
+        </div>
+      </article>
+
+      <article class="article-card">
+        <div class="img-wrap aspect-[16/10]"><img src="https://images.unsplash.com/photo-1544306094-e2dcf9479da3?w=1000&q=90" class="w-full h-full object-cover"></div>
+        <div class="p-7">
+          <div class="topic-pill">MARCHÉ · 6 MIN</div>
+          <h3 class="display text-2xl mt-4 leading-tight">Tel Aviv, <span class="display-i text-[var(--gold-deep)]">printemps MMXXVI.</span></h3>
+          <p class="text-sm mt-3 leading-relaxed text-[var(--ink-soft)]">Le marché de Tel Aviv reprend son souffle. Notre analyse du Q1 2026 sur les quartiers Rothschild, Park Tzameret et Lev Ha'ir.</p>
+          <div class="flex items-center justify-between mt-5 pt-4 border-t border-[var(--line)]"><span class="cinzel text-[10px] tracking-[0.3em] text-[var(--muted)]">28 MARS MMXXVI</span><a class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold-deep)]">LIRE →</a></div>
+        </div>
+      </article>
+
+      <article class="article-card">
+        <div class="img-wrap aspect-[16/10]"><img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1000&q=90" class="w-full h-full object-cover"></div>
+        <div class="p-7">
+          <div class="topic-pill">QUARTIER · 9 MIN</div>
+          <h3 class="display text-2xl mt-4 leading-tight">Caesarea, <span class="display-i text-[var(--gold-deep)]">le golf et le reste.</span></h3>
+          <p class="text-sm mt-3 leading-relaxed text-[var(--ink-soft)]">Le Quartier 13 de Caesarea fascine — mais Caesarea ne s'y résume pas. Tour d'horizon des secteurs nord, sud, et du domaine privé.</p>
+          <div class="flex items-center justify-between mt-5 pt-4 border-t border-[var(--line)]"><span class="cinzel text-[10px] tracking-[0.3em] text-[var(--muted)]">14 MARS MMXXVI</span><a class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold-deep)]">LIRE →</a></div>
+        </div>
+      </article>
+
+      <article class="article-card">
+        <div class="img-wrap aspect-[16/10]"><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1000&q=90" class="w-full h-full object-cover"></div>
+        <div class="p-7">
+          <div class="topic-pill">REPORTAGE · 14 MIN</div>
+          <h3 class="display text-2xl mt-4 leading-tight">Trois jours <span class="display-i text-[var(--gold-deep)]">à Mougins-sur-Méditerranée.</span></h3>
+          <p class="text-sm mt-3 leading-relaxed text-[var(--ink-soft)]">Reportage immersif dans une villa du Quartier 13 de Caesarea. La famille hésite. Notre travail : les aider à décider, pas vendre.</p>
+          <div class="flex items-center justify-between mt-5 pt-4 border-t border-[var(--line)]"><span class="cinzel text-[10px] tracking-[0.3em] text-[var(--muted)]">2 MARS MMXXVI</span><a class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold-deep)]">LIRE →</a></div>
+        </div>
+      </article>
+
+      <article class="article-card">
+        <div class="img-wrap aspect-[16/10]"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1000&q=90" class="w-full h-full object-cover"></div>
+        <div class="p-7">
+          <div class="topic-pill">FISCALITÉ · 6 MIN</div>
+          <h3 class="display text-2xl mt-4 leading-tight">Plus-value, <span class="display-i text-[var(--gold-deep)]">le calcul que tout le monde rate.</span></h3>
+          <p class="text-sm mt-3 leading-relaxed text-[var(--ink-soft)]">Travaux déductibles, abattements pour durée de détention, exonération résidence principale. Les pièges à éviter avant la cession.</p>
+          <div class="flex items-center justify-between mt-5 pt-4 border-t border-[var(--line)]"><span class="cinzel text-[10px] tracking-[0.3em] text-[var(--muted)]">22 FÉV. MMXXVI</span><a class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold-deep)]">LIRE →</a></div>
+        </div>
+      </article>
+
+      <article class="article-card">
+        <div class="img-wrap aspect-[16/10]"><img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1000&q=90" class="w-full h-full object-cover"></div>
+        <div class="p-7">
+          <div class="topic-pill">QUARTIER · 7 MIN</div>
+          <h3 class="display text-2xl mt-4 leading-tight">Mamilla, <span class="display-i text-[var(--gold-deep)]">le luxe à pied de la Vieille Ville.</span></h3>
+          <p class="text-sm mt-3 leading-relaxed text-[var(--ink-soft)]">Le quartier Mamilla et David's Village concentrent l'élite jérusalémite. Notre lecture des biens disponibles et des prix au m².</p>
+          <div class="flex items-center justify-between mt-5 pt-4 border-t border-[var(--line)]"><span class="cinzel text-[10px] tracking-[0.3em] text-[var(--muted)]">10 FÉV. MMXXVI</span><a class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold-deep)]">LIRE →</a></div>
+        </div>
+      </article>
+
+      <article class="article-card">
+        <div class="img-wrap aspect-[16/10]"><img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1000&q=90" class="w-full h-full object-cover"></div>
+        <div class="p-7">
+          <div class="topic-pill">ALIYAH · 10 MIN</div>
+          <h3 class="display text-2xl mt-4 leading-tight">Banque <span class="display-i text-[var(--gold-deep)]">en Israël quand on vient de France.</span></h3>
+          <p class="text-sm mt-3 leading-relaxed text-[var(--ink-soft)]">Hapoalim, Discount, Mizrahi, Leumi — les conseillers francophones, les délais, les frais. Notre tour d'horizon pratique 2026.</p>
+          <div class="flex items-center justify-between mt-5 pt-4 border-t border-[var(--line)]"><span class="cinzel text-[10px] tracking-[0.3em] text-[var(--muted)]">28 JANV. MMXXVI</span><a class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold-deep)]">LIRE →</a></div>
+        </div>
+      </article>
+
+      <article class="article-card">
+        <div class="img-wrap aspect-[16/10]"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1000&q=90" class="w-full h-full object-cover"></div>
+        <div class="p-7">
+          <div class="topic-pill">MARCHÉ · 5 MIN</div>
+          <h3 class="display text-2xl mt-4 leading-tight">Herzliya Pituach, <span class="display-i text-[var(--gold-deep)]">la côte des francophones.</span></h3>
+          <p class="text-sm mt-3 leading-relaxed text-[var(--ink-soft)]">Galei Tchelet, Reshef, Reichman — pourquoi 40% des familles francophones que nous accompagnons choisissent Herzliya en premier.</p>
+          <div class="flex items-center justify-between mt-5 pt-4 border-t border-[var(--line)]"><span class="cinzel text-[10px] tracking-[0.3em] text-[var(--muted)]">15 JANV. MMXXVI</span><a class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold-deep)]">LIRE →</a></div>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="text-center mt-16">
+      <a class="btn-line text-[var(--teal)]">Voir les 47 articles →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="px-6 md:px-10 py-20 md:py-24 bg-[var(--paper-deep)] border-y border-[var(--line)]">
+  <div class="max-w-3xl mx-auto text-center">
+    <div class="label-gold">— Le carnet privé</div>
+    <h2 class="display mt-4" style="font-size: clamp(2rem, 4.5vw, 3.5rem); font-weight: 400">Recevoir le journal <em class="display-i text-[var(--gold-deep)]">avant publication.</em></h2>
+    <p class="text-base mt-6 max-w-xl mx-auto leading-relaxed text-[var(--ink-soft)]">Quelques envois par trimestre. Les nouveaux articles + les biens off-market avant publication. Jamais de spam.</p>
+    <div class="mt-10 flex flex-col md:flex-row gap-3 max-w-xl mx-auto">
+      <input type="email" placeholder="prenom@nom.fr" class="flex-1 bg-[var(--paper)] border border-[var(--line)] px-5 py-4 text-base outline-none focus:border-[var(--gold)] transition">
+      <button class="btn-teal justify-center">S'inscrire →</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-[var(--teal-deep)] text-[var(--paper)] px-6 md:px-10 py-16">
+  <div class="max-w-[1500px] mx-auto">
+    <div class="text-center mb-12 pb-12 border-b border-[var(--line-gold)]">
+      <div class="brand-logo"><div class="name text-3xl md:text-4xl" style="color: var(--gold)">SHAHAR LEVI</div><div class="desc text-[10px] md:text-xs" style="color: var(--gold-deep)">REAL ESTATE</div></div>
+    </div>
+    <div class="grid md:grid-cols-12 gap-10 mb-12">
+      <div class="md:col-span-4"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-3">— LA MAISON</div><p class="text-base text-[var(--paper)]/75 max-w-md leading-relaxed font-light">Maison indépendante de courtage immobilier. Tel Aviv depuis 2014. Mossi'a #4218.</p></div>
+      <div class="md:col-span-3"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4">PAGES</div><ul class="space-y-2 text-sm text-[var(--paper)]/80"><li><a href="06-professional.html" class="hover:text-[var(--gold)]">Accueil</a></li><li><a href="06-portefeuille.html" class="hover:text-[var(--gold)]">Portefeuille</a></li><li><a href="06-agence.html" class="hover:text-[var(--gold)]">L'Agence</a></li><li><a href="06-aliyah.html" class="hover:text-[var(--gold)]">Aliyah</a></li><li><a href="06-journal.html" class="hover:text-[var(--gold)]">Journal</a></li><li><a href="06-contact.html" class="hover:text-[var(--gold)]">Contact</a></li></ul></div>
+      <div class="md:col-span-5"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4">CONTACT</div><div class="text-sm text-[var(--paper)]/80 leading-relaxed">14 Rothschild Boulevard · Tel Aviv 6688314<br>+972 50 000 0000 · <span class="text-[var(--gold)]">nathalie@shaharlevi.co.il</span></div></div>
+    </div>
+    <div class="border-t border-[var(--line-gold)] pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs cinzel tracking-[0.2em] text-[var(--paper)]/50"><div>© MMXXVI SHAHAR LEVI REAL ESTATE · MOSSI'A #4218</div><div class="flex gap-6"><a class="hover:text-[var(--gold)]">MENTIONS</a><a class="hover:text-[var(--gold)]">RGPD</a><a class="hover:text-[var(--gold)]">HONORAIRES</a></div></div>
+  </div>
+</footer>
+
+</body>
+</html>

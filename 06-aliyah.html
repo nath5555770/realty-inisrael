@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aliyah patrimoniale — SHAHAR LEVI REAL ESTATE</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root { --paper:#f4ede0; --paper-light:#faf5ea; --paper-deep:#ebe1c5; --surface:#fff; --teal:#0e2722; --teal-deep:#061814; --gold:#c4a877; --gold-deep:#a78c5c; --gold-pale:#e0c89a; --ink:#14110d; --ink-soft:#4a3f33; --muted:#8a7d6a; --line:rgba(20,17,13,0.13); --line-gold:rgba(196,168,119,0.3); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; overflow-x: hidden; -webkit-font-smoothing: antialiased; letter-spacing: -0.005em; opacity: 0; animation: page-in 0.8s ease forwards; }
+  @keyframes page-in { to { opacity: 1; } }
+  .cinzel { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.16em; }
+  .display { font-family: 'Playfair Display', serif; font-weight: 400; letter-spacing: -0.022em; }
+  .display-i { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  ::selection { background: var(--teal); color: var(--gold); }
+  body::before { content:''; position: fixed; inset: 0; z-index: 100; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"); opacity: 0.22; mix-blend-mode: multiply; }
+  @keyframes fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { opacity: 0; animation: fade-up 1.4s cubic-bezier(0.2,0.85,0.2,1) forwards; }
+  @keyframes ken-burns { from { transform: scale(1); } to { transform: scale(1.1); } }
+  .ken-burns { animation: ken-burns 28s ease-in-out infinite alternate; }
+
+  .brand-logo .name { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.18em; line-height: 1; }
+  .brand-logo .desc { font-family: 'Cinzel', serif; font-weight: 400; letter-spacing: 0.4em; margin-top: 0.5em; font-size: 0.4em; }
+
+  .pro-link { position: relative; display: inline-block; color: var(--ink); transition: color 0.4s; }
+  .pro-link::after { content:''; position: absolute; left: 0; bottom: -4px; width: 100%; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: right; transition: transform 0.6s; }
+  .pro-link:hover { color: var(--gold-deep); } .pro-link:hover::after { transform: scaleX(1); transform-origin: left; }
+  .pro-link.active { color: var(--gold-deep); } .pro-link.active::after { background: var(--gold-deep); transform: scaleX(1); }
+
+  .btn-teal { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; background: var(--teal); color: var(--gold); font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; transition: all 0.6s; }
+  .btn-teal:hover { letter-spacing: 0.4em; }
+  .btn-line { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; border: 1px solid currentColor; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; transition: all 0.6s; background: transparent; }
+  .btn-line:hover { letter-spacing: 0.4em; }
+
+  .label { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--muted); }
+  .label-teal { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--teal); }
+  .label-gold { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4em; color: var(--gold-deep); }
+  .hr-thin { height: 1px; background: var(--line); width: 100%; }
+  .hr-gold { height: 1px; background: var(--line-gold); width: 100%; }
+  .roman { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; color: var(--gold-deep); line-height: 0.85; }
+
+  .burger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 44px; height: 44px; cursor: pointer; background: transparent; border: 1px solid var(--teal); transition: all 0.4s; }
+  .burger span { display: block; width: 20px; height: 1px; background: var(--teal); transition: all 0.4s; }
+  body.menu-open .burger { background: var(--teal); border-color: var(--teal); } body.menu-open .burger span { background: var(--gold); }
+  body.menu-open .burger span:nth-child(1) { transform: translateY(3px) rotate(45deg); } body.menu-open .burger span:nth-child(2) { transform: translateY(-3px) rotate(-45deg); }
+  @media (max-width: 1023px) { .burger { display: flex; } }
+  .mobile-menu { position: fixed; inset: 0; z-index: 55; background: var(--teal); transform: translateY(-100%); transition: transform 0.7s; display: flex; flex-direction: column; padding: 6rem 2rem 3rem; overflow-y: auto; }
+  body.menu-open .mobile-menu { transform: translateY(0); } body.menu-open { overflow: hidden; }
+  .mobile-menu .menu-link { display: block; font-family: 'Cinzel', serif; font-weight: 400; font-size: clamp(1.5rem, 5vw, 2.5rem); color: var(--gold); padding: 1rem 0; border-bottom: 1px solid var(--line-gold); transition: all 0.4s; letter-spacing: 0.15em; text-transform: uppercase; }
+  .mobile-menu .menu-link:hover, .mobile-menu .menu-link.active { padding-left: 1rem; color: var(--paper); }
+  .mobile-menu .menu-foot { margin-top: auto; padding-top: 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(196,168,119,0.6); }
+  ::-webkit-scrollbar { width: 10px; } ::-webkit-scrollbar-track { background: var(--paper); } ::-webkit-scrollbar-thumb { background: var(--gold-deep); }
+</style>
+</head>
+<body>
+
+<div class="bg-[var(--teal)] text-[var(--gold)]"><div class="max-w-[1500px] mx-auto px-6 md:px-10 py-2.5 flex items-center justify-between text-xs"><span class="mono opacity-90">— ALIYAH PATRIMONIALE · ACCOMPAGNEMENT FRANCOPHONE</span><div class="flex items-center gap-4 mono"><a class="opacity-90 hover:opacity-100">+972 50 000 0000</a><span class="opacity-40">·</span><a class="underline-offset-4 underline">FR</a></div></div></div>
+
+<header class="sticky top-0 z-50 bg-[var(--paper)]/92 backdrop-blur-xl border-b border-[var(--line)]">
+  <div class="max-w-[1500px] mx-auto px-6 md:px-10 py-5 flex items-center justify-between gap-6">
+    <a href="06-professional.html" class="brand-logo text-left">
+      <div class="name text-[20px] md:text-[24px]" style="color: var(--teal)">SHAHAR LEVI</div>
+      <div class="desc text-[8px] md:text-[9px] !mt-1" style="color: var(--gold-deep)">REAL ESTATE</div>
+    </a>
+    <nav class="hidden lg:flex items-center gap-9 text-sm">
+      <a href="06-professional.html" class="pro-link">Accueil</a>
+      <a href="06-portefeuille.html" class="pro-link">Portefeuille</a>
+      <a href="06-agence.html" class="pro-link">L'Agence</a>
+      <a href="06-aliyah.html" class="pro-link active">Aliyah</a>
+      <a href="06-journal.html" class="pro-link">Journal</a>
+      <a href="06-contact.html" class="pro-link">Contact</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="06-contact.html" class="hidden md:inline-flex btn-teal text-[10px]">Cabinet privé</a>
+      <button class="burger" onclick="document.body.classList.toggle('menu-open')" aria-label="Menu"><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu lg:hidden">
+  <div class="brand-logo mb-12 text-center"><div class="name text-2xl" style="color: var(--gold)">SHAHAR LEVI</div><div class="desc text-[10px]" style="color: var(--gold-deep)">REAL ESTATE</div></div>
+  <a href="06-professional.html" class="menu-link">Accueil</a>
+  <a href="06-portefeuille.html" class="menu-link">Portefeuille</a>
+  <a href="06-agence.html" class="menu-link">L'Agence</a>
+  <a href="06-aliyah.html" class="menu-link active">Aliyah</a>
+  <a href="06-journal.html" class="menu-link">Journal</a>
+  <a href="06-contact.html" class="menu-link">Contact</a>
+  <div class="menu-foot">+972 50 000 0000 · nathalie@shaharlevi.co.il</div>
+</div>
+
+<!-- Page hero -->
+<section class="relative px-6 md:px-10 py-20 md:py-32 overflow-hidden border-b border-[var(--line)]">
+  <div class="absolute inset-0 opacity-15"><img src="https://images.unsplash.com/photo-1544306094-e2dcf9479da3?w=2000&q=85" class="w-full h-full object-cover ken-burns"></div>
+  <div class="relative max-w-[1500px] mx-auto">
+    <div class="grid md:grid-cols-12 gap-10 items-end">
+      <div class="md:col-span-8 fade-up">
+        <div class="label-gold">— Aliyah patrimoniale</div>
+        <h1 class="mt-6 leading-[0.9]" style="font-size: clamp(3rem, 8vw, 7rem)">
+          <span class="display">Acheter avant</span><br><span class="display-i text-[var(--gold-deep)]">de monter.</span>
+        </h1>
+      </div>
+      <div class="md:col-span-4 fade-up" style="animation-delay: 0.2s">
+        <p class="text-base text-[var(--ink-soft)] leading-relaxed">
+          Acquérir avant l'aliyah officielle peut réduire votre Mas Rechisha (taxe d'achat) jusqu'à 6%. Nous accompagnons l'ensemble du parcours, en français, depuis votre première recherche jusqu'à la pose de la mezouza.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Key numbers -->
+<section class="px-6 md:px-10 py-16 md:py-20 border-b border-[var(--line)] bg-[var(--paper-light)]">
+  <div class="max-w-[1500px] mx-auto grid md:grid-cols-3 gap-8">
+    <div class="border-l-2 border-[var(--gold)] pl-6">
+      <div class="label-gold">— ÉCONOMIE MOYENNE</div>
+      <div class="display text-5xl mt-3 text-[var(--teal)]">~ 250 000 ₪</div>
+      <div class="text-sm text-[var(--ink-soft)] mt-2">sur un bien à 5M ₪ (vs taux étranger)</div>
+    </div>
+    <div class="border-l-2 border-[var(--gold)] pl-6">
+      <div class="label-gold">— DÉLAI MOYEN</div>
+      <div class="display text-5xl mt-3 text-[var(--teal)]">8—14 mois</div>
+      <div class="text-sm text-[var(--ink-soft)] mt-2">de la première visite à la signature</div>
+    </div>
+    <div class="border-l-2 border-[var(--gold)] pl-6">
+      <div class="label-gold">— FAMILLES ACCOMPAGNÉES</div>
+      <div class="display text-5xl mt-3 text-[var(--teal)]">147</div>
+      <div class="text-sm text-[var(--ink-soft)] mt-2">depuis MMXIV · 100% francophones</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 steps -->
+<section class="px-6 md:px-10 py-24 md:py-32">
+  <div class="max-w-[1500px] mx-auto">
+    <div class="text-center mb-16">
+      <div class="label-gold">— Les 7 étapes de l'aliyah patrimoniale</div>
+      <h2 class="mt-6 leading-[0.92]" style="font-size: clamp(2.5rem, 6vw, 5rem)">
+        <span class="display">Un parcours</span><br><span class="display-i text-[var(--gold-deep)]">balisé en français.</span>
+      </h2>
+    </div>
+
+    <div class="space-y-6">
+      <div class="bg-[var(--surface)] border border-[var(--line)] p-8 grid md:grid-cols-12 gap-6 items-start">
+        <div class="md:col-span-1"><span class="roman text-5xl">01</span></div>
+        <div class="md:col-span-3"><div class="display text-2xl">Cadrage patrimonial</div><div class="cinzel text-[10px] tracking-[0.3em] mt-2 text-[var(--gold-deep)]">PARIS / VISIO · 1—2H</div></div>
+        <div class="md:col-span-8"><p class="text-base text-[var(--ink-soft)] leading-relaxed">Premier rendez-vous à Paris ou en visioconférence. Définition de l'enveloppe budgétaire, de la zone (Tel Aviv, Netanya, Jérusalem...), de l'horizon (résidence post-aliyah, secondaire, ou locatif), et de la fiscalité applicable.</p></div>
+      </div>
+
+      <div class="bg-[var(--surface)] border border-[var(--line)] p-8 grid md:grid-cols-12 gap-6 items-start">
+        <div class="md:col-span-1"><span class="roman text-5xl">02</span></div>
+        <div class="md:col-span-3"><div class="display text-2xl">Visites présélectionnées</div><div class="cinzel text-[10px] tracking-[0.3em] mt-2 text-[var(--gold-deep)]">2—3 JOURS EN ISRAËL</div></div>
+        <div class="md:col-span-8"><p class="text-base text-[var(--ink-soft)] leading-relaxed">Trois biens maximum, choisis en amont selon vos critères. Visite physique sur 2—3 jours en Israël (avec accompagnement complet : transport, hôtel partenaire, restaurants), ou en vidéo si vous êtes encore en France.</p></div>
+      </div>
+
+      <div class="bg-[var(--surface)] border border-[var(--line)] p-8 grid md:grid-cols-12 gap-6 items-start">
+        <div class="md:col-span-1"><span class="roman text-5xl">03</span></div>
+        <div class="md:col-span-3"><div class="display text-2xl">Heskem zikaron</div><div class="cinzel text-[10px] tracking-[0.3em] mt-2 text-[var(--gold-deep)]">COMPROMIS NOTARIÉ</div></div>
+        <div class="md:col-span-8"><p class="text-base text-[var(--ink-soft)] leading-relaxed">Compromis avec notaire bilingue (Maître Cohen, à Tel Aviv et Paris). Acompte 10—15%. Tout est traduit, expliqué, signé en français. Délai légal de 90 jours pour le heskem mekher (acte définitif).</p></div>
+      </div>
+
+      <div class="bg-[var(--surface)] border border-[var(--line)] p-8 grid md:grid-cols-12 gap-6 items-start">
+        <div class="md:col-span-1"><span class="roman text-5xl">04</span></div>
+        <div class="md:col-span-3"><div class="display text-2xl">Financement</div><div class="cinzel text-[10px] tracking-[0.3em] mt-2 text-[var(--gold-deep)]">CRÉDIT IL OU APPORT FR</div></div>
+        <div class="md:col-span-8"><p class="text-base text-[var(--ink-soft)] leading-relaxed">Crédit immobilier israélien (Bank Hapoalim, Discount, Mizrahi, Leumi) jusqu'à 50% LTV non-résident, 70% post-aliyah. Coordination avec votre banquier français pour le transfert des fonds.</p></div>
+      </div>
+
+      <div class="bg-[var(--surface)] border border-[var(--line)] p-8 grid md:grid-cols-12 gap-6 items-start">
+        <div class="md:col-span-1"><span class="roman text-5xl">05</span></div>
+        <div class="md:col-span-3"><div class="display text-2xl">Transfert des fonds</div><div class="cinzel text-[10px] tracking-[0.3em] mt-2 text-[var(--gold-deep)]">DÉCLARATION TRÉSOR FR</div></div>
+        <div class="md:col-span-8"><p class="text-base text-[var(--ink-soft)] leading-relaxed">Déclaration de sortie de capital au Trésor public français (formulaire 3916 + annexes). Assurance change si nécessaire. Virement sécurisé sur compte d'avocat (escrow) jusqu'à la signature.</p></div>
+      </div>
+
+      <div class="bg-[var(--surface)] border border-[var(--line)] p-8 grid md:grid-cols-12 gap-6 items-start">
+        <div class="md:col-span-1"><span class="roman text-5xl">06</span></div>
+        <div class="md:col-span-3"><div class="display text-2xl">Heskem mekher + Tabu</div><div class="cinzel text-[10px] tracking-[0.3em] mt-2 text-[var(--gold-deep)]">ACTE DE VENTE + CADASTRE</div></div>
+        <div class="md:col-span-8"><p class="text-base text-[var(--ink-soft)] leading-relaxed">Signature de l'acte définitif chez le notaire. Paiement de la Mas Rechisha (taxe d'achat). Inscription au Tabu (cadastre israélien) — vous êtes officiellement propriétaire. Remise des clés.</p></div>
+      </div>
+
+      <div class="bg-[var(--surface)] border border-[var(--line)] p-8 grid md:grid-cols-12 gap-6 items-start">
+        <div class="md:col-span-1"><span class="roman text-5xl">07</span></div>
+        <div class="md:col-span-3"><div class="display text-2xl">Suivi annuel</div><div class="cinzel text-[10px] tracking-[0.3em] mt-2 text-[var(--gold-deep)]">GESTION + FISCALITÉ FR/IL</div></div>
+        <div class="md:col-span-8"><p class="text-base text-[var(--ink-soft)] leading-relaxed">Mise en location si vous n'avez pas encore fait l'aliyah, gestion locative, déclaration fiscale FR/IL annuelle (convention bilatérale du 31.07.1995). Nous restons votre interlocuteur.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mas Rechisha simulator -->
+<section class="px-6 md:px-10 py-24 md:py-32 bg-[var(--teal)] text-[var(--paper)]">
+  <div class="max-w-[1500px] mx-auto">
+    <div class="grid md:grid-cols-12 gap-12 items-center">
+      <div class="md:col-span-6">
+        <div class="cinzel text-[11px] tracking-[0.4em] text-[var(--gold)]">— Le levier fiscal · Mas Rechisha</div>
+        <h2 class="mt-6 leading-[0.92]" style="font-size: clamp(2.25rem, 5vw, 4.5rem); color: var(--paper)">
+          <span class="display">Acheter en olé,</span><br><span class="display-i text-[var(--gold)]">économiser 6%.</span>
+        </h2>
+        <p class="text-lg mt-8 leading-relaxed text-[var(--paper)]/85 font-light">
+          La Mas Rechisha (taxe d'achat) varie selon votre statut : <strong class="text-[var(--gold)]">8% pour un étranger</strong>, <strong class="text-[var(--gold)]">0—5% pour un olé hadash</strong> dans les 7 ans suivant l'aliyah. Acquérir avant ou pendant la procédure d'aliyah peut donc faire économiser des centaines de milliers de shekels.
+        </p>
+      </div>
+      <div class="md:col-span-6">
+        <div class="bg-[var(--paper)] text-[var(--ink)] p-8">
+          <div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold-deep)]">— EXEMPLE CHIFFRÉ · BIEN À 5 000 000 ₪</div>
+          <div class="mt-6 space-y-4">
+            <div class="flex items-baseline justify-between border-b border-[var(--line)] pb-3">
+              <div><div class="display text-lg">Étranger non-résident</div><div class="text-xs text-[var(--muted)]">Taux Mas Rechisha · 8%</div></div>
+              <div class="display text-2xl text-[var(--ink)]">400 000 ₪</div>
+            </div>
+            <div class="flex items-baseline justify-between border-b border-[var(--line)] pb-3">
+              <div><div class="display text-lg">Olé hadash (post-aliyah)</div><div class="text-xs text-[var(--muted)]">Taux préférentiel · ~0.5—5%</div></div>
+              <div class="display text-2xl text-[var(--gold-deep)]">~ 150 000 ₪</div>
+            </div>
+            <div class="flex items-baseline justify-between bg-[var(--paper-deep)] p-4 -mx-2">
+              <div><div class="display text-lg text-[var(--teal)]">Économie</div><div class="text-xs text-[var(--muted)]">Conditions à valider avec un fiscaliste</div></div>
+              <div class="display text-3xl text-[var(--teal)]">~ 250 000 ₪</div>
+            </div>
+          </div>
+          <div class="mono text-xs text-[var(--muted)] mt-4">≈ 65 000 € à taux courant</div>
+          <a href="06-contact.html" class="btn-teal w-full justify-center mt-6">Demander une simulation →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ aliyah -->
+<section class="px-6 md:px-10 py-24 md:py-32 border-b border-[var(--line)]">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="label-gold">— Questions fréquentes</div>
+      <h2 class="display mt-4" style="font-size: clamp(2rem, 4.5vw, 3.5rem)">Les questions <em class="display-i text-[var(--gold-deep)]">qu'on nous pose souvent.</em></h2>
+    </div>
+
+    <details class="border-t border-[var(--line)] py-5"><summary class="cursor-pointer flex items-center justify-between display text-xl">À partir de quand bénéficie-t-on du taux Mas Rechisha réduit ?<span class="text-[var(--gold-deep)] cinzel">+</span></summary><p class="text-[var(--ink-soft)] mt-4 leading-relaxed">Le taux préférentiel (0—5%) s'applique pendant 7 ans après votre aliyah officielle. Plusieurs cas particuliers permettent de bénéficier du taux dès l'annonce d'aliyah ou avec un visa de candidat à l'aliyah (A-1). Nous coordonnons systématiquement avec un fiscaliste FR/IL pour valider votre situation.</p></details>
+
+    <details class="border-t border-[var(--line)] py-5"><summary class="cursor-pointer flex items-center justify-between display text-xl">Peut-on acheter à crédit en Israël depuis la France ?<span class="text-[var(--gold-deep)] cinzel">+</span></summary><p class="text-[var(--ink-soft)] mt-4 leading-relaxed">Oui. Les principales banques israéliennes accordent jusqu'à 50% LTV aux non-résidents, 70% post-aliyah. Taux fixes ou variables, en shekels ou USD. Délai d'instruction : 4 à 8 semaines. Nous orchestrons avec votre banquier français.</p></details>
+
+    <details class="border-t border-[var(--line)] py-5"><summary class="cursor-pointer flex items-center justify-between display text-xl">Que se passe-t-il si je n'ai pas encore fait l'aliyah au moment de l'achat ?<span class="text-[var(--gold-deep)] cinzel">+</span></summary><p class="text-[var(--ink-soft)] mt-4 leading-relaxed">Vous achetez en tant qu'étranger non-résident (taux Mas Rechisha 8%). Mais — point important — si vous montez en aliyah dans les 2 ans suivant l'achat, vous pouvez demander un remboursement partiel a posteriori. À discuter avec votre fiscaliste.</p></details>
+
+    <details class="border-t border-[var(--line)] py-5"><summary class="cursor-pointer flex items-center justify-between display text-xl">Faut-il un compte bancaire israélien pour acheter ?<span class="text-[var(--gold-deep)] cinzel">+</span></summary><p class="text-[var(--ink-soft)] mt-4 leading-relaxed">Oui, pour le transfert des fonds, le paiement de la Mas Rechisha, et les frais récurrents (arnona, vaad bayit). Nous accompagnons l'ouverture du compte en français — Bank Hapoalim et Discount ont des conseillers francophones dédiés.</p></details>
+
+    <details class="border-t border-[var(--line)] border-b py-5"><summary class="cursor-pointer flex items-center justify-between display text-xl">Quelle fiscalité française s'applique sur un bien en Israël ?<span class="text-[var(--gold-deep)] cinzel">+</span></summary><p class="text-[var(--ink-soft)] mt-4 leading-relaxed">La convention fiscale franco-israélienne du 31 juillet 1995 évite la double imposition. Les revenus locatifs sont déclarés en France (avec crédit d'impôt sur ce qui est payé en Israël), entrent dans l'IFI au-delà de 1.3 M€ de patrimoine immobilier. La plus-value à la cession est imposable en France.</p></details>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="px-6 md:px-10 py-24 md:py-32 bg-[var(--paper-deep)]">
+  <div class="max-w-3xl mx-auto text-center">
+    <div class="label-gold">— Prêt à commencer ?</div>
+    <h2 class="mt-6 leading-[0.92]" style="font-size: clamp(2.5rem, 6vw, 5rem)">
+      <span class="display">Un rendez-vous,</span><br><span class="display-i text-[var(--gold-deep)]">en confidence.</span>
+    </h2>
+    <p class="text-lg mt-8 max-w-xl mx-auto leading-relaxed text-[var(--ink-soft)]">À Paris, Tel Aviv ou en visioconférence. Sans engagement, sans frais initiaux. Toujours en français.</p>
+    <div class="mt-10 flex flex-wrap justify-center gap-3">
+      <a href="06-contact.html" class="btn-teal">Solliciter un cadrage →</a>
+      <a href="06-portefeuille.html" class="btn-line text-[var(--teal)]">Voir le portefeuille</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-[var(--teal-deep)] text-[var(--paper)] px-6 md:px-10 py-16">
+  <div class="max-w-[1500px] mx-auto">
+    <div class="text-center mb-12 pb-12 border-b border-[var(--line-gold)]">
+      <div class="brand-logo"><div class="name text-3xl md:text-4xl" style="color: var(--gold)">SHAHAR LEVI</div><div class="desc text-[10px] md:text-xs" style="color: var(--gold-deep)">REAL ESTATE</div></div>
+    </div>
+    <div class="grid md:grid-cols-12 gap-10 mb-12">
+      <div class="md:col-span-4"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-3">— LA MAISON</div><p class="text-base text-[var(--paper)]/75 max-w-md leading-relaxed font-light">Maison indépendante de courtage immobilier. Tel Aviv depuis 2014. Mossi'a #4218.</p></div>
+      <div class="md:col-span-3"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4">PAGES</div><ul class="space-y-2 text-sm text-[var(--paper)]/80"><li><a href="06-professional.html" class="hover:text-[var(--gold)]">Accueil</a></li><li><a href="06-portefeuille.html" class="hover:text-[var(--gold)]">Portefeuille</a></li><li><a href="06-agence.html" class="hover:text-[var(--gold)]">L'Agence</a></li><li><a href="06-aliyah.html" class="hover:text-[var(--gold)]">Aliyah</a></li><li><a href="06-journal.html" class="hover:text-[var(--gold)]">Journal</a></li><li><a href="06-contact.html" class="hover:text-[var(--gold)]">Contact</a></li></ul></div>
+      <div class="md:col-span-5"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4">CONTACT</div><div class="text-sm text-[var(--paper)]/80 leading-relaxed">14 Rothschild Boulevard · Tel Aviv 6688314<br>+972 50 000 0000 · <span class="text-[var(--gold)]">nathalie@shaharlevi.co.il</span></div></div>
+    </div>
+    <div class="border-t border-[var(--line-gold)] pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs cinzel tracking-[0.2em] text-[var(--paper)]/50"><div>© MMXXVI SHAHAR LEVI REAL ESTATE · MOSSI'A #4218</div><div class="flex gap-6"><a class="hover:text-[var(--gold)]">MENTIONS</a><a class="hover:text-[var(--gold)]">RGPD</a><a class="hover:text-[var(--gold)]">HONORAIRES</a></div></div>
+  </div>
+</footer>
+
+</body>
+</html>
