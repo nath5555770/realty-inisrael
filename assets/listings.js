@@ -1,19 +1,43 @@
 /* ==========================================================================
-   SHAHAR LEVI REAL ESTATE — Listings Renderer
-   Reads /data/listings.json and renders the portfolio + featured cards.
-   The JSON is the single source of truth, edited by the admin (/admin/).
+   SHAHAR LEVI REAL ESTATE — Listings renderer (Supabase backend)
+   Reads from Supabase Postgres in real time. Anonymous (publishable) key.
    ========================================================================== */
 (function () {
   'use strict';
 
-  const DATA_URL = (location.pathname.startsWith('/admin') ? '../' : '') + 'data/listings.json';
+  if (!window.SL_SUPABASE) {
+    console.error('[listings] Supabase config missing');
+    return;
+  }
+  const SB_URL = window.SL_SUPABASE.url;
+  const SB_KEY = window.SL_SUPABASE.key;
+
   let CACHE = null;
 
-  function load() {
-    if (CACHE) return Promise.resolve(CACHE);
-    return fetch(DATA_URL + '?v=' + Date.now())
-      .then(r => r.json())
-      .then(d => { CACHE = d; return d; });
+  function load(force) {
+    if (CACHE && !force) return Promise.resolve(CACHE);
+    // PostgREST: select all visible listings, ordered by position then created_at
+    const url = SB_URL + '/rest/v1/listings?select=*&visible=eq.true&off_market=eq.false&order=position.asc,created_at.asc';
+    return fetch(url, {
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Accept': 'application/json'
+      }
+    })
+      .then(r => {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(rows => { CACHE = rows; return rows; });
+  }
+
+  function imageUrl(path) {
+    if (!path) return '';
+    // External (https://...) → keep as-is
+    if (/^https?:\/\//i.test(path)) return path;
+    // Path within the listing-images bucket → Supabase Storage public URL
+    return SB_URL + '/storage/v1/object/public/listing-images/' + path.replace(/^\/+/, '');
   }
 
   function escapeHtml(s) {
@@ -23,7 +47,7 @@
 
   function priceLabel(l) {
     if (l.price_display) return l.price_display;
-    if (typeof l.price_usd === 'number') {
+    if (typeof l.price_usd === 'number' && l.price_usd > 0) {
       const m = l.price_usd / 1_000_000;
       return '$' + (m % 1 === 0 ? m.toFixed(1) : m.toFixed(2)) + 'M';
     }
@@ -37,7 +61,7 @@
       'caesarea': 'CAESAREA',
       'netanya': 'NETANYA',
       'jerusalem': 'JÉRUSALEM'
-    })[slug] || slug.toUpperCase();
+    })[slug] || (slug || '').toUpperCase();
   }
 
   function cardHTML(l, opts) {
@@ -45,13 +69,14 @@
     const big = opts.big;
     const refTag = (l.signature ? '★ ' : '') + (l.ref || '');
     const heart = '<button class="like-btn"><svg width="' + (big ? 18 : 16) + '" height="' + (big ? 18 : 16) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>';
+    const img = imageUrl(l.image);
 
     if (big) {
       return [
         '<article class="estate mb-16" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-ref="', escapeHtml(l.ref), '">',
         '  <div class="grid md:grid-cols-12 gap-10 items-center">',
         '    <div class="md:col-span-7 frame aspect-[16/10]">',
-        '      <img src="', escapeHtml(l.image), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
+        '      <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
         '      <div class="ref-tag">', escapeHtml(refTag), (l.signature ? ' · PIÈCE SIGNATURE' : ''), '</div>',
         heart,
         '    </div>',
@@ -83,7 +108,7 @@
     return [
       '<article class="estate" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-ref="', escapeHtml(l.ref), '">',
       '  <div class="frame aspect-[4/5] mb-5">',
-      '    <img src="', escapeHtml(l.image), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
+      '    <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
       '    <div class="ref-tag">', escapeHtml(refTag), '</div>',
       heart,
       '  </div>',
@@ -100,12 +125,15 @@
     ].join('');
   }
 
-  // ---- PORTFOLIO PAGE -------------------------------------------------------
+  // ---- PORTFOLIO PAGE ------------------------------------------------------
   function renderPortfolio(container) {
-    return load().then(d => {
-      const visible = d.listings.filter(l => l.visible !== false && !l.off_market);
-      const big = visible.find(l => l.signature) || visible[0];
-      const others = visible.filter(l => l !== big);
+    return load(true).then(rows => {
+      if (!rows.length) {
+        container.innerHTML = '<div class="text-center py-20 text-[var(--muted)] cinzel text-xs tracking-[0.3em]">Aucune annonce pour le moment.</div>';
+        return;
+      }
+      const big = rows.find(l => l.signature) || rows[0];
+      const others = rows.filter(l => l !== big);
 
       const html = [];
       if (big) html.push(cardHTML(big, { big: true }));
@@ -117,16 +145,13 @@
 
       // Update counters in the page header
       const totalEl = document.querySelector('[data-stat="total"]');
-      if (totalEl) totalEl.textContent = visible.length;
-      const offMarketCount = d.listings.filter(l => l.off_market === true).length;
-      const offMarketEl = document.querySelector('[data-stat="off-market"]');
-      if (offMarketEl) offMarketEl.textContent = offMarketCount;
+      if (totalEl) totalEl.textContent = rows.length;
 
-      // Update filter counts
-      updateFilterCounts(visible);
-
-      // Wire up filters
+      updateFilterCounts(rows);
       wireFilters(container);
+    }).catch(e => {
+      console.error('[portfolio] failed:', e);
+      container.innerHTML = '<div class="text-center py-20 text-[var(--muted)]">Impossible de charger le portefeuille.</div>';
     });
   }
 
@@ -140,9 +165,10 @@
       const t = btn.textContent.trim().toLowerCase();
       let key = null;
       if (t.startsWith('tous')) {
-        btn.dataset.filterTotal = items.length;
         btn.textContent = 'Tous · ' + items.length;
-      } else if (t.startsWith('tel aviv')) key = 'tel-aviv';
+        return;
+      }
+      if (t.startsWith('tel aviv')) key = 'tel-aviv';
       else if (t.startsWith('herzliya')) key = 'herzliya';
       else if (t.startsWith('caesarea')) key = 'caesarea';
       else if (t.startsWith('netanya')) key = 'netanya';
@@ -150,13 +176,13 @@
       else if (t.startsWith('penthouse')) key = 'penthouse';
       else if (t.startsWith('villa')) key = 'villa';
       else if (t.startsWith('appartement')) key = 'appartement';
-      if (key && counts[key] != null) {
+      if (key) {
         const labelMap = {
           'tel-aviv': 'Tel Aviv', 'herzliya': 'Herzliya', 'caesarea': 'Caesarea',
           'netanya': 'Netanya', 'jerusalem': 'Jérusalem',
           'penthouse': 'Penthouse', 'villa': 'Villa', 'appartement': 'Appartement'
         };
-        btn.textContent = labelMap[key] + ' · ' + counts[key];
+        btn.textContent = labelMap[key] + ' · ' + (counts[key] || 0);
       }
     });
   }
@@ -200,47 +226,47 @@
 
   // ---- HOMEPAGE FEATURED ---------------------------------------------------
   function renderFeatured(container, count) {
-    return load().then(d => {
+    return load().then(rows => {
       count = count || 3;
-      const visible = d.listings.filter(l => l.visible !== false && !l.off_market);
-      // Prefer items marked featured; fallback to first N
-      let featured = visible.filter(l => l.featured === true);
+      let featured = rows.filter(l => l.featured === true);
       if (featured.length < count) {
-        const extras = visible.filter(l => !l.featured).slice(0, count - featured.length);
+        const extras = rows.filter(l => !l.featured).slice(0, count - featured.length);
         featured = featured.concat(extras);
       }
       featured = featured.slice(0, count);
 
-      // Compact card variant for the home preview
-      const html = featured.map(l => [
-        '<article class="estate">',
-        '  <div class="frame aspect-[4/5] mb-5">',
-        '    <img src="', escapeHtml(l.image), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
-        '    <div class="ref-tag">', (l.signature ? '★ ' : ''), escapeHtml(l.ref || ''), '</div>',
-        '  </div>',
-        '  <div class="label-teal">', cityLabel(l.city), ' · ', escapeHtml((l.neighborhood || '').toUpperCase()), '</div>',
-        '  <h3 class="display text-3xl mt-3 leading-tight">', escapeHtml(l.title_main), ' <span class="display-i text-[var(--gold-deep)]">', escapeHtml(l.title_accent || ''), '</span></h3>',
-        '  <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtml(l.description || ''), '</p>',
-        '  <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">',
-        '    <span class="label !tracking-[0.2em]">', escapeHtml(l.rooms || ''), l.extra_label ? ' · ' + escapeHtml(l.extra_label) : '', '</span>',
-        '    <span class="display text-2xl text-[var(--teal)]">', escapeHtml(priceLabel(l)), '</span>',
-        '  </div>',
-        '</article>'
-      ].join('')).join('');
+      const html = featured.map(l => {
+        const img = imageUrl(l.image);
+        return [
+          '<article class="estate">',
+          '  <div class="frame aspect-[4/5] mb-5">',
+          '    <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
+          '    <div class="ref-tag">', (l.signature ? '★ ' : ''), escapeHtml(l.ref || ''), '</div>',
+          '  </div>',
+          '  <div class="label-teal">', cityLabel(l.city), ' · ', escapeHtml((l.neighborhood || '').toUpperCase()), '</div>',
+          '  <h3 class="display text-3xl mt-3 leading-tight">', escapeHtml(l.title_main), ' <span class="display-i text-[var(--gold-deep)]">', escapeHtml(l.title_accent || ''), '</span></h3>',
+          '  <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtml(l.description || ''), '</p>',
+          '  <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">',
+          '    <span class="label !tracking-[0.2em]">', escapeHtml(l.rooms || ''), l.extra_label ? ' · ' + escapeHtml(l.extra_label) : '', '</span>',
+          '    <span class="display text-2xl text-[var(--teal)]">', escapeHtml(priceLabel(l)), '</span>',
+          '  </div>',
+          '</article>'
+        ].join('');
+      }).join('');
 
       container.innerHTML = html;
-    });
+    }).catch(e => console.error('[featured] failed:', e));
   }
 
   // ---- AUTO-INIT -----------------------------------------------------------
   function init() {
     const portfolio = document.getElementById('listings-portfolio');
-    if (portfolio) renderPortfolio(portfolio).catch(e => console.error('Portfolio render failed', e));
+    if (portfolio) renderPortfolio(portfolio);
 
     const featured = document.getElementById('listings-featured');
     if (featured) {
       const count = parseInt(featured.dataset.count || '3', 10);
-      renderFeatured(featured, count).catch(e => console.error('Featured render failed', e));
+      renderFeatured(featured, count);
     }
   }
 
@@ -250,6 +276,5 @@
     init();
   }
 
-  // Public API for the admin
-  window.SLListings = { load, renderPortfolio, renderFeatured };
+  window.SLListings = { load, renderPortfolio, renderFeatured, imageUrl };
 })();

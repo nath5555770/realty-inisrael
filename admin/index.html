@@ -28,27 +28,15 @@
 
     <form class="login-form" id="loginForm">
       <label class="field">
-        <span class="field-label">— MOT DE PASSE</span>
-        <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••" autofocus>
+        <span class="field-label">— EMAIL</span>
+        <input type="email" id="loginEmail" required autocomplete="username" placeholder="nathalie@shaharlevi.co.il" autofocus>
       </label>
-      <details class="field-advanced">
-        <summary>Réglages avancés</summary>
-        <label class="field">
-          <span class="field-label">— TOKEN GITHUB <a class="help-link" target="_blank" rel="noopener" href="https://github.com/settings/tokens/new?scopes=repo&description=SHAHAR+LEVI+Admin">obtenir un token →</a></span>
-          <input type="password" id="loginToken" placeholder="ghp_••••••••••••••••" autocomplete="off" spellcheck="false">
-          <span class="field-hint">Saisi une seule fois sur ce navigateur. Stocké localement.</span>
-        </label>
-        <label class="field">
-          <span class="field-label">— DÉPÔT (owner/repo)</span>
-          <input type="text" id="loginRepo" value="nath5555770/realty-inisrael" autocomplete="off" spellcheck="false">
-        </label>
-        <label class="field">
-          <span class="field-label">— BRANCHE</span>
-          <input type="text" id="loginBranch" value="main" autocomplete="off" spellcheck="false">
-        </label>
-      </details>
+      <label class="field">
+        <span class="field-label">— MOT DE PASSE</span>
+        <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••">
+      </label>
       <div class="login-error" id="loginError" hidden></div>
-      <button type="submit" class="btn-primary">Se connecter →</button>
+      <button type="submit" class="btn-primary" id="loginSubmit">Se connecter →</button>
     </form>
 
     <a class="back-link" href="../index.html">← Retour au site public</a>
@@ -62,95 +50,55 @@
       <div class="brand-name">SHAHAR LEVI</div>
       <div class="brand-desc">Espace privé</div>
     </div>
-    <nav class="topbar-nav">
-      <button class="nav-btn active" data-tab="listings">Annonces</button>
-      <button class="nav-btn" data-tab="settings">Réglages</button>
-    </nav>
     <div class="topbar-right">
-      <span class="user-tag" id="userTag">@nath5555770</span>
+      <span class="user-tag" id="userTag">—</span>
       <button class="link-btn" id="logoutBtn">Déconnexion</button>
     </div>
   </header>
 
   <main class="dash">
-    <!-- Tab: Listings -->
-    <div class="tab-pane active" data-tab-pane="listings">
-      <div class="dash-head">
-        <div>
-          <div class="eyebrow">— PORTEFEUILLE</div>
-          <h2>Vos <em>annonces.</em></h2>
-          <p class="dash-sub">Cliquez sur une annonce pour modifier toutes ses informations. Les changements sont publiés en direct sur le site.</p>
-        </div>
-        <div class="dash-actions">
-          <button class="btn-ghost" id="reloadBtn" title="Recharger depuis GitHub">↻ Actualiser</button>
-          <button class="btn-primary" id="newListingBtn">＋ Nouvelle annonce</button>
-        </div>
+    <div class="dash-head">
+      <div>
+        <div class="eyebrow">— PORTEFEUILLE</div>
+        <h2>Vos <em>annonces.</em></h2>
+        <p class="dash-sub">Cliquez sur une annonce pour modifier toutes ses informations. Les changements sont publiés en temps réel sur le site.</p>
       </div>
-
-      <!-- Stats strip -->
-      <div class="stats-strip">
-        <div class="stat"><span class="stat-num" id="statTotal">—</span><span class="stat-lbl">Total</span></div>
-        <div class="stat"><span class="stat-num" id="statVisible">—</span><span class="stat-lbl">Publiées</span></div>
-        <div class="stat"><span class="stat-num" id="statFeatured">—</span><span class="stat-lbl">À la une</span></div>
-        <div class="stat"><span class="stat-num" id="statHidden">—</span><span class="stat-lbl">Masquées</span></div>
-        <div class="stat"><span class="stat-num" id="statOff">—</span><span class="stat-lbl">Off-market</span></div>
-      </div>
-
-      <!-- Toolbar -->
-      <div class="toolbar">
-        <input type="search" id="searchInput" placeholder="Rechercher (titre, ville, référence)…">
-        <select id="filterCity">
-          <option value="">Toutes les villes</option>
-          <option value="tel-aviv">Tel Aviv</option>
-          <option value="herzliya">Herzliya</option>
-          <option value="caesarea">Caesarea</option>
-          <option value="netanya">Netanya</option>
-          <option value="jerusalem">Jérusalem</option>
-        </select>
-        <select id="filterType">
-          <option value="">Tous les types</option>
-          <option value="appartement">Appartement</option>
-          <option value="penthouse">Penthouse</option>
-          <option value="villa">Villa</option>
-          <option value="loft">Loft</option>
-          <option value="maison">Maison</option>
-        </select>
-      </div>
-
-      <!-- Listings table/grid -->
-      <div class="listings-table" id="listingsTable">
-        <div class="loading">Chargement…</div>
+      <div class="dash-actions">
+        <button class="btn-ghost" id="reloadBtn" title="Recharger">↻ Actualiser</button>
+        <button class="btn-primary" id="newListingBtn">＋ Nouvelle annonce</button>
       </div>
     </div>
 
-    <!-- Tab: Settings -->
-    <div class="tab-pane" data-tab-pane="settings" hidden>
-      <div class="dash-head">
-        <div>
-          <div class="eyebrow">— RÉGLAGES</div>
-          <h2>Votre <em>compte.</em></h2>
-        </div>
-      </div>
+    <div class="stats-strip">
+      <div class="stat"><span class="stat-num" id="statTotal">—</span><span class="stat-lbl">Total</span></div>
+      <div class="stat"><span class="stat-num" id="statVisible">—</span><span class="stat-lbl">Publiées</span></div>
+      <div class="stat"><span class="stat-num" id="statFeatured">—</span><span class="stat-lbl">À la une</span></div>
+      <div class="stat"><span class="stat-num" id="statHidden">—</span><span class="stat-lbl">Masquées</span></div>
+      <div class="stat"><span class="stat-num" id="statOff">—</span><span class="stat-lbl">Off-market</span></div>
+    </div>
 
-      <div class="settings-grid">
-        <div class="setting-card">
-          <div class="card-title">Connexion GitHub</div>
-          <div class="card-row"><span>Dépôt</span><code id="settingRepo">—</code></div>
-          <div class="card-row"><span>Branche</span><code id="settingBranch">—</code></div>
-          <div class="card-row"><span>Token</span><code id="settingTokenMasked">—</code></div>
-          <button class="btn-ghost" id="changeTokenBtn">Changer le token</button>
-        </div>
-        <div class="setting-card">
-          <div class="card-title">Mot de passe admin</div>
-          <p class="card-desc">Le mot de passe est local à ce navigateur — réinitialisable à tout moment.</p>
-          <button class="btn-ghost" id="changePasswordBtn">Changer le mot de passe</button>
-        </div>
-        <div class="setting-card">
-          <div class="card-title">Aide</div>
-          <p class="card-desc">Les modifications sont enregistrées comme commits sur GitHub. Le site se met à jour automatiquement en 1 à 2 minutes après chaque sauvegarde.</p>
-          <a class="btn-ghost" href="https://github.com/nath5555770/realty-inisrael/commits/main" target="_blank" rel="noopener">Voir l'historique →</a>
-        </div>
-      </div>
+    <div class="toolbar">
+      <input type="search" id="searchInput" placeholder="Rechercher (titre, ville, référence)…">
+      <select id="filterCity">
+        <option value="">Toutes les villes</option>
+        <option value="tel-aviv">Tel Aviv</option>
+        <option value="herzliya">Herzliya</option>
+        <option value="caesarea">Caesarea</option>
+        <option value="netanya">Netanya</option>
+        <option value="jerusalem">Jérusalem</option>
+      </select>
+      <select id="filterType">
+        <option value="">Tous les types</option>
+        <option value="appartement">Appartement</option>
+        <option value="penthouse">Penthouse</option>
+        <option value="villa">Villa</option>
+        <option value="loft">Loft</option>
+        <option value="maison">Maison</option>
+      </select>
+    </div>
+
+    <div class="listings-table" id="listingsTable">
+      <div class="loading">Chargement…</div>
     </div>
   </main>
 </section>
@@ -171,7 +119,6 @@
   <main class="editor">
     <form id="editForm" class="editor-form">
 
-      <!-- Image -->
       <fieldset class="field-group field-images">
         <legend>Photo principale</legend>
         <div class="image-zone">
@@ -184,13 +131,12 @@
               Choisir une photo…
             </label>
             <input type="url" id="fImage" placeholder="ou coller une URL d'image" class="field-image-url">
-            <span class="field-hint">PNG, JPG ou WebP — max ~3 MB. L'image sera commitée dans <code>assets/listings/</code>.</span>
+            <span class="field-hint">PNG, JPG ou WebP — max 5 MB. Stockée dans Supabase.</span>
             <div class="upload-progress" id="uploadProgress" hidden></div>
           </div>
         </div>
       </fieldset>
 
-      <!-- Status -->
       <fieldset class="field-group field-status">
         <legend>Statut</legend>
         <div class="grid-2">
@@ -212,12 +158,11 @@
           <label class="toggle">
             <input type="checkbox" id="fOffMarket">
             <span class="toggle-track"></span>
-            <span class="toggle-text"><strong>Off-market</strong> · ne pas afficher publiquement (carnet privé)</span>
+            <span class="toggle-text"><strong>Off-market</strong> · ne pas afficher publiquement</span>
           </label>
         </div>
       </fieldset>
 
-      <!-- Identification -->
       <fieldset class="field-group">
         <legend>Identification</legend>
         <div class="grid-3">
@@ -252,7 +197,6 @@
         </label>
       </fieldset>
 
-      <!-- Title -->
       <fieldset class="field-group">
         <legend>Titre</legend>
         <div class="grid-2">
@@ -271,7 +215,6 @@
         </label>
       </fieldset>
 
-      <!-- Numbers -->
       <fieldset class="field-group">
         <legend>Caractéristiques</legend>
         <div class="grid-3">
@@ -290,14 +233,13 @@
         </div>
       </fieldset>
 
-      <!-- Pricing -->
       <fieldset class="field-group">
         <legend>Prix</legend>
         <div class="grid-3">
           <label class="field">
             <span class="field-label">Prix USD (chiffre)</span>
             <input type="number" id="fPriceUsd" placeholder="14800000" step="50000">
-            <span class="field-hint">Utilisé pour le tri. Sans formatage.</span>
+            <span class="field-hint">Sans formatage. Sert au tri.</span>
           </label>
           <label class="field">
             <span class="field-label">Prix affiché</span>
@@ -317,10 +259,8 @@
   </main>
 </section>
 
-<!-- ===== TOAST ===== -->
+<!-- ===== TOAST + MODAL ===== -->
 <div class="toast-host" id="toastHost"></div>
-
-<!-- ===== CONFIRM MODAL ===== -->
 <div class="modal" id="confirmModal" hidden>
   <div class="modal-box">
     <div class="modal-title" id="confirmTitle">Confirmer</div>
@@ -332,6 +272,8 @@
   </div>
 </div>
 
+<script src="../assets/supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="admin.js"></script>
 </body>
 </html>
