@@ -431,3 +431,89 @@ html[dir="rtl"] .ref-tag { right: auto; left: 14px; }
 html[dir="rtl"] .arrow-after::after { content: '←'; }
 html[dir="rtl"] .arrow-before::before { content: '←'; }
 
+/* === FOOTER SOCIAL ROW ====================================================== */
+.footer-social {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  padding: 1.5rem 0;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--line-gold, rgba(196,168,119,0.25));
+}
+.footer-social-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold, #c4a877);
+}
+.footer-social-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid rgba(196,168,119,0.32);
+  color: rgba(244,237,224,0.85);
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.35s cubic-bezier(0.2, 0.85, 0.2, 1);
+  background: transparent;
+}
+.social-btn svg { flex-shrink: 0; }
+.social-btn:hover {
+  border-color: var(--gold, #c4a877);
+  color: var(--gold, #c4a877);
+  letter-spacing: 0.4em;
+}
+.social-btn.social-wa:hover { color: #25d366; border-color: #25d366; }
+.social-btn.social-fb:hover { color: #4267b2; border-color: #4267b2; }
+.social-btn.social-ig:hover { color: #e1306c; border-color: #e1306c; }
+
+/* === FLOATING WHATSAPP BUTTON ============================================= */
+.floating-wa {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.45), 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 95;
+  transition: transform 0.4s cubic-bezier(0.2, 0.85, 0.2, 1), box-shadow 0.4s, background 0.3s;
+  animation: floating-wa-pulse 2.4s ease-in-out infinite;
+}
+.floating-wa svg { width: 28px; height: 28px; }
+.floating-wa:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 28px rgba(37, 211, 102, 0.55), 0 3px 8px rgba(0,0,0,0.25);
+  background: #1ebe5a;
+  animation: none;
+}
+@keyframes floating-wa-pulse {
+  0%, 100% { box-shadow: 0 6px 22px rgba(37, 211, 102, 0.45), 0 2px 6px rgba(0,0,0,0.2), 0 0 0 0 rgba(37, 211, 102, 0.4); }
+  50%      { box-shadow: 0 6px 22px rgba(37, 211, 102, 0.45), 0 2px 6px rgba(0,0,0,0.2), 0 0 0 12px rgba(37, 211, 102, 0); }
+}
+@media (max-width: 640px) {
+  .floating-wa { right: 16px; bottom: 16px; width: 52px; height: 52px; }
+  .floating-wa svg { width: 24px; height: 24px; }
+}
+@media (prefers-reduced-motion: reduce) { .floating-wa { animation: none; } }
+/* Hide floating WA on the admin pages (clean UI) */
+body.admin-page .floating-wa { display: none; }
+
+
