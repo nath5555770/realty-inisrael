@@ -740,6 +740,29 @@ body {
   justify-content: flex-end;
 }
 
+/* ===== EDITOR TOPBAR (full-width, distinct from dashboard topbar) ===== */
+.editor-topbar { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 1rem; background: var(--teal); color: var(--gold-pale); padding: 0.75rem 1.5rem; border-bottom: 1px solid rgba(196,168,119,0.2); }
+.editor-topbar .editor-title { font-family: 'Playfair Display', serif; font-style: italic; font-size: 16px; color: var(--paper); }
+.editor-topbar .editor-actions { display: flex; gap: 0.6rem; }
+.editor-topbar .btn-ghost { color: var(--gold-pale); border-color: rgba(196,168,119,0.3); }
+.editor-topbar .btn-ghost:hover { background: rgba(196,168,119,0.1); border-color: var(--gold); }
+.editor-topbar .btn-primary { width: auto; margin-top: 0; padding: 0.65rem 1.4rem; font-size: 11px; }
+
+/* ===== AVATAR (team list) ===== */
+.thumb.avatar { display: flex; align-items: center; justify-content: center; background: var(--teal); color: var(--gold); font-family: 'Playfair Display', serif; font-style: italic; font-size: 24px; }
+
+/* ===== PASSWORD ROW ===== */
+.pwd-row { display: flex; gap: 0.5rem; align-items: stretch; }
+.pwd-row input { flex: 1; }
+.pwd-row .btn-ghost { padding: 0.65rem 1rem; font-size: 11px; }
+
+/* ===== ARTICLE CONTENT TEXTAREA ===== */
+.content-area { font-family: 'JetBrains Mono', monospace !important; font-size: 13px !important; line-height: 1.5; min-height: 300px !important; }
+
+/* ===== META GRID (audit) ===== */
+.meta-grid > div > div:last-child { font-family: 'Playfair Display', serif; font-style: italic; color: var(--teal); padding-top: 0.4rem; }
+.mono-text { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
   .stats-strip { grid-template-columns: repeat(2, 1fr); }

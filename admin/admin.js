@@ -1,40 +1,46 @@
 /* ==========================================================================
-   SHAHAR LEVI Real Estate — Admin SPA
-   Supabase Auth + Postgres listings + Storage for images.
+   SHAHAR LEVI · Admin SPA v2
+   - Supabase Auth + RLS
+   - Tabs: Listings, Journal, Team
+   - Audit trail (created_by/updated_by) shown on every record
+   - Team CRUD via Edge Function /functions/v1/admin-agent (admin only)
    ========================================================================== */
-
 (function () {
   'use strict';
 
   if (!window.SL_SUPABASE) { alert('Configuration Supabase manquante.'); return; }
-  if (!window.supabase || !window.supabase.createClient) { alert('SDK Supabase manquant — vérifiez votre connexion.'); return; }
+  if (!window.supabase || !window.supabase.createClient) { alert('SDK Supabase non chargé.'); return; }
 
   const sb = window.supabase.createClient(window.SL_SUPABASE.url, window.SL_SUPABASE.key, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      storage: window.localStorage,
-      storageKey: 'sl-admin-session'
-    }
+    auth: { persistSession: true, autoRefreshToken: true, storage: window.localStorage, storageKey: 'sl-admin-session' }
   });
 
-  const BUCKET = 'listing-images';
+  const BUCKET_LISTINGS = 'listing-images';
+  const BUCKET_ARTICLES = 'article-images';
+  const FN_ADMIN_AGENT = window.SL_SUPABASE.url + '/functions/v1/admin-agent';
 
-  // ---- STATE ---------------------------------------------------------------
+  // ------------------------------------------------------------------
+  // STATE
+  // ------------------------------------------------------------------
   const STATE = {
+    user: null,
+    profile: null,         // { id, email, full_name, role, is_active }
+    profilesById: {},      // id => profile (for author display)
+    profilesList: [],
     listings: [],
-    currentEdit: null,    // row in STATE.listings or 'new'
-    pendingFile: null,
-    user: null
+    currentListing: null,  // index | 'new'
+    pendingListingFile: null,
+    articles: [],
+    currentArticle: null,  // index | 'new'
+    pendingArticleFile: null,
+    currentAgent: null     // index | 'new'
   };
 
-  // ---- UTILS ---------------------------------------------------------------
+  // ------------------------------------------------------------------
+  // UTILS
+  // ------------------------------------------------------------------
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
-
-  function showView(name) {
-    $$('.view').forEach(v => { v.hidden = v.dataset.view !== name; });
-  }
 
   function escapeHtml(s) {
     if (s == null) return '';
@@ -42,13 +48,33 @@
   }
 
   function slugify(s) {
-    return (s || '')
-      .toString()
+    return (s || '').toString()
       .normalize('NFKD').replace(/[̀-ͯ]/g, '')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-      .slice(0, 60) || ('listing-' + Date.now().toString(36));
+      .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+      .slice(0, 80) || 'item-' + Date.now().toString(36);
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    try { return new Date(iso).toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: '2-digit' }); }
+    catch (_) { return '—'; }
+  }
+
+  function authorLabel(id) {
+    const p = STATE.profilesById[id];
+    if (!p) return '—';
+    return p.full_name || p.email || id.slice(0, 8);
+  }
+
+  function showView(name) {
+    $$('.view').forEach(v => { v.hidden = v.dataset.view !== name; });
+    const topbar = $('header.topbar');
+    if (topbar) topbar.hidden = (name === 'login');
+  }
+
+  function showTab(name) {
+    $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    $$('.tab-pane').forEach(p => { p.hidden = p.dataset.tabPane !== name; });
   }
 
   function toast(msg, kind, title) {
@@ -83,87 +109,94 @@
     }
     return '—';
   }
-
-  function cityLabel(slug) {
-    return ({
-      'tel-aviv': 'Tel Aviv', 'herzliya': 'Herzliya', 'caesarea': 'Caesarea',
-      'netanya': 'Netanya', 'jerusalem': 'Jérusalem'
-    })[slug] || slug;
-  }
-
-  function imageUrl(path) {
+  function cityLabel(slug) { return ({'tel-aviv':'Tel Aviv','herzliya':'Herzliya','caesarea':'Caesarea','netanya':'Netanya','jerusalem':'Jérusalem'})[slug] || slug; }
+  function imageUrl(bucket, path) {
     if (!path) return '';
     if (/^https?:\/\//i.test(path)) return path;
-    return window.SL_SUPABASE.url + '/storage/v1/object/public/' + BUCKET + '/' + path.replace(/^\/+/, '');
+    return window.SL_SUPABASE.url + '/storage/v1/object/public/' + bucket + '/' + path.replace(/^\/+/, '');
   }
 
-  // ---- AUTH ----------------------------------------------------------------
-  async function tryLogin(email, password) {
-    const { data, error } = await sb.auth.signInWithPassword({ email, password });
-    if (error) throw error;
+  // ------------------------------------------------------------------
+  // AUTH
+  // ------------------------------------------------------------------
+  async function loadProfile() {
+    const { data: { user } } = await sb.auth.getUser();
+    STATE.user = user;
+    if (!user) return null;
+    const { data, error } = await sb.from('profiles').select('*').eq('id', user.id).single();
+    if (error) { console.error(error); return null; }
+    STATE.profile = data;
+    return data;
+  }
+
+  async function loadAllProfiles() {
+    const { data, error } = await sb.from('profiles').select('*').order('created_at', { ascending: false });
+    if (error) { console.error(error); return []; }
+    STATE.profilesList = data;
+    STATE.profilesById = {};
+    data.forEach(p => { STATE.profilesById[p.id] = p; });
     return data;
   }
 
   async function logout() {
     await sb.auth.signOut();
     STATE.user = null;
+    STATE.profile = null;
     showView('login');
     $('#loginPassword').value = '';
     $('#loginEmail').focus();
   }
 
-  // ---- LOAD / SAVE ---------------------------------------------------------
+  // ------------------------------------------------------------------
+  // LISTINGS
+  // ------------------------------------------------------------------
   async function loadListings() {
-    const { data, error } = await sb
-      .from('listings')
-      .select('*')
+    const { data, error } = await sb.from('listings').select('*')
       .order('position', { ascending: true })
       .order('created_at', { ascending: true });
-    if (error) {
-      console.error(error);
-      toast('Impossible de charger les annonces : ' + error.message, 'error', 'Erreur');
-      throw error;
-    }
+    if (error) { toast(error.message, 'error', 'Erreur'); throw error; }
     STATE.listings = data || [];
-    return STATE.listings;
+    return data;
   }
 
-  // ---- RENDER --------------------------------------------------------------
-  function updateStats() {
-    const total = STATE.listings.length;
-    const visible = STATE.listings.filter(l => l.visible !== false).length;
-    const featured = STATE.listings.filter(l => l.featured === true).length;
-    const hidden = STATE.listings.filter(l => l.visible === false).length;
-    const off = STATE.listings.filter(l => l.off_market === true).length;
-    $('#statTotal').textContent = total;
-    $('#statVisible').textContent = visible;
-    $('#statFeatured').textContent = featured;
-    $('#statHidden').textContent = hidden;
-    $('#statOff').textContent = off;
+  function listingsStats() {
+    const s = STATE.listings;
+    $('#statTotal').textContent = s.length;
+    $('#statVisible').textContent = s.filter(x => x.visible !== false).length;
+    $('#statFeatured').textContent = s.filter(x => x.featured).length;
+    $('#statHidden').textContent = s.filter(x => x.visible === false).length;
+    $('#statOff').textContent = s.filter(x => x.off_market).length;
   }
 
-  function applyFilter() {
+  function renderListingsAuthorFilter() {
+    const sel = $('#filterAuthor');
+    if (!sel) return;
+    const cur = sel.value;
+    const ids = new Set();
+    STATE.listings.forEach(l => { if (l.created_by) ids.add(l.created_by); });
+    sel.innerHTML = '<option value="">Tous les agents</option>' +
+      Array.from(ids).map(id => '<option value="' + escapeHtml(id) + '">' + escapeHtml(authorLabel(id)) + '</option>').join('');
+    sel.value = cur || '';
+  }
+
+  function renderListingsTable() {
     const search = ($('#searchInput').value || '').trim().toLowerCase();
     const city = $('#filterCity').value;
     const type = $('#filterType').value;
-    return STATE.listings
-      .map((l, i) => ({ l, i }))
-      .filter(({ l }) => {
-        if (city && l.city !== city) return false;
-        if (type && l.type !== type) return false;
-        if (search) {
-          const blob = ((l.title_main || '') + ' ' + (l.title_accent || '') + ' ' + (l.ref || '') + ' ' + (l.neighborhood || '') + ' ' + (l.city || '')).toLowerCase();
-          if (!blob.includes(search)) return false;
-        }
-        return true;
-      });
-  }
-
-  function renderTable() {
-    const filtered = applyFilter();
+    const author = $('#filterAuthor').value;
+    const filtered = STATE.listings.map((l, i) => ({ l, i })).filter(({ l }) => {
+      if (city && l.city !== city) return false;
+      if (type && l.type !== type) return false;
+      if (author && l.created_by !== author) return false;
+      if (search) {
+        const blob = ((l.title_main||'') + ' ' + (l.title_accent||'') + ' ' + (l.ref||'') + ' ' + (l.neighborhood||'') + ' ' + (l.city||'')).toLowerCase();
+        if (!blob.includes(search)) return false;
+      }
+      return true;
+    });
     const root = $('#listingsTable');
     if (!filtered.length) {
-      root.innerHTML = '<div class="empty-state"><div class="display">Aucun résultat</div><p>Essayez d\'élargir votre recherche, ou ajoutez une nouvelle annonce.</p></div>';
+      root.innerHTML = '<div class="empty-state"><div class="display">Aucun résultat</div><p>Essayez d\'élargir votre recherche.</p></div>';
       return;
     }
     root.innerHTML = filtered.map(({ l, i }) => {
@@ -172,72 +205,56 @@
       if (l.featured) badges.push('<span class="badge badge-featured">À la une</span>');
       if (l.visible === false) badges.push('<span class="badge badge-hidden">Masquée</span>');
       if (l.off_market) badges.push('<span class="badge badge-off">Off-market</span>');
-      return [
-        '<div class="listing-row" data-i="', i, '">',
-        '  <div class="thumb" style="background-image: url(\'', escapeHtml(imageUrl(l.image)), '\')"></div>',
-        '  <div class="info">',
-        '    <div class="title">', escapeHtml(l.title_main || ''), ' <em>', escapeHtml(l.title_accent || ''), '</em></div>',
-        '    <div class="sub">', escapeHtml(l.ref || ''), ' · ', escapeHtml(l.neighborhood || ''), '</div>',
-        '  </div>',
-        '  <div class="city-tag">', cityLabel(l.city), '</div>',
-        '  <div class="badges">', badges.join(''), '</div>',
-        '  <div class="price">', priceLabel(l), '</div>',
-        '  <div class="row-actions">',
-        '    <button class="icon-btn" data-act="edit" title="Modifier">✎</button>',
-        '    <button class="icon-btn" data-act="duplicate" title="Dupliquer">⎘</button>',
-        '  </div>',
-        '</div>'
-      ].join('');
+      return '<div class="listing-row" data-i="' + i + '">' +
+        '<div class="thumb" style="background-image:url(\'' + escapeHtml(imageUrl(BUCKET_LISTINGS, l.image)) + '\')"></div>' +
+        '<div class="info">' +
+          '<div class="title">' + escapeHtml(l.title_main || '') + ' <em>' + escapeHtml(l.title_accent || '') + '</em></div>' +
+          '<div class="sub">' + escapeHtml(l.ref || '') + ' · ' + escapeHtml(l.neighborhood || '') + ' · par <em>' + escapeHtml(authorLabel(l.created_by)) + '</em></div>' +
+        '</div>' +
+        '<div class="city-tag">' + cityLabel(l.city) + '</div>' +
+        '<div class="badges">' + badges.join('') + '</div>' +
+        '<div class="price">' + priceLabel(l) + '</div>' +
+        '<div class="row-actions">' +
+          '<button class="icon-btn" data-act="edit" title="Modifier">✎</button>' +
+          '<button class="icon-btn" data-act="duplicate" title="Dupliquer">⎘</button>' +
+        '</div>' +
+      '</div>';
     }).join('');
-
     root.querySelectorAll('.listing-row').forEach(row => {
       row.addEventListener('click', e => {
         const i = parseInt(row.dataset.i, 10);
         const act = e.target.closest('[data-act]')?.dataset.act;
-        if (act === 'duplicate') return duplicate(i);
-        openEditor(i);
+        if (act === 'duplicate') return duplicateListing(i);
+        openListingEditor(i);
       });
     });
   }
 
-  async function duplicate(i) {
+  async function duplicateListing(i) {
     const src = STATE.listings[i];
     const copy = Object.assign({}, src);
-    delete copy.id;
-    delete copy.created_at;
-    delete copy.updated_at;
+    delete copy.id; delete copy.created_at; delete copy.updated_at; delete copy.created_by; delete copy.updated_by;
     copy.slug = slugify((src.slug || src.title_main) + '-copie-' + Date.now().toString(36));
     copy.ref = (src.ref || 'SL') + '·';
-    copy.featured = false;
-    copy.signature = false;
-    copy.visible = false;
+    copy.featured = false; copy.signature = false; copy.visible = false;
     const { data, error } = await sb.from('listings').insert(copy).select().single();
-    if (error) { toast(error.message, 'error', 'Erreur'); return; }
-    STATE.listings.splice(i + 1, 0, data);
-    renderTable();
-    updateStats();
-    toast('Annonce dupliquée — pensez à la modifier.', 'success', 'Dupliqué');
-    openEditor(STATE.listings.indexOf(data));
+    if (error) { toast(error.message, 'error'); return; }
+    await loadListings();
+    listingsStats();
+    renderListingsTable();
+    toast('Annonce dupliquée — pensez à la modifier.', 'success');
+    openListingEditor(STATE.listings.findIndex(x => x.id === data.id));
   }
 
-  // ---- EDITOR --------------------------------------------------------------
-  function openEditor(idx) {
-    STATE.currentEdit = idx;
-    STATE.pendingFile = null;
+  function openListingEditor(idx) {
+    STATE.currentListing = idx;
+    STATE.pendingListingFile = null;
     const isNew = idx === 'new';
     const l = isNew
-      ? {
-          slug: '', ref: '', city: 'tel-aviv', type: 'appartement', neighborhood: '',
-          title_main: '', title_accent: '', description: '',
-          surface: '', rooms: '', extra_label: '',
-          price_usd: null, price_display: '', price_eur_eq: '', price_ils_eq: '',
-          image: '', visible: true, featured: false, signature: false, off_market: false
-        }
+      ? { city: 'tel-aviv', type: 'appartement', visible: true, featured: false, signature: false, off_market: false }
       : STATE.listings[idx];
-
     $('#editorTitle').textContent = isNew ? 'Nouvelle annonce' : 'Modifier · ' + (l.ref || '');
-    $('#deleteBtn').style.display = isNew ? 'none' : '';
-
+    $('#deleteBtn').hidden = isNew;
     $('#fRef').value = l.ref || '';
     $('#fCity').value = l.city || 'tel-aviv';
     $('#fType').value = l.type || 'appartement';
@@ -254,37 +271,36 @@
     $('#fPriceIls').value = l.price_ils_eq || '';
     $('#fImage').value = l.image || '';
     $('#fVisible').checked = l.visible !== false;
-    $('#fFeatured').checked = l.featured === true;
-    $('#fSignature').checked = l.signature === true;
-    $('#fOffMarket').checked = l.off_market === true;
-
-    setImagePreview(imageUrl(l.image));
+    $('#fFeatured').checked = !!l.featured;
+    $('#fSignature').checked = !!l.signature;
+    $('#fOffMarket').checked = !!l.off_market;
+    setListingPreview(imageUrl(BUCKET_LISTINGS, l.image));
     $('#uploadProgress').hidden = true;
 
+    if (!isNew) {
+      $('#metaGroup').hidden = false;
+      $('#metaCreatedBy').textContent = authorLabel(l.created_by) + ' · ' + fmtDate(l.created_at);
+      $('#metaUpdatedBy').textContent = authorLabel(l.updated_by) + ' · ' + fmtDate(l.updated_at);
+    } else {
+      $('#metaGroup').hidden = true;
+    }
     showView('editor');
     window.scrollTo(0, 0);
   }
 
-  function setImagePreview(url) {
+  function setListingPreview(url) {
     const p = $('#imagePreview');
-    if (url) {
-      p.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
-      p.innerHTML = '';
-    } else {
-      p.style.backgroundImage = '';
-      p.innerHTML = '<div class="image-empty">Aucune photo</div>';
-    }
+    if (url) { p.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')"; p.innerHTML = ''; }
+    else { p.style.backgroundImage = ''; p.innerHTML = '<div class="image-empty">Aucune photo</div>'; }
   }
 
-  function readForm(base) {
+  function readListingForm(base) {
     const titleSlug = ($('#fTitleMain').value + '-' + $('#fTitleAccent').value).trim();
     const slug = (base && base.slug) || slugify(titleSlug || $('#fRef').value || 'listing');
     const priceUsd = $('#fPriceUsd').value ? parseFloat($('#fPriceUsd').value) : null;
     return {
-      slug,
-      ref: $('#fRef').value.trim() || null,
-      city: $('#fCity').value,
-      type: $('#fType').value,
+      slug, ref: $('#fRef').value.trim() || null,
+      city: $('#fCity').value, type: $('#fType').value,
       neighborhood: $('#fNeighborhood').value.trim() || null,
       title_main: $('#fTitleMain').value.trim(),
       title_accent: $('#fTitleAccent').value.trim() || null,
@@ -297,131 +313,409 @@
       price_eur_eq: $('#fPriceEur').value.trim() || null,
       price_ils_eq: $('#fPriceIls').value.trim() || null,
       image: $('#fImage').value.trim() || null,
-      visible: $('#fVisible').checked,
-      featured: $('#fFeatured').checked,
-      signature: $('#fSignature').checked,
-      off_market: $('#fOffMarket').checked
+      visible: $('#fVisible').checked, featured: $('#fFeatured').checked,
+      signature: $('#fSignature').checked, off_market: $('#fOffMarket').checked
     };
   }
 
-  async function uploadImage(slug, file) {
-    $('#uploadProgress').hidden = false;
-    $('#uploadProgress').textContent = 'Téléversement de la photo…';
+  async function uploadImage(bucket, slug, file, progressEl) {
+    progressEl.hidden = false;
+    progressEl.textContent = 'Téléversement…';
     const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace('jpeg', 'jpg');
     const path = slug + '/' + Date.now().toString(36) + '.' + ext;
-    const { error } = await sb.storage.from(BUCKET).upload(path, file, {
-      cacheControl: '3600',
-      upsert: false,
-      contentType: file.type || 'image/jpeg'
-    });
-    if (error) {
-      $('#uploadProgress').textContent = 'Erreur : ' + error.message;
-      throw error;
-    }
-    $('#uploadProgress').textContent = 'Photo téléversée ✓';
-    setTimeout(() => { $('#uploadProgress').hidden = true; }, 1800);
-    return path; // stored relative — listings.js builds the public URL
+    const { error } = await sb.storage.from(bucket).upload(path, file, { cacheControl: '3600', upsert: false, contentType: file.type || 'image/jpeg' });
+    if (error) { progressEl.textContent = 'Erreur : ' + error.message; throw error; }
+    progressEl.textContent = 'Image téléversée ✓';
+    setTimeout(() => { progressEl.hidden = true; }, 1800);
+    return path;
   }
 
-  async function saveEditor() {
-    const isNew = STATE.currentEdit === 'new';
-    const base = isNew ? null : STATE.listings[STATE.currentEdit];
-
-    if (!$('#fTitleMain').value.trim()) {
-      toast('Le titre principal est requis.', 'error');
-      $('#fTitleMain').focus();
-      return;
-    }
-
-    const saveBtn = $('#saveBtn');
-    saveBtn.disabled = true;
-    const oldText = saveBtn.textContent;
-    saveBtn.textContent = '⏳ Enregistrement…';
-
+  async function saveListing() {
+    const isNew = STATE.currentListing === 'new';
+    const base = isNew ? null : STATE.listings[STATE.currentListing];
+    if (!$('#fTitleMain').value.trim()) { toast('Le titre principal est requis.', 'error'); $('#fTitleMain').focus(); return; }
+    const btn = $('#saveBtn'); btn.disabled = true; const old = btn.textContent; btn.textContent = '⏳ Enregistrement…';
     try {
-      let payload = readForm(base);
-
-      // If a file is pending, upload then attach the path
-      if (STATE.pendingFile) {
-        const path = await uploadImage(payload.slug, STATE.pendingFile);
-        payload.image = path;
+      const payload = readListingForm(base);
+      if (STATE.pendingListingFile) {
+        payload.image = await uploadImage(BUCKET_LISTINGS, payload.slug, STATE.pendingListingFile, $('#uploadProgress'));
       }
-
-      // Featured uniqueness on home: clear other featured if this becomes featured
       if (payload.featured && !base?.featured) {
         await sb.from('listings').update({ featured: false }).neq('id', base?.id || '00000000-0000-0000-0000-000000000000').eq('featured', true);
       }
-      // Signature uniqueness
       if (payload.signature && !base?.signature) {
         await sb.from('listings').update({ signature: false }).neq('id', base?.id || '00000000-0000-0000-0000-000000000000').eq('signature', true);
       }
-
-      let saved;
       if (isNew) {
         const maxPos = STATE.listings.reduce((m, x) => Math.max(m, x.position || 0), 0);
         payload.position = maxPos + 1;
-        const { data, error } = await sb.from('listings').insert(payload).select().single();
+        const { error } = await sb.from('listings').insert(payload).select().single();
         if (error) throw error;
-        saved = data;
       } else {
-        const { data, error } = await sb.from('listings').update(payload).eq('id', base.id).select().single();
+        const { error } = await sb.from('listings').update(payload).eq('id', base.id).select().single();
         if (error) throw error;
-        saved = data;
       }
-
-      // Refresh state and go back
       await loadListings();
-      renderTable();
-      updateStats();
-      toast('Modifications enregistrées. Le site se met à jour immédiatement.', 'success', 'Enregistré');
+      listingsStats();
+      renderListingsTable();
+      renderListingsAuthorFilter();
+      toast('Annonce enregistrée. Le site se met à jour immédiatement.', 'success', 'Enregistré');
       backToDashboard();
     } catch (e) {
       console.error(e);
-      toast(e.message || 'Erreur inconnue', 'error', 'Échec');
+      toast(e.message || 'Erreur', 'error', 'Échec');
     } finally {
-      saveBtn.disabled = false;
-      saveBtn.textContent = oldText;
+      btn.disabled = false; btn.textContent = old;
     }
   }
 
-  async function deleteCurrent() {
-    if (STATE.currentEdit === 'new') return backToDashboard();
-    const idx = STATE.currentEdit;
-    const l = STATE.listings[idx];
-    const ok = await confirmModal('Supprimer cette annonce ?', '"' + (l.title_main + ' ' + (l.title_accent || '')).trim() + '" (' + (l.ref || '') + ') sera définitivement retirée du site.');
+  async function deleteListing() {
+    if (STATE.currentListing === 'new') return backToDashboard();
+    const l = STATE.listings[STATE.currentListing];
+    const ok = await confirmModal('Supprimer cette annonce ?', '"' + (l.title_main + ' ' + (l.title_accent || '')).trim() + '" sera définitivement retirée.');
     if (!ok) return;
     const { error } = await sb.from('listings').delete().eq('id', l.id);
     if (error) { toast(error.message, 'error', 'Échec'); return; }
-    STATE.listings.splice(idx, 1);
-    toast('Annonce supprimée.', 'success', 'Supprimé');
+    toast('Annonce supprimée.', 'success');
+    await loadListings();
+    listingsStats();
+    renderListingsTable();
+    renderListingsAuthorFilter();
     backToDashboard();
   }
 
-  function backToDashboard() {
-    STATE.currentEdit = null;
-    STATE.pendingFile = null;
-    showView('dashboard');
-    renderTable();
-    updateStats();
+  // ------------------------------------------------------------------
+  // ARTICLES (Journal)
+  // ------------------------------------------------------------------
+  async function loadArticles() {
+    const { data, error } = await sb.from('journal_articles').select('*')
+      .order('position', { ascending: true })
+      .order('publish_date', { ascending: false })
+      .order('created_at', { ascending: false });
+    if (error) { toast(error.message, 'error', 'Erreur'); throw error; }
+    STATE.articles = data || [];
+    return data;
   }
 
-  function handleFileSelect(file) {
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-      toast('Image trop lourde (> 5 MB). Compressez-la d\'abord.', 'error');
+  function articlesStats() {
+    const s = STATE.articles;
+    $('#artStatTotal').textContent = s.length;
+    $('#artStatPublished').textContent = s.filter(x => x.published).length;
+    $('#artStatDraft').textContent = s.filter(x => !x.published).length;
+  }
+
+  function renderArticlesTable() {
+    const search = ($('#artSearchInput').value || '').trim().toLowerCase();
+    const cat = $('#artFilterCategory').value;
+    const filtered = STATE.articles.map((a, i) => ({ a, i })).filter(({ a }) => {
+      if (cat && a.category !== cat) return false;
+      if (search) {
+        const blob = ((a.title || '') + ' ' + (a.subtitle || '') + ' ' + (a.excerpt || '') + ' ' + (a.category || '')).toLowerCase();
+        if (!blob.includes(search)) return false;
+      }
+      return true;
+    });
+    const root = $('#articlesTable');
+    if (!filtered.length) {
+      root.innerHTML = '<div class="empty-state"><div class="display">Aucun article</div><p>Cliquez sur "+ Nouvel article" pour démarrer.</p></div>';
       return;
     }
-    STATE.pendingFile = file;
-    const reader = new FileReader();
-    reader.onload = e => {
-      setImagePreview(e.target.result);
-      $('#fImage').value = '(téléversement à l\'enregistrement)';
-    };
-    reader.readAsDataURL(file);
-    toast('Photo prête. Cliquez Enregistrer pour publier.', null, 'Photo en attente');
+    root.innerHTML = filtered.map(({ a, i }) => {
+      const badges = [];
+      if (a.published) badges.push('<span class="badge badge-featured">Publié</span>');
+      else badges.push('<span class="badge badge-hidden">Brouillon</span>');
+      if (a.category) badges.push('<span class="badge badge-off">' + escapeHtml(a.category) + '</span>');
+      return '<div class="listing-row" data-i="' + i + '">' +
+        '<div class="thumb" style="background-image:url(\'' + escapeHtml(imageUrl(BUCKET_ARTICLES, a.cover_image)) + '\')"></div>' +
+        '<div class="info">' +
+          '<div class="title">' + escapeHtml(a.title || '') + '</div>' +
+          '<div class="sub">' + fmtDate(a.publish_date) + ' · par <em>' + escapeHtml(authorLabel(a.author_id)) + '</em>' + (a.read_minutes ? ' · ' + a.read_minutes + ' min' : '') + '</div>' +
+        '</div>' +
+        '<div class="city-tag"></div>' +
+        '<div class="badges">' + badges.join('') + '</div>' +
+        '<div class="price">—</div>' +
+        '<div class="row-actions"><button class="icon-btn" data-act="edit">✎</button></div>' +
+      '</div>';
+    }).join('');
+    root.querySelectorAll('.listing-row').forEach(row => {
+      row.addEventListener('click', () => openArticleEditor(parseInt(row.dataset.i, 10)));
+    });
   }
 
-  // ---- BOOT ----------------------------------------------------------------
+  function openArticleEditor(idx) {
+    STATE.currentArticle = idx;
+    STATE.pendingArticleFile = null;
+    const isNew = idx === 'new';
+    const a = isNew
+      ? { category: 'marche', published: false, publish_date: new Date().toISOString().slice(0,10) }
+      : STATE.articles[idx];
+    $('#artEditorTitle').textContent = isNew ? 'Nouvel article' : 'Modifier · ' + (a.title || '');
+    $('#artDeleteBtn').hidden = isNew;
+    $('#artCategory').value = a.category || 'marche';
+    $('#artTitle').value = a.title || '';
+    $('#artSubtitle').value = a.subtitle || '';
+    $('#artExcerpt').value = a.excerpt || '';
+    $('#artContent').value = a.content || '';
+    $('#artReadMinutes').value = a.read_minutes || '';
+    $('#artFImage').value = a.cover_image || '';
+    $('#artPublished').checked = !!a.published;
+    $('#artPublishDate').value = (a.publish_date || '').slice(0, 10) || new Date().toISOString().slice(0,10);
+    setArticlePreview(imageUrl(BUCKET_ARTICLES, a.cover_image));
+    $('#artUploadProgress').hidden = true;
+    if (!isNew) {
+      $('#artMetaGroup').hidden = false;
+      $('#artMetaAuthor').textContent = authorLabel(a.author_id) + ' · créé ' + fmtDate(a.created_at);
+      $('#artMetaUpdatedBy').textContent = authorLabel(a.updated_by) + ' · ' + fmtDate(a.updated_at);
+    } else { $('#artMetaGroup').hidden = true; }
+    showView('article-editor');
+    window.scrollTo(0, 0);
+  }
+
+  function setArticlePreview(url) {
+    const p = $('#artImagePreview');
+    if (url) { p.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')"; p.innerHTML = ''; }
+    else { p.style.backgroundImage = ''; p.innerHTML = '<div class="image-empty">Aucune image</div>'; }
+  }
+
+  function readArticleForm(base) {
+    const slug = (base && base.slug) || slugify($('#artTitle').value || 'article');
+    return {
+      slug,
+      title: $('#artTitle').value.trim(),
+      subtitle: $('#artSubtitle').value.trim() || null,
+      excerpt: $('#artExcerpt').value.trim() || null,
+      content: $('#artContent').value.trim() || null,
+      category: $('#artCategory').value,
+      read_minutes: $('#artReadMinutes').value ? parseInt($('#artReadMinutes').value, 10) : null,
+      cover_image: $('#artFImage').value.trim() || null,
+      published: $('#artPublished').checked,
+      publish_date: $('#artPublishDate').value || null
+    };
+  }
+
+  async function saveArticle() {
+    const isNew = STATE.currentArticle === 'new';
+    const base = isNew ? null : STATE.articles[STATE.currentArticle];
+    if (!$('#artTitle').value.trim()) { toast('Le titre est requis.', 'error'); return; }
+    const btn = $('#artSaveBtn'); btn.disabled = true; const old = btn.textContent; btn.textContent = '⏳ Enregistrement…';
+    try {
+      const payload = readArticleForm(base);
+      if (STATE.pendingArticleFile) {
+        payload.cover_image = await uploadImage(BUCKET_ARTICLES, payload.slug, STATE.pendingArticleFile, $('#artUploadProgress'));
+      }
+      if (isNew) {
+        const maxPos = STATE.articles.reduce((m, x) => Math.max(m, x.position || 0), 0);
+        payload.position = maxPos + 1;
+        const { error } = await sb.from('journal_articles').insert(payload).select().single();
+        if (error) throw error;
+      } else {
+        const { error } = await sb.from('journal_articles').update(payload).eq('id', base.id).select().single();
+        if (error) throw error;
+      }
+      await loadArticles();
+      articlesStats();
+      renderArticlesTable();
+      toast('Article enregistré.', 'success', 'Enregistré');
+      backToJournal();
+    } catch (e) {
+      console.error(e); toast(e.message || 'Erreur', 'error', 'Échec');
+    } finally {
+      btn.disabled = false; btn.textContent = old;
+    }
+  }
+
+  async function deleteArticle() {
+    if (STATE.currentArticle === 'new') return backToJournal();
+    const a = STATE.articles[STATE.currentArticle];
+    const ok = await confirmModal('Supprimer cet article ?', '"' + (a.title || '') + '" sera définitivement retiré.');
+    if (!ok) return;
+    const { error } = await sb.from('journal_articles').delete().eq('id', a.id);
+    if (error) { toast(error.message, 'error'); return; }
+    toast('Article supprimé.', 'success');
+    await loadArticles();
+    articlesStats();
+    renderArticlesTable();
+    backToJournal();
+  }
+
+  // ------------------------------------------------------------------
+  // TEAM (admin only)
+  // ------------------------------------------------------------------
+  function renderTeamTable() {
+    const root = $('#teamTable');
+    const list = STATE.profilesList;
+    if (!list.length) {
+      root.innerHTML = '<div class="loading">Aucun agent.</div>';
+      return;
+    }
+    root.innerHTML = list.map((p, i) => {
+      const badges = [];
+      if (p.role === 'admin') badges.push('<span class="badge badge-signature">Admin</span>');
+      else badges.push('<span class="badge badge-off">Agent</span>');
+      if (!p.is_active) badges.push('<span class="badge badge-hidden">Désactivé</span>');
+      const initial = (p.full_name || p.email || '?').charAt(0).toUpperCase();
+      return '<div class="listing-row team-row" data-i="' + i + '">' +
+        '<div class="thumb avatar">' + escapeHtml(initial) + '</div>' +
+        '<div class="info">' +
+          '<div class="title">' + escapeHtml(p.full_name || p.email) + '</div>' +
+          '<div class="sub">' + escapeHtml(p.email) + ' · créé ' + fmtDate(p.created_at) + '</div>' +
+        '</div>' +
+        '<div class="city-tag"></div>' +
+        '<div class="badges">' + badges.join('') + '</div>' +
+        '<div class="price">—</div>' +
+        '<div class="row-actions"><button class="icon-btn" data-act="edit">✎</button></div>' +
+      '</div>';
+    }).join('');
+    root.querySelectorAll('.listing-row').forEach(row => {
+      row.addEventListener('click', () => openAgentEditor(parseInt(row.dataset.i, 10)));
+    });
+  }
+
+  function genStrongPassword() {
+    const alpha = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const sym = '!@-_+';
+    let s = '';
+    const arr = new Uint32Array(14);
+    crypto.getRandomValues(arr);
+    for (let i = 0; i < 12; i++) s += alpha.charAt(arr[i] % alpha.length);
+    s += sym.charAt(arr[12] % sym.length);
+    s += alpha.charAt(arr[13] % alpha.length);
+    return s;
+  }
+
+  function openAgentEditor(idx) {
+    STATE.currentAgent = idx;
+    const isNew = idx === 'new';
+    const p = isNew ? { role: 'agent', is_active: true } : STATE.profilesList[idx];
+    $('#teamEditorTitle').textContent = isNew ? 'Nouvel agent' : 'Modifier · ' + (p.full_name || p.email);
+    $('#teamDeleteBtn').hidden = isNew;
+    $('#teamEmail').value = p.email || '';
+    $('#teamEmail').disabled = !isNew; // can't change email of existing user via this UI
+    $('#teamFullName').value = p.full_name || '';
+    $('#teamPassword').value = '';
+    $('#teamPassword').required = isNew;
+    $('#teamPwdLbl').textContent = isNew ? 'Mot de passe (8 caractères minimum)' : 'Nouveau mot de passe (laisser vide pour ne pas changer)';
+    $('#teamRole').value = p.role || 'agent';
+    $('#teamActive').checked = p.is_active !== false;
+    if (!isNew) {
+      $('#teamMetaGroup').hidden = false;
+      $('#teamMetaId').textContent = p.id;
+      $('#teamMetaCreated').textContent = fmtDate(p.created_at);
+    } else { $('#teamMetaGroup').hidden = true; }
+    showView('team-editor');
+    window.scrollTo(0, 0);
+  }
+
+  async function callAdminAgent(op, body) {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) throw new Error('Session expirée. Reconnectez-vous.');
+    const r = await fetch(FN_ADMIN_AGENT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + session.access_token,
+        'apikey': window.SL_SUPABASE.key
+      },
+      body: JSON.stringify(Object.assign({ op }, body))
+    });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(data.error || ('HTTP ' + r.status));
+    return data;
+  }
+
+  async function saveAgent() {
+    const isNew = STATE.currentAgent === 'new';
+    const base = isNew ? null : STATE.profilesList[STATE.currentAgent];
+    const email = $('#teamEmail').value.trim();
+    const password = $('#teamPassword').value;
+    const full_name = $('#teamFullName').value.trim();
+    const role = $('#teamRole').value;
+    const is_active = $('#teamActive').checked;
+
+    if (isNew && !email) { toast('Email requis.', 'error'); return; }
+    if (isNew && (!password || password.length < 8)) { toast('Mot de passe : 8+ caractères.', 'error'); return; }
+
+    const btn = $('#teamSaveBtn'); btn.disabled = true; const old = btn.textContent; btn.textContent = '⏳…';
+    try {
+      if (isNew) {
+        await callAdminAgent('create', { email, password, full_name, role });
+        toast('Agent créé. Communiquez-lui les identifiants.', 'success', 'Créé');
+      } else {
+        const body = { id: base.id, full_name, role, is_active };
+        if (password && password.length >= 8) body.password = password;
+        await callAdminAgent('update', body);
+        toast('Agent mis à jour.', 'success');
+      }
+      await loadAllProfiles();
+      renderTeamTable();
+      renderListingsAuthorFilter();
+      backToTeam();
+    } catch (e) {
+      console.error(e); toast(e.message || 'Erreur', 'error', 'Échec');
+    } finally { btn.disabled = false; btn.textContent = old; }
+  }
+
+  async function deleteAgent() {
+    if (STATE.currentAgent === 'new') return backToTeam();
+    const p = STATE.profilesList[STATE.currentAgent];
+    if (p.id === STATE.user.id) { toast('Vous ne pouvez pas supprimer votre propre compte.', 'error'); return; }
+    const ok = await confirmModal('Supprimer cet agent ?',
+      'Le compte de "' + (p.full_name || p.email) + '" sera supprimé. Les annonces qu\'il·elle a créées resteront, attribuées à "—".');
+    if (!ok) return;
+    try {
+      await callAdminAgent('delete', { id: p.id });
+      toast('Agent supprimé.', 'success');
+      await loadAllProfiles();
+      renderTeamTable();
+      renderListingsAuthorFilter();
+      backToTeam();
+    } catch (e) { toast(e.message || 'Erreur', 'error', 'Échec'); }
+  }
+
+  // ------------------------------------------------------------------
+  // NAVIGATION
+  // ------------------------------------------------------------------
+  function backToDashboard() {
+    STATE.currentListing = null; STATE.pendingListingFile = null;
+    showView('dashboard');
+    showTab('listings');
+  }
+  function backToJournal() {
+    STATE.currentArticle = null; STATE.pendingArticleFile = null;
+    showView('dashboard');
+    showTab('journal');
+  }
+  function backToTeam() {
+    STATE.currentAgent = null;
+    showView('dashboard');
+    showTab('team');
+  }
+
+  // ------------------------------------------------------------------
+  // FILE HANDLERS
+  // ------------------------------------------------------------------
+  function handleListingFile(file) {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast('Image > 5MB. Compressez-la.', 'error'); return; }
+    STATE.pendingListingFile = file;
+    const r = new FileReader();
+    r.onload = e => { setListingPreview(e.target.result); $('#fImage').value = '(téléversement à l\'enregistrement)'; };
+    r.readAsDataURL(file);
+    toast('Photo prête.', null, 'Photo en attente');
+  }
+  function handleArticleFile(file) {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast('Image > 5MB.', 'error'); return; }
+    STATE.pendingArticleFile = file;
+    const r = new FileReader();
+    r.onload = e => { setArticlePreview(e.target.result); $('#artFImage').value = '(téléversement à l\'enregistrement)'; };
+    r.readAsDataURL(file);
+    toast('Image prête.', null, 'Image en attente');
+  }
+
+  // ------------------------------------------------------------------
+  // BIND EVENTS
+  // ------------------------------------------------------------------
   function bindEvents() {
     // Login
     $('#loginForm').addEventListener('submit', async e => {
@@ -429,76 +723,106 @@
       $('#loginError').hidden = true;
       const email = $('#loginEmail').value.trim();
       const password = $('#loginPassword').value;
-      const btn = $('#loginSubmit');
-      btn.disabled = true;
-      const oldText = btn.textContent;
-      btn.textContent = '⏳ Connexion…';
+      const btn = $('#loginSubmit'); btn.disabled = true;
+      const old = btn.textContent; btn.textContent = '⏳ Connexion…';
       try {
-        await tryLogin(email, password);
+        const { error } = await sb.auth.signInWithPassword({ email, password });
+        if (error) throw error;
         await enterDashboard();
       } catch (err) {
-        $('#loginError').textContent = err.message === 'Invalid login credentials'
-          ? 'Email ou mot de passe incorrect.'
-          : err.message;
+        $('#loginError').textContent = err.message === 'Invalid login credentials' ? 'Email ou mot de passe incorrect.' : err.message;
         $('#loginError').hidden = false;
-      } finally {
-        btn.disabled = false;
-        btn.textContent = oldText;
-      }
+      } finally { btn.disabled = false; btn.textContent = old; }
     });
 
-    // Dashboard
     $('#logoutBtn').addEventListener('click', logout);
-    $('#reloadBtn').addEventListener('click', async () => {
-      try { await loadListings(); renderTable(); updateStats(); toast('Données rechargées.', 'success'); }
-      catch (_) {}
-    });
-    $('#newListingBtn').addEventListener('click', () => openEditor('new'));
-    $('#searchInput').addEventListener('input', renderTable);
-    $('#filterCity').addEventListener('change', renderTable);
-    $('#filterType').addEventListener('change', renderTable);
 
-    // Editor
+    // Tab switching
+    $$('.nav-btn').forEach(btn => btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      if (tab === 'team' && STATE.profile?.role !== 'admin') return;
+      showView('dashboard');
+      showTab(tab);
+    }));
+
+    // Listings tab
+    $('#reloadBtn').addEventListener('click', async () => { try { await loadListings(); listingsStats(); renderListingsTable(); renderListingsAuthorFilter(); toast('Annonces rechargées.', 'success'); } catch (_) {} });
+    $('#newListingBtn').addEventListener('click', () => openListingEditor('new'));
+    $('#searchInput').addEventListener('input', renderListingsTable);
+    $('#filterCity').addEventListener('change', renderListingsTable);
+    $('#filterType').addEventListener('change', renderListingsTable);
+    $('#filterAuthor').addEventListener('change', renderListingsTable);
+
+    // Listing editor
     $('#editorBackBtn').addEventListener('click', backToDashboard);
-    $('#saveBtn').addEventListener('click', saveEditor);
-    $('#deleteBtn').addEventListener('click', deleteCurrent);
-    $('#fileUpload').addEventListener('change', e => handleFileSelect(e.target.files[0]));
-    $('#fImage').addEventListener('change', () => {
-      if ($('#fImage').value && !STATE.pendingFile && !$('#fImage').value.startsWith('(')) setImagePreview($('#fImage').value);
-    });
+    $('#saveBtn').addEventListener('click', saveListing);
+    $('#deleteBtn').addEventListener('click', deleteListing);
+    $('#fileUpload').addEventListener('change', e => handleListingFile(e.target.files[0]));
+    $('#fImage').addEventListener('change', () => { if ($('#fImage').value && !STATE.pendingListingFile && !$('#fImage').value.startsWith('(')) setListingPreview($('#fImage').value); });
     $('#fPriceUsd').addEventListener('blur', () => {
       const v = parseFloat($('#fPriceUsd').value);
       if (!v || $('#fPriceDisplay').value) return;
       const m = v / 1_000_000;
       $('#fPriceDisplay').value = '$' + (m % 1 === 0 ? m.toFixed(1) : m.toFixed(2)) + 'M';
     });
+
+    // Journal tab
+    $('#reloadArticlesBtn').addEventListener('click', async () => { try { await loadArticles(); articlesStats(); renderArticlesTable(); toast('Articles rechargés.', 'success'); } catch (_) {} });
+    $('#newArticleBtn').addEventListener('click', () => openArticleEditor('new'));
+    $('#artSearchInput').addEventListener('input', renderArticlesTable);
+    $('#artFilterCategory').addEventListener('change', renderArticlesTable);
+    $('#artEditorBackBtn').addEventListener('click', backToJournal);
+    $('#artSaveBtn').addEventListener('click', saveArticle);
+    $('#artDeleteBtn').addEventListener('click', deleteArticle);
+    $('#artFileUpload').addEventListener('change', e => handleArticleFile(e.target.files[0]));
+    $('#artFImage').addEventListener('change', () => { if ($('#artFImage').value && !STATE.pendingArticleFile && !$('#artFImage').value.startsWith('(')) setArticlePreview($('#artFImage').value); });
+
+    // Team tab
+    $('#reloadTeamBtn').addEventListener('click', async () => { try { await loadAllProfiles(); renderTeamTable(); toast('Équipe rechargée.', 'success'); } catch (_) {} });
+    $('#newAgentBtn').addEventListener('click', () => openAgentEditor('new'));
+    $('#teamBackBtn').addEventListener('click', backToTeam);
+    $('#teamSaveBtn').addEventListener('click', saveAgent);
+    $('#teamDeleteBtn').addEventListener('click', deleteAgent);
+    $('#teamGenPwd').addEventListener('click', () => { $('#teamPassword').value = genStrongPassword(); });
   }
 
   async function enterDashboard() {
-    STATE.user = (await sb.auth.getUser()).data.user;
-    $('#userTag').textContent = STATE.user?.email || '—';
+    await loadProfile();
+    if (!STATE.profile) {
+      toast('Profil introuvable. Contactez l\'administrateur.', 'error', 'Erreur');
+      await logout();
+      return;
+    }
+    if (STATE.profile.is_active === false) {
+      toast('Votre compte a été désactivé.', 'error', 'Accès refusé');
+      await logout();
+      return;
+    }
+    $('#userTag').textContent = (STATE.profile.full_name || STATE.profile.email) + (STATE.profile.role === 'admin' ? ' · ADMIN' : '');
+    // Hide admin-only tabs for non-admins
+    $$('[data-admin-only]').forEach(el => { el.hidden = (STATE.profile.role !== 'admin'); });
+
     showView('dashboard');
+    showTab('listings');
+
     try {
-      await loadListings();
-      renderTable();
-      updateStats();
-    } catch (_) { /* already toasted */ }
+      await Promise.all([loadAllProfiles(), loadListings(), loadArticles()]);
+      listingsStats();
+      renderListingsAuthorFilter();
+      renderListingsTable();
+      articlesStats();
+      renderArticlesTable();
+      if (STATE.profile.role === 'admin') renderTeamTable();
+    } catch (e) { console.error(e); }
   }
 
   async function boot() {
     bindEvents();
     const { data: { session } } = await sb.auth.getSession();
-    if (session) {
-      await enterDashboard();
-    } else {
-      showView('login');
-      $('#loginEmail').focus();
-    }
+    if (session) await enterDashboard();
+    else { showView('login'); $('#loginEmail').focus(); }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
-  } else {
-    boot();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();

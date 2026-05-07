@@ -206,36 +206,18 @@
   </div>
 </section>
 
-<!-- Featured article -->
-<section class="px-6 md:px-10 py-20 md:py-24">
-  <div class="max-w-[1500px] mx-auto">
-    <article class="article-card">
-      <div class="grid md:grid-cols-12 gap-0 items-stretch">
-        <div class="md:col-span-7 img-wrap aspect-[16/10] md:aspect-auto">
-          <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=2000&q=92" class="w-full h-full object-cover">
-        </div>
-        <div class="md:col-span-5 p-8 md:p-12 flex flex-col justify-center">
-          <div class="topic-pill self-start">★ À LA UNE · FISCALITÉ</div>
-          <h2 class="display mt-6 leading-[0.95]" style="font-size: clamp(2rem, 4vw, 3.5rem)">
-            Fiscalité <span class="display-i text-[var(--gold-deep)]">FR/IL</span> en clair.
-          </h2>
-          <p class="text-base text-[var(--ink-soft)] mt-5 leading-relaxed">IFI, plus-value, double imposition, déclaration des comptes israéliens — un guide complet de 47 pages illustré d'exemples chiffrés. Lecture indispensable avant toute acquisition.</p>
-          <div class="flex items-center gap-4 mt-6 text-sm text-[var(--muted)]">
-            <span class="cinzel text-[10px] tracking-[0.3em]">— 11 MIN</span>
-            <span>·</span>
-            <span class="cinzel text-[10px] tracking-[0.3em]">PUBLIÉ LE 18 AVRIL MMXXVI</span>
-          </div>
-          <a class="btn-teal mt-6 self-start">Lire l'article →</a>
-        </div>
-      </div>
-    </article>
+<!-- Featured article (dynamic from Supabase) -->
+<section class="px-6 md:px-10 py-20 md:py-24" id="featured-article-section">
+  <div class="max-w-[1500px] mx-auto" id="journal-featured">
+    <div class="text-center py-20 text-[var(--muted)] cinzel text-xs tracking-[0.3em]">Chargement…</div>
   </div>
 </section>
 
-<!-- Articles grid -->
+<!-- Articles grid (dynamic from Supabase) -->
 <section class="px-6 md:px-10 pb-24 md:pb-32">
   <div class="max-w-[1500px] mx-auto">
-    <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+    <div class="grid md:grid-cols-3 gap-6 md:gap-8" id="journal-grid"></div>
+    <div id="_journal-fallback" hidden>
 
       <article class="article-card">
         <div class="img-wrap aspect-[16/10]"><img src="https://images.unsplash.com/photo-1499678329028-101435549a4e?w=1000&q=90" class="w-full h-full object-cover"></div>
@@ -327,10 +309,10 @@
         </div>
       </article>
 
-    </div>
+    </div><!-- /_journal-fallback -->
 
-    <div class="text-center mt-16">
-      <a class="btn-line text-[var(--teal)]">Voir les 47 articles →</a>
+    <div class="text-center mt-16" id="journal-cta-wrap" hidden>
+      <a class="btn-line text-[var(--teal)]" href="contact.html">Demander d'autres analyses →</a>
     </div>
   </div>
 </section>
@@ -365,6 +347,8 @@
 
 <script src="assets/animations.js" defer></script>
 <script src="assets/i18n.js" defer></script>
+<script src="assets/supabase-config.js" defer></script>
+<script src="assets/journal.js" defer></script>
 <script>
 window.addEventListener('scroll', function() {
   var winScroll = document.documentElement.scrollTop;

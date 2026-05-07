@@ -7,7 +7,6 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=(), payment=()">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'">
-<!-- SL_SECURITY_END -->
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <title>Espace privé · SHAHAR LEVI Real Estate</title>
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
@@ -27,14 +26,13 @@
     </div>
     <div class="login-title">
       <div class="login-eyebrow">— ESPACE PRIVÉ</div>
-      <h1>Bonjour <em>Nathalie.</em></h1>
+      <h1>Bonjour <em>l'équipe.</em></h1>
       <p class="login-sub">Connectez-vous pour gérer le portefeuille.</p>
     </div>
-
     <form class="login-form" id="loginForm">
       <label class="field">
         <span class="field-label">— EMAIL</span>
-        <input type="email" id="loginEmail" required autocomplete="username" placeholder="nathalie@shaharlevi.co.il" autofocus>
+        <input type="email" id="loginEmail" required autocomplete="username" placeholder="prénom@shaharlevi.co.il" autofocus>
       </label>
       <label class="field">
         <span class="field-label">— MOT DE PASSE</span>
@@ -43,84 +41,146 @@
       <div class="login-error" id="loginError" hidden></div>
       <button type="submit" class="btn-primary" id="loginSubmit">Se connecter →</button>
     </form>
-
     <a class="back-link" href="../index.html">← Retour au site public</a>
   </div>
 </section>
 
+<!-- ===== TOPBAR (always visible when logged in) ===== -->
+<header class="topbar" data-when="dashboard editor article-editor team-editor" hidden>
+  <div class="topbar-brand">
+    <div class="brand-name">SHAHAR LEVI</div>
+    <div class="brand-desc">Espace privé</div>
+  </div>
+  <nav class="topbar-nav">
+    <button class="nav-btn active" data-tab="listings">Annonces</button>
+    <button class="nav-btn" data-tab="journal">Journal</button>
+    <button class="nav-btn" data-tab="team" data-admin-only>Équipe</button>
+  </nav>
+  <div class="topbar-right">
+    <span class="user-tag" id="userTag">—</span>
+    <button class="link-btn" id="logoutBtn">Déconnexion</button>
+  </div>
+</header>
+
 <!-- ===== DASHBOARD VIEW ===== -->
 <section class="view view-dashboard" data-view="dashboard" hidden>
-  <header class="topbar">
-    <div class="topbar-brand">
-      <div class="brand-name">SHAHAR LEVI</div>
-      <div class="brand-desc">Espace privé</div>
-    </div>
-    <div class="topbar-right">
-      <span class="user-tag" id="userTag">—</span>
-      <button class="link-btn" id="logoutBtn">Déconnexion</button>
-    </div>
-  </header>
-
   <main class="dash">
-    <div class="dash-head">
-      <div>
-        <div class="eyebrow">— PORTEFEUILLE</div>
-        <h2>Vos <em>annonces.</em></h2>
-        <p class="dash-sub">Cliquez sur une annonce pour modifier toutes ses informations. Les changements sont publiés en temps réel sur le site.</p>
+
+    <!-- Tab: Listings -->
+    <div class="tab-pane active" data-tab-pane="listings">
+      <div class="dash-head">
+        <div>
+          <div class="eyebrow">— PORTEFEUILLE</div>
+          <h2>Vos <em>annonces.</em></h2>
+          <p class="dash-sub">Cliquez sur une annonce pour la modifier. Les changements sont publiés en direct.</p>
+        </div>
+        <div class="dash-actions">
+          <button class="btn-ghost" id="reloadBtn" title="Recharger">↻ Actualiser</button>
+          <button class="btn-primary" id="newListingBtn">＋ Nouvelle annonce</button>
+        </div>
       </div>
-      <div class="dash-actions">
-        <button class="btn-ghost" id="reloadBtn" title="Recharger">↻ Actualiser</button>
-        <button class="btn-primary" id="newListingBtn">＋ Nouvelle annonce</button>
+      <div class="stats-strip">
+        <div class="stat"><span class="stat-num" id="statTotal">—</span><span class="stat-lbl">Total</span></div>
+        <div class="stat"><span class="stat-num" id="statVisible">—</span><span class="stat-lbl">Publiées</span></div>
+        <div class="stat"><span class="stat-num" id="statFeatured">—</span><span class="stat-lbl">À la une</span></div>
+        <div class="stat"><span class="stat-num" id="statHidden">—</span><span class="stat-lbl">Masquées</span></div>
+        <div class="stat"><span class="stat-num" id="statOff">—</span><span class="stat-lbl">Off-market</span></div>
+      </div>
+      <div class="toolbar">
+        <input type="search" id="searchInput" placeholder="Rechercher (titre, ville, référence)…">
+        <select id="filterCity">
+          <option value="">Toutes les villes</option>
+          <option value="tel-aviv">Tel Aviv</option>
+          <option value="herzliya">Herzliya</option>
+          <option value="caesarea">Caesarea</option>
+          <option value="netanya">Netanya</option>
+          <option value="jerusalem">Jérusalem</option>
+        </select>
+        <select id="filterType">
+          <option value="">Tous les types</option>
+          <option value="appartement">Appartement</option>
+          <option value="penthouse">Penthouse</option>
+          <option value="villa">Villa</option>
+          <option value="loft">Loft</option>
+          <option value="maison">Maison</option>
+        </select>
+        <select id="filterAuthor">
+          <option value="">Tous les agents</option>
+        </select>
+      </div>
+      <div class="listings-table" id="listingsTable">
+        <div class="loading">Chargement…</div>
       </div>
     </div>
 
-    <div class="stats-strip">
-      <div class="stat"><span class="stat-num" id="statTotal">—</span><span class="stat-lbl">Total</span></div>
-      <div class="stat"><span class="stat-num" id="statVisible">—</span><span class="stat-lbl">Publiées</span></div>
-      <div class="stat"><span class="stat-num" id="statFeatured">—</span><span class="stat-lbl">À la une</span></div>
-      <div class="stat"><span class="stat-num" id="statHidden">—</span><span class="stat-lbl">Masquées</span></div>
-      <div class="stat"><span class="stat-num" id="statOff">—</span><span class="stat-lbl">Off-market</span></div>
+    <!-- Tab: Journal -->
+    <div class="tab-pane" data-tab-pane="journal" hidden>
+      <div class="dash-head">
+        <div>
+          <div class="eyebrow">— LE JOURNAL</div>
+          <h2>Vos <em>articles.</em></h2>
+          <p class="dash-sub">Articles, analyses et regards publiés sur le marché israélien.</p>
+        </div>
+        <div class="dash-actions">
+          <button class="btn-ghost" id="reloadArticlesBtn">↻ Actualiser</button>
+          <button class="btn-primary" id="newArticleBtn">＋ Nouvel article</button>
+        </div>
+      </div>
+      <div class="stats-strip">
+        <div class="stat"><span class="stat-num" id="artStatTotal">—</span><span class="stat-lbl">Articles</span></div>
+        <div class="stat"><span class="stat-num" id="artStatPublished">—</span><span class="stat-lbl">Publiés</span></div>
+        <div class="stat"><span class="stat-num" id="artStatDraft">—</span><span class="stat-lbl">Brouillons</span></div>
+      </div>
+      <div class="toolbar">
+        <input type="search" id="artSearchInput" placeholder="Rechercher un article…">
+        <select id="artFilterCategory">
+          <option value="">Toutes les catégories</option>
+          <option value="marche">Marché</option>
+          <option value="aliyah">Aliyah</option>
+          <option value="patrimoine">Patrimoine</option>
+          <option value="decryptage">Décryptage</option>
+        </select>
+      </div>
+      <div class="listings-table" id="articlesTable">
+        <div class="loading">Chargement…</div>
+      </div>
     </div>
 
-    <div class="toolbar">
-      <input type="search" id="searchInput" placeholder="Rechercher (titre, ville, référence)…">
-      <select id="filterCity">
-        <option value="">Toutes les villes</option>
-        <option value="tel-aviv">Tel Aviv</option>
-        <option value="herzliya">Herzliya</option>
-        <option value="caesarea">Caesarea</option>
-        <option value="netanya">Netanya</option>
-        <option value="jerusalem">Jérusalem</option>
-      </select>
-      <select id="filterType">
-        <option value="">Tous les types</option>
-        <option value="appartement">Appartement</option>
-        <option value="penthouse">Penthouse</option>
-        <option value="villa">Villa</option>
-        <option value="loft">Loft</option>
-        <option value="maison">Maison</option>
-      </select>
+    <!-- Tab: Team (admin only) -->
+    <div class="tab-pane" data-tab-pane="team" hidden>
+      <div class="dash-head">
+        <div>
+          <div class="eyebrow">— L'ÉQUIPE</div>
+          <h2>Les <em>agents.</em></h2>
+          <p class="dash-sub">Créez les comptes des conseiller·ère·s. Chaque modification du site est attribuée à son auteur.</p>
+        </div>
+        <div class="dash-actions">
+          <button class="btn-ghost" id="reloadTeamBtn">↻ Actualiser</button>
+          <button class="btn-primary" id="newAgentBtn">＋ Nouvel agent</button>
+        </div>
+      </div>
+      <div class="listings-table" id="teamTable">
+        <div class="loading">Chargement…</div>
+      </div>
+      <p class="dash-sub" style="margin-top: 1.5rem; max-width: 720px;">
+        <strong>Rôles :</strong> "Admin" peut tout gérer (annonces, articles, équipe). "Agent" peut gérer les annonces et les articles.
+        <br><strong>Désactivation :</strong> un agent désactivé conserve son historique mais ne peut plus se connecter.
+      </p>
     </div>
 
-    <div class="listings-table" id="listingsTable">
-      <div class="loading">Chargement…</div>
-    </div>
   </main>
 </section>
 
-<!-- ===== EDITOR VIEW ===== -->
+<!-- ===== LISTING EDITOR VIEW ===== -->
 <section class="view view-editor" data-view="editor" hidden>
-  <header class="topbar">
-    <div class="topbar-brand">
-      <button class="back-btn" id="editorBackBtn">← Retour</button>
-    </div>
-    <div class="topbar-center"><span id="editorTitle">Modifier l'annonce</span></div>
-    <div class="topbar-right">
-      <button class="btn-ghost" id="deleteBtn" title="Supprimer">Supprimer</button>
+  <div class="editor-topbar">
+    <button class="back-btn" id="editorBackBtn">← Retour</button>
+    <span class="editor-title" id="editorTitle">Modifier l'annonce</span>
+    <div class="editor-actions">
+      <button class="btn-ghost" id="deleteBtn">Supprimer</button>
       <button class="btn-primary" id="saveBtn">💾 Enregistrer</button>
     </div>
-  </header>
-
+  </div>
   <main class="editor">
     <form id="editForm" class="editor-form">
 
@@ -136,122 +196,64 @@
               Choisir une photo…
             </label>
             <input type="url" id="fImage" placeholder="ou coller une URL d'image" class="field-image-url">
-            <span class="field-hint">PNG, JPG ou WebP — max 5 MB. Stockée dans Supabase.</span>
+            <span class="field-hint">PNG, JPG ou WebP — max 5 MB.</span>
             <div class="upload-progress" id="uploadProgress" hidden></div>
           </div>
         </div>
       </fieldset>
 
-      <fieldset class="field-group field-status">
+      <fieldset class="field-group">
         <legend>Statut</legend>
         <div class="grid-2">
-          <label class="toggle">
-            <input type="checkbox" id="fVisible" checked>
-            <span class="toggle-track"></span>
-            <span class="toggle-text"><strong>Publiée</strong> · visible sur le site public</span>
-          </label>
-          <label class="toggle">
-            <input type="checkbox" id="fFeatured">
-            <span class="toggle-track"></span>
-            <span class="toggle-text"><strong>À la une</strong> · apparaît sur la page d'accueil</span>
-          </label>
-          <label class="toggle">
-            <input type="checkbox" id="fSignature">
-            <span class="toggle-track"></span>
-            <span class="toggle-text"><strong>Signature</strong> · pièce vedette du portefeuille (★)</span>
-          </label>
-          <label class="toggle">
-            <input type="checkbox" id="fOffMarket">
-            <span class="toggle-track"></span>
-            <span class="toggle-text"><strong>Off-market</strong> · ne pas afficher publiquement</span>
-          </label>
+          <label class="toggle"><input type="checkbox" id="fVisible" checked><span class="toggle-track"></span><span class="toggle-text"><strong>Publiée</strong> · visible</span></label>
+          <label class="toggle"><input type="checkbox" id="fFeatured"><span class="toggle-track"></span><span class="toggle-text"><strong>À la une</strong> · accueil</span></label>
+          <label class="toggle"><input type="checkbox" id="fSignature"><span class="toggle-track"></span><span class="toggle-text"><strong>Signature</strong> · pièce vedette ★</span></label>
+          <label class="toggle"><input type="checkbox" id="fOffMarket"><span class="toggle-track"></span><span class="toggle-text"><strong>Off-market</strong> · carnet privé</span></label>
         </div>
       </fieldset>
 
       <fieldset class="field-group">
         <legend>Identification</legend>
         <div class="grid-3">
-          <label class="field">
-            <span class="field-label">Référence</span>
-            <input type="text" id="fRef" placeholder="SL.0020">
-          </label>
-          <label class="field">
-            <span class="field-label">Ville</span>
+          <label class="field"><span class="field-label">Référence</span><input type="text" id="fRef" placeholder="SL.0020"></label>
+          <label class="field"><span class="field-label">Ville</span>
             <select id="fCity">
-              <option value="tel-aviv">Tel Aviv</option>
-              <option value="herzliya">Herzliya</option>
-              <option value="caesarea">Caesarea</option>
-              <option value="netanya">Netanya</option>
-              <option value="jerusalem">Jérusalem</option>
+              <option value="tel-aviv">Tel Aviv</option><option value="herzliya">Herzliya</option><option value="caesarea">Caesarea</option><option value="netanya">Netanya</option><option value="jerusalem">Jérusalem</option>
             </select>
           </label>
-          <label class="field">
-            <span class="field-label">Type</span>
+          <label class="field"><span class="field-label">Type</span>
             <select id="fType">
-              <option value="appartement">Appartement</option>
-              <option value="penthouse">Penthouse</option>
-              <option value="villa">Villa</option>
-              <option value="loft">Loft</option>
-              <option value="maison">Maison</option>
+              <option value="appartement">Appartement</option><option value="penthouse">Penthouse</option><option value="villa">Villa</option><option value="loft">Loft</option><option value="maison">Maison</option>
             </select>
           </label>
         </div>
-        <label class="field">
-          <span class="field-label">Quartier / projet</span>
-          <input type="text" id="fNeighborhood" placeholder="Akirov Towers · Tour B">
-        </label>
+        <label class="field"><span class="field-label">Quartier / projet</span><input type="text" id="fNeighborhood" placeholder="Akirov Towers · Tour B"></label>
       </fieldset>
 
       <fieldset class="field-group">
         <legend>Titre</legend>
         <div class="grid-2">
-          <label class="field">
-            <span class="field-label">Titre principal</span>
-            <input type="text" id="fTitleMain" placeholder="Penthouse">
-          </label>
-          <label class="field">
-            <span class="field-label">Accent (italique doré)</span>
-            <input type="text" id="fTitleAccent" placeholder="Akirov.">
-          </label>
+          <label class="field"><span class="field-label">Titre principal</span><input type="text" id="fTitleMain" placeholder="Penthouse"></label>
+          <label class="field"><span class="field-label">Accent (italique doré)</span><input type="text" id="fTitleAccent" placeholder="Akirov."></label>
         </div>
-        <label class="field">
-          <span class="field-label">Description courte</span>
-          <textarea id="fDescription" rows="3" placeholder="Cinq pièces au 28ᵉ étage avec terrasse 180 m²…"></textarea>
-        </label>
+        <label class="field"><span class="field-label">Description courte</span><textarea id="fDescription" rows="3" placeholder="Cinq pièces au 28ᵉ étage…"></textarea></label>
       </fieldset>
 
       <fieldset class="field-group">
         <legend>Caractéristiques</legend>
         <div class="grid-3">
-          <label class="field">
-            <span class="field-label">Surface</span>
-            <input type="text" id="fSurface" placeholder="320 m²">
-          </label>
-          <label class="field">
-            <span class="field-label">Pièces</span>
-            <input type="text" id="fRooms" placeholder="5 P">
-          </label>
-          <label class="field">
-            <span class="field-label">Étiquette additionnelle</span>
-            <input type="text" id="fExtra" placeholder="VUE MER · TERRASSE 180">
-          </label>
+          <label class="field"><span class="field-label">Surface</span><input type="text" id="fSurface" placeholder="320 m²"></label>
+          <label class="field"><span class="field-label">Pièces</span><input type="text" id="fRooms" placeholder="5 P"></label>
+          <label class="field"><span class="field-label">Étiquette</span><input type="text" id="fExtra" placeholder="VUE MER"></label>
         </div>
       </fieldset>
 
       <fieldset class="field-group">
         <legend>Prix</legend>
         <div class="grid-3">
-          <label class="field">
-            <span class="field-label">Prix USD (chiffre)</span>
-            <input type="number" id="fPriceUsd" placeholder="14800000" step="50000">
-            <span class="field-hint">Sans formatage. Sert au tri.</span>
-          </label>
-          <label class="field">
-            <span class="field-label">Prix affiché</span>
-            <input type="text" id="fPriceDisplay" placeholder="$14.8M">
-          </label>
-          <label class="field">
-            <span class="field-label">Équivalents (optionnel)</span>
+          <label class="field"><span class="field-label">Prix USD</span><input type="number" id="fPriceUsd" placeholder="14800000" step="50000"><span class="field-hint">Sans formatage. Sert au tri.</span></label>
+          <label class="field"><span class="field-label">Prix affiché</span><input type="text" id="fPriceDisplay" placeholder="$14.8M"></label>
+          <label class="field"><span class="field-label">Équivalents</span>
             <div class="grid-2-tight">
               <input type="text" id="fPriceEur" placeholder="≈ 13.6 M€">
               <input type="text" id="fPriceIls" placeholder="≈ 53.5 M ₪">
@@ -260,6 +262,135 @@
         </div>
       </fieldset>
 
+      <fieldset class="field-group" id="metaGroup" hidden>
+        <legend>Historique</legend>
+        <div class="grid-2 meta-grid">
+          <div><div class="field-label">Créé par</div><div id="metaCreatedBy">—</div></div>
+          <div><div class="field-label">Dernière modification</div><div id="metaUpdatedBy">—</div></div>
+        </div>
+      </fieldset>
+
+    </form>
+  </main>
+</section>
+
+<!-- ===== ARTICLE EDITOR ===== -->
+<section class="view view-article-editor" data-view="article-editor" hidden>
+  <div class="editor-topbar">
+    <button class="back-btn" id="artEditorBackBtn">← Retour</button>
+    <span class="editor-title" id="artEditorTitle">Modifier l'article</span>
+    <div class="editor-actions">
+      <button class="btn-ghost" id="artDeleteBtn">Supprimer</button>
+      <button class="btn-primary" id="artSaveBtn">💾 Enregistrer</button>
+    </div>
+  </div>
+  <main class="editor">
+    <form id="artEditForm" class="editor-form">
+
+      <fieldset class="field-group field-images">
+        <legend>Image de couverture</legend>
+        <div class="image-zone">
+          <div class="image-preview" id="artImagePreview">
+            <div class="image-empty">Aucune image</div>
+          </div>
+          <div class="image-actions">
+            <label class="btn-ghost">
+              <input type="file" id="artFileUpload" accept="image/*" style="display:none">
+              Choisir une image…
+            </label>
+            <input type="url" id="artFImage" placeholder="ou coller une URL" class="field-image-url">
+            <span class="field-hint">Format paysage recommandé (16/9 ou 16/10).</span>
+            <div class="upload-progress" id="artUploadProgress" hidden></div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="field-group">
+        <legend>Statut</legend>
+        <div class="grid-2">
+          <label class="toggle"><input type="checkbox" id="artPublished"><span class="toggle-track"></span><span class="toggle-text"><strong>Publié</strong> · visible sur le site</span></label>
+          <label class="field"><span class="field-label">Date de publication</span><input type="date" id="artPublishDate"></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="field-group">
+        <legend>Contenu</legend>
+        <label class="field"><span class="field-label">Catégorie</span>
+          <select id="artCategory">
+            <option value="marche">Marché</option>
+            <option value="aliyah">Aliyah</option>
+            <option value="patrimoine">Patrimoine</option>
+            <option value="decryptage">Décryptage</option>
+          </select>
+        </label>
+        <label class="field"><span class="field-label">Titre</span><input type="text" id="artTitle" placeholder="Tel Aviv 2026 : ce que les chiffres disent…"></label>
+        <label class="field"><span class="field-label">Sous-titre (optionnel)</span><input type="text" id="artSubtitle" placeholder="Sous-titre court"></label>
+        <label class="field"><span class="field-label">Extrait</span><textarea id="artExcerpt" rows="2" placeholder="Une ou deux phrases d'accroche…"></textarea></label>
+        <label class="field"><span class="field-label">Article complet (HTML autorisé)</span><textarea id="artContent" rows="14" class="content-area" placeholder="Le corps de l'article, en paragraphes…"></textarea></label>
+        <div class="grid-2">
+          <label class="field"><span class="field-label">Temps de lecture (min)</span><input type="number" id="artReadMinutes" min="1" placeholder="6"></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="field-group" id="artMetaGroup" hidden>
+        <legend>Historique</legend>
+        <div class="grid-2 meta-grid">
+          <div><div class="field-label">Auteur·rice</div><div id="artMetaAuthor">—</div></div>
+          <div><div class="field-label">Dernière modification</div><div id="artMetaUpdatedBy">—</div></div>
+        </div>
+      </fieldset>
+    </form>
+  </main>
+</section>
+
+<!-- ===== TEAM EDITOR (modal-style) ===== -->
+<section class="view view-team-editor" data-view="team-editor" hidden>
+  <div class="editor-topbar">
+    <button class="back-btn" id="teamBackBtn">← Retour</button>
+    <span class="editor-title" id="teamEditorTitle">Nouvel agent</span>
+    <div class="editor-actions">
+      <button class="btn-ghost" id="teamDeleteBtn" hidden>Supprimer</button>
+      <button class="btn-primary" id="teamSaveBtn">💾 Enregistrer</button>
+    </div>
+  </div>
+  <main class="editor">
+    <form id="teamForm" class="editor-form" autocomplete="off">
+      <fieldset class="field-group">
+        <legend>Identifiants de connexion</legend>
+        <div class="grid-2">
+          <label class="field"><span class="field-label">Email</span><input type="email" id="teamEmail" required placeholder="prenom@shaharlevi.co.il"></label>
+          <label class="field"><span class="field-label">Nom complet</span><input type="text" id="teamFullName" placeholder="Chloé Mimoun"></label>
+        </div>
+        <label class="field">
+          <span class="field-label" id="teamPwdLbl">Mot de passe (8 caractères minimum)</span>
+          <div class="pwd-row">
+            <input type="text" id="teamPassword" autocomplete="new-password" placeholder="Sera communiqué à l'agent">
+            <button type="button" class="btn-ghost" id="teamGenPwd">Générer</button>
+          </div>
+          <span class="field-hint">Stocké hashé (bcrypt) côté serveur. Communiquez-le à l'agent par un canal sécurisé.</span>
+        </label>
+      </fieldset>
+
+      <fieldset class="field-group">
+        <legend>Permissions</legend>
+        <div class="grid-2">
+          <label class="field"><span class="field-label">Rôle</span>
+            <select id="teamRole">
+              <option value="agent">Agent — gère annonces & articles</option>
+              <option value="admin">Admin — tout, y compris l'équipe</option>
+            </select>
+          </label>
+          <label class="toggle"><input type="checkbox" id="teamActive" checked><span class="toggle-track"></span><span class="toggle-text"><strong>Actif</strong> · peut se connecter</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="field-group" id="teamMetaGroup" hidden>
+        <legend>Compte</legend>
+        <div class="grid-2 meta-grid">
+          <div><div class="field-label">Identifiant</div><div id="teamMetaId" class="mono-text">—</div></div>
+          <div><div class="field-label">Créé le</div><div id="teamMetaCreated">—</div></div>
+        </div>
+      </fieldset>
     </form>
   </main>
 </section>
@@ -278,7 +409,9 @@
 </div>
 
 <script src="../assets/supabase-config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.3/dist/umd/supabase.js" integrity="sha384-wUhGjm8yom7j8IkWM5ZzIdOO/62dez3WNulthrcTYBqGaTi9lWhKKCnVtcxT2CEI" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.3/dist/umd/supabase.js"
+        integrity="sha384-wUhGjm8yom7j8IkWM5ZzIdOO/62dez3WNulthrcTYBqGaTi9lWhKKCnVtcxT2CEI"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="admin.js"></script>
 </body>
 </html>
