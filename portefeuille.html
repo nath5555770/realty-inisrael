@@ -262,9 +262,14 @@
   </div>
 </section>
 
-<!-- LISTINGS GRID — All 19 -->
+<!-- LISTINGS GRID — Rendered dynamically from data/listings.json -->
 <section class="px-6 md:px-10 py-16 md:py-24">
   <div class="max-w-[1500px] mx-auto">
+    <div id="listings-portfolio">
+      <!-- Will be filled by assets/listings.js -->
+      <div class="text-center py-20 text-[var(--muted)] cinzel text-xs tracking-[0.3em]">Chargement du portefeuille…</div>
+    </div>
+    <div id="_listings-static-fallback" style="display:none">
 
     <!-- Featured large -->
     <article class="estate mb-16">
@@ -338,6 +343,7 @@
 
       <article class="estate" data-city="herzliya" data-type="villa" data-ref="SL.0019"><div class="frame aspect-[4/5] mb-5"><img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=92" class="w-full h-full object-cover"><div class="ref-tag">SL.0019</div></div><div><div class="label-teal">HERZLIYA · GALEI TCHELET</div><h3 class="display text-2xl mt-3 leading-tight">Villa <span class="display-i text-[var(--gold-deep)]">Reichman.</span></h3><p class="text-sm text-[var(--ink-soft)] mt-2">395 m² · piscine · cinéma privé</p><div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]"><span class="label !tracking-[0.2em]">8 P · 700 M²</span><span class="display text-2xl text-[var(--teal)]">$11.5M</span></div></div></article>
     </div>
+    </div><!-- /_listings-static-fallback -->
 
     <!-- Off-market block -->
     <div class="mt-24 bg-[var(--teal)] text-[var(--paper)] p-10 md:p-14">
@@ -405,6 +411,7 @@
 
 <script src="assets/animations.js" defer></script>
 <script src="assets/i18n.js" defer></script>
+<script src="assets/listings.js" defer></script>
 <script>
 window.addEventListener('scroll', function() {
   var winScroll = document.documentElement.scrollTop;
@@ -412,55 +419,6 @@ window.addEventListener('scroll', function() {
   var scrolled = (winScroll / height) * 100;
   document.getElementById('scrollProgress').style.width = scrolled + '%';
 }, { passive: true });
-</script>
-
-<script>
-(function() {
-  const filterBtns = document.querySelectorAll('.filter-pill');
-  const estates = document.querySelectorAll('.estate[data-city], .estate[data-type]');
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      const text = this.textContent.toLowerCase();
-      filterBtns.forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-
-      let filterCity = null, filterType = null;
-      if (text.includes('tel aviv')) filterCity = 'tel-aviv';
-      else if (text.includes('herzliya')) filterCity = 'herzliya';
-      else if (text.includes('caesarea')) filterCity = 'caesarea';
-      else if (text.includes('netanya')) filterCity = 'netanya';
-      else if (text.includes('jerusalem') || text.includes('jérusalem')) filterCity = 'jerusalem';
-      else if (text.includes('penthouse')) filterType = 'penthouse';
-      else if (text.includes('villa')) filterType = 'villa';
-      else if (text.includes('appartement')) filterType = 'appartement';
-
-      let count = 0;
-      estates.forEach(el => {
-        const matchCity = !filterCity || el.dataset.city === filterCity;
-        const matchType = !filterType || el.dataset.type === filterType;
-        const visible = matchCity && matchType;
-        el.style.transition = 'opacity 0.4s, transform 0.4s';
-        if (visible) {
-          el.style.display = '';
-          requestAnimationFrame(() => {
-            el.style.opacity = '1';
-            el.style.transform = 'scale(1)';
-          });
-          count++;
-        } else {
-          el.style.opacity = '0';
-          el.style.transform = 'scale(0.95)';
-          setTimeout(() => { el.style.display = 'none'; }, 400);
-        }
-      });
-
-      // Update active counter visibility
-      const counterEl = document.getElementById('filteredCount');
-      if (counterEl) counterEl.textContent = count + (count === 1 ? ' bien' : ' biens');
-    });
-  });
-})();
 </script>
 </body>
 </html>

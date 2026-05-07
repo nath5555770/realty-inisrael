@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /admin
 
-Sitemap: https://myzehut01-bot.github.io/shahar-levi-real-estate/sitemap.xml
+Sitemap: https://realty-inisrael.com/sitemap.xml

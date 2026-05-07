@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>Espace privé · SHAHAR LEVI Real Estate</title>
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0e2722">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ===== LOGIN VIEW ===== -->
+<section class="view view-login" data-view="login">
+  <div class="login-frame">
+    <div class="login-brand">
+      <div class="brand-name">SHAHAR LEVI</div>
+      <div class="brand-desc">REAL ESTATE</div>
+    </div>
+    <div class="login-title">
+      <div class="login-eyebrow">— ESPACE PRIVÉ</div>
+      <h1>Bonjour <em>Nathalie.</em></h1>
+      <p class="login-sub">Connectez-vous pour gérer le portefeuille.</p>
+    </div>
+
+    <form class="login-form" id="loginForm">
+      <label class="field">
+        <span class="field-label">— MOT DE PASSE</span>
+        <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••" autofocus>
+      </label>
+      <details class="field-advanced">
+        <summary>Réglages avancés</summary>
+        <label class="field">
+          <span class="field-label">— TOKEN GITHUB <a class="help-link" target="_blank" rel="noopener" href="https://github.com/settings/tokens/new?scopes=repo&description=SHAHAR+LEVI+Admin">obtenir un token →</a></span>
+          <input type="password" id="loginToken" placeholder="ghp_••••••••••••••••" autocomplete="off" spellcheck="false">
+          <span class="field-hint">Saisi une seule fois sur ce navigateur. Stocké localement.</span>
+        </label>
+        <label class="field">
+          <span class="field-label">— DÉPÔT (owner/repo)</span>
+          <input type="text" id="loginRepo" value="nath5555770/realty-inisrael" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="field">
+          <span class="field-label">— BRANCHE</span>
+          <input type="text" id="loginBranch" value="main" autocomplete="off" spellcheck="false">
+        </label>
+      </details>
+      <div class="login-error" id="loginError" hidden></div>
+      <button type="submit" class="btn-primary">Se connecter →</button>
+    </form>
+
+    <a class="back-link" href="../index.html">← Retour au site public</a>
+  </div>
+</section>
+
+<!-- ===== DASHBOARD VIEW ===== -->
+<section class="view view-dashboard" data-view="dashboard" hidden>
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="brand-name">SHAHAR LEVI</div>
+      <div class="brand-desc">Espace privé</div>
+    </div>
+    <nav class="topbar-nav">
+      <button class="nav-btn active" data-tab="listings">Annonces</button>
+      <button class="nav-btn" data-tab="settings">Réglages</button>
+    </nav>
+    <div class="topbar-right">
+      <span class="user-tag" id="userTag">@nath5555770</span>
+      <button class="link-btn" id="logoutBtn">Déconnexion</button>
+    </div>
+  </header>
+
+  <main class="dash">
+    <!-- Tab: Listings -->
+    <div class="tab-pane active" data-tab-pane="listings">
+      <div class="dash-head">
+        <div>
+          <div class="eyebrow">— PORTEFEUILLE</div>
+          <h2>Vos <em>annonces.</em></h2>
+          <p class="dash-sub">Cliquez sur une annonce pour modifier toutes ses informations. Les changements sont publiés en direct sur le site.</p>
+        </div>
+        <div class="dash-actions">
+          <button class="btn-ghost" id="reloadBtn" title="Recharger depuis GitHub">↻ Actualiser</button>
+          <button class="btn-primary" id="newListingBtn">＋ Nouvelle annonce</button>
+        </div>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="stats-strip">
+        <div class="stat"><span class="stat-num" id="statTotal">—</span><span class="stat-lbl">Total</span></div>
+        <div class="stat"><span class="stat-num" id="statVisible">—</span><span class="stat-lbl">Publiées</span></div>
+        <div class="stat"><span class="stat-num" id="statFeatured">—</span><span class="stat-lbl">À la une</span></div>
+        <div class="stat"><span class="stat-num" id="statHidden">—</span><span class="stat-lbl">Masquées</span></div>
+        <div class="stat"><span class="stat-num" id="statOff">—</span><span class="stat-lbl">Off-market</span></div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <input type="search" id="searchInput" placeholder="Rechercher (titre, ville, référence)…">
+        <select id="filterCity">
+          <option value="">Toutes les villes</option>
+          <option value="tel-aviv">Tel Aviv</option>
+          <option value="herzliya">Herzliya</option>
+          <option value="caesarea">Caesarea</option>
+          <option value="netanya">Netanya</option>
+          <option value="jerusalem">Jérusalem</option>
+        </select>
+        <select id="filterType">
+          <option value="">Tous les types</option>
+          <option value="appartement">Appartement</option>
+          <option value="penthouse">Penthouse</option>
+          <option value="villa">Villa</option>
+          <option value="loft">Loft</option>
+          <option value="maison">Maison</option>
+        </select>
+      </div>
+
+      <!-- Listings table/grid -->
+      <div class="listings-table" id="listingsTable">
+        <div class="loading">Chargement…</div>
+      </div>
+    </div>
+
+    <!-- Tab: Settings -->
+    <div class="tab-pane" data-tab-pane="settings" hidden>
+      <div class="dash-head">
+        <div>
+          <div class="eyebrow">— RÉGLAGES</div>
+          <h2>Votre <em>compte.</em></h2>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <div class="setting-card">
+          <div class="card-title">Connexion GitHub</div>
+          <div class="card-row"><span>Dépôt</span><code id="settingRepo">—</code></div>
+          <div class="card-row"><span>Branche</span><code id="settingBranch">—</code></div>
+          <div class="card-row"><span>Token</span><code id="settingTokenMasked">—</code></div>
+          <button class="btn-ghost" id="changeTokenBtn">Changer le token</button>
+        </div>
+        <div class="setting-card">
+          <div class="card-title">Mot de passe admin</div>
+          <p class="card-desc">Le mot de passe est local à ce navigateur — réinitialisable à tout moment.</p>
+          <button class="btn-ghost" id="changePasswordBtn">Changer le mot de passe</button>
+        </div>
+        <div class="setting-card">
+          <div class="card-title">Aide</div>
+          <p class="card-desc">Les modifications sont enregistrées comme commits sur GitHub. Le site se met à jour automatiquement en 1 à 2 minutes après chaque sauvegarde.</p>
+          <a class="btn-ghost" href="https://github.com/nath5555770/realty-inisrael/commits/main" target="_blank" rel="noopener">Voir l'historique →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ===== EDITOR VIEW ===== -->
+<section class="view view-editor" data-view="editor" hidden>
+  <header class="topbar">
+    <div class="topbar-brand">
+      <button class="back-btn" id="editorBackBtn">← Retour</button>
+    </div>
+    <div class="topbar-center"><span id="editorTitle">Modifier l'annonce</span></div>
+    <div class="topbar-right">
+      <button class="btn-ghost" id="deleteBtn" title="Supprimer">Supprimer</button>
+      <button class="btn-primary" id="saveBtn">💾 Enregistrer</button>
+    </div>
+  </header>
+
+  <main class="editor">
+    <form id="editForm" class="editor-form">
+
+      <!-- Image -->
+      <fieldset class="field-group field-images">
+        <legend>Photo principale</legend>
+        <div class="image-zone">
+          <div class="image-preview" id="imagePreview">
+            <div class="image-empty">Aucune photo</div>
+          </div>
+          <div class="image-actions">
+            <label class="btn-ghost">
+              <input type="file" id="fileUpload" accept="image/*" style="display:none">
+              Choisir une photo…
+            </label>
+            <input type="url" id="fImage" placeholder="ou coller une URL d'image" class="field-image-url">
+            <span class="field-hint">PNG, JPG ou WebP — max ~3 MB. L'image sera commitée dans <code>assets/listings/</code>.</span>
+            <div class="upload-progress" id="uploadProgress" hidden></div>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Status -->
+      <fieldset class="field-group field-status">
+        <legend>Statut</legend>
+        <div class="grid-2">
+          <label class="toggle">
+            <input type="checkbox" id="fVisible" checked>
+            <span class="toggle-track"></span>
+            <span class="toggle-text"><strong>Publiée</strong> · visible sur le site public</span>
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="fFeatured">
+            <span class="toggle-track"></span>
+            <span class="toggle-text"><strong>À la une</strong> · apparaît sur la page d'accueil</span>
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="fSignature">
+            <span class="toggle-track"></span>
+            <span class="toggle-text"><strong>Signature</strong> · pièce vedette du portefeuille (★)</span>
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="fOffMarket">
+            <span class="toggle-track"></span>
+            <span class="toggle-text"><strong>Off-market</strong> · ne pas afficher publiquement (carnet privé)</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Identification -->
+      <fieldset class="field-group">
+        <legend>Identification</legend>
+        <div class="grid-3">
+          <label class="field">
+            <span class="field-label">Référence</span>
+            <input type="text" id="fRef" placeholder="SL.0020">
+          </label>
+          <label class="field">
+            <span class="field-label">Ville</span>
+            <select id="fCity">
+              <option value="tel-aviv">Tel Aviv</option>
+              <option value="herzliya">Herzliya</option>
+              <option value="caesarea">Caesarea</option>
+              <option value="netanya">Netanya</option>
+              <option value="jerusalem">Jérusalem</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Type</span>
+            <select id="fType">
+              <option value="appartement">Appartement</option>
+              <option value="penthouse">Penthouse</option>
+              <option value="villa">Villa</option>
+              <option value="loft">Loft</option>
+              <option value="maison">Maison</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span class="field-label">Quartier / projet</span>
+          <input type="text" id="fNeighborhood" placeholder="Akirov Towers · Tour B">
+        </label>
+      </fieldset>
+
+      <!-- Title -->
+      <fieldset class="field-group">
+        <legend>Titre</legend>
+        <div class="grid-2">
+          <label class="field">
+            <span class="field-label">Titre principal</span>
+            <input type="text" id="fTitleMain" placeholder="Penthouse">
+          </label>
+          <label class="field">
+            <span class="field-label">Accent (italique doré)</span>
+            <input type="text" id="fTitleAccent" placeholder="Akirov.">
+          </label>
+        </div>
+        <label class="field">
+          <span class="field-label">Description courte</span>
+          <textarea id="fDescription" rows="3" placeholder="Cinq pièces au 28ᵉ étage avec terrasse 180 m²…"></textarea>
+        </label>
+      </fieldset>
+
+      <!-- Numbers -->
+      <fieldset class="field-group">
+        <legend>Caractéristiques</legend>
+        <div class="grid-3">
+          <label class="field">
+            <span class="field-label">Surface</span>
+            <input type="text" id="fSurface" placeholder="320 m²">
+          </label>
+          <label class="field">
+            <span class="field-label">Pièces</span>
+            <input type="text" id="fRooms" placeholder="5 P">
+          </label>
+          <label class="field">
+            <span class="field-label">Étiquette additionnelle</span>
+            <input type="text" id="fExtra" placeholder="VUE MER · TERRASSE 180">
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Pricing -->
+      <fieldset class="field-group">
+        <legend>Prix</legend>
+        <div class="grid-3">
+          <label class="field">
+            <span class="field-label">Prix USD (chiffre)</span>
+            <input type="number" id="fPriceUsd" placeholder="14800000" step="50000">
+            <span class="field-hint">Utilisé pour le tri. Sans formatage.</span>
+          </label>
+          <label class="field">
+            <span class="field-label">Prix affiché</span>
+            <input type="text" id="fPriceDisplay" placeholder="$14.8M">
+          </label>
+          <label class="field">
+            <span class="field-label">Équivalents (optionnel)</span>
+            <div class="grid-2-tight">
+              <input type="text" id="fPriceEur" placeholder="≈ 13.6 M€">
+              <input type="text" id="fPriceIls" placeholder="≈ 53.5 M ₪">
+            </div>
+          </label>
+        </div>
+      </fieldset>
+
+    </form>
+  </main>
+</section>
+
+<!-- ===== TOAST ===== -->
+<div class="toast-host" id="toastHost"></div>
+
+<!-- ===== CONFIRM MODAL ===== -->
+<div class="modal" id="confirmModal" hidden>
+  <div class="modal-box">
+    <div class="modal-title" id="confirmTitle">Confirmer</div>
+    <div class="modal-body" id="confirmBody"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="confirmCancel">Annuler</button>
+      <button class="btn-danger" id="confirmOk">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

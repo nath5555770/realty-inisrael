@@ -1,1 +1,5 @@
-admin/
+# Local build outputs only — admin and data are now first-class repo content
+node_modules/
+*.log
+.DS_Store
+Thumbs.db

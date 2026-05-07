@@ -332,50 +332,9 @@
       </div>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6">
-
-      <article class="estate">
-        <div class="frame aspect-[4/5] mb-5">
-          <img src="https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=1200&q=92" class="w-full h-full object-cover">
-          <div class="ref-tag">★ SL.0001</div>
-        </div>
-        <div class="label-teal">TEL AVIV · AKIROV TOWERS</div>
-        <h3 class="display text-3xl mt-3 leading-tight">Penthouse <span class="display-i text-[var(--gold-deep)]">Akirov.</span></h3>
-        <p class="text-sm text-[var(--ink-soft)] mt-2">320 m² · 28ᵉ étage · terrasse 180 m² · piscine privée</p>
-        <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">
-          <span class="label !tracking-[0.2em]">5 PIÈCES</span>
-          <span class="display text-2xl text-[var(--teal)]">$14.8M</span>
-        </div>
-      </article>
-
-      <article class="estate">
-        <div class="frame aspect-[4/5] mb-5">
-          <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&q=92" class="w-full h-full object-cover">
-          <div class="ref-tag">SL.0003</div>
-        </div>
-        <div class="label-teal">CAESAREA · QUARTIER 13</div>
-        <h3 class="display text-3xl mt-3 leading-tight">Villa <span class="display-i text-[var(--gold-deep)]">Carmel.</span></h3>
-        <p class="text-sm text-[var(--ink-soft)] mt-2">540 m² · sur le golf · 1 800 m² terrain · piscine</p>
-        <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">
-          <span class="label !tracking-[0.2em]">9 PIÈCES · VUE MER</span>
-          <span class="display text-2xl text-[var(--teal)]">$18.0M</span>
-        </div>
-      </article>
-
-      <article class="estate">
-        <div class="frame aspect-[4/5] mb-5">
-          <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&q=92" class="w-full h-full object-cover">
-          <div class="ref-tag">SL.0004</div>
-        </div>
-        <div class="label-teal">HERZLIYA PITUACH · GALEI TCHELET</div>
-        <h3 class="display text-3xl mt-3 leading-tight">Villa <span class="display-i text-[var(--gold-deep)]">front de mer.</span></h3>
-        <p class="text-sm text-[var(--ink-soft)] mt-2">340 m² · accès direct plage · piscine · vue 180°</p>
-        <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">
-          <span class="label !tracking-[0.2em]">8 P · 600 M² JARDIN</span>
-          <span class="display text-2xl text-[var(--teal)]">$8.2M</span>
-        </div>
-      </article>
-
+    <div class="grid md:grid-cols-3 gap-6" id="listings-featured" data-count="3">
+      <!-- Rendered dynamically from data/listings.json (items where featured=true) -->
+      <div class="text-center py-20 text-[var(--muted)] cinzel text-xs tracking-[0.3em] col-span-3">Chargement de la sélection…</div>
     </div>
 
     <div class="text-center mt-16">
@@ -529,6 +488,7 @@
 
 <script src="assets/animations.js" defer></script>
 <script src="assets/i18n.js" defer></script>
+<script src="assets/listings.js" defer></script>
 <script>
 window.addEventListener('scroll', function() {
   var winScroll = document.documentElement.scrollTop;
