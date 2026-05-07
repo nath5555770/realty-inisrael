@@ -241,8 +241,9 @@
   .lang-pill:hover { background: rgba(196,168,119,0.14); border-color: var(--gold); }
   .lang-pill .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
   .director-frame { position: relative; }
-  .director-frame::before { content: ''; position: absolute; inset: -16px; border: 1px solid var(--line-gold); pointer-events: none; }
-  .director-frame::after { content: '— DIRECTRICE'; position: absolute; top: -16px; left: 28px; background: var(--paper); padding: 0 14px; font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.4em; color: var(--gold-deep); transform: translateY(-50%); }
+  .director-frame::before { content: ''; position: absolute; inset: -14px; border: 1px solid var(--line-gold); pointer-events: none; }
+  .director-frame::after { content: '— DIRECTEUR'; position: absolute; top: -14px; left: 22px; background: var(--paper); padding: 0 12px; font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.4em; color: var(--gold-deep); transform: translateY(-50%); }
+  .director-frame.director-frame-fr::after { content: '— DIRECTRICE'; }
 </style>
 
 <section class="px-6 md:px-10 py-24 md:py-32 border-b border-[var(--line)]">
@@ -253,64 +254,94 @@
         <span class="display">Une équipe</span><br><span class="display-i text-[var(--gold-deep)]">à taille humaine.</span>
       </h2>
       <p class="mt-8 max-w-2xl mx-auto text-base leading-relaxed text-[var(--ink-soft)]">
-        Six visages, cinq langues, une exigence commune : que vous compreniez chaque ligne, à chaque étape. Nous ne déléguons rien — chaque dossier est suivi par la même personne, du premier rendez-vous à la remise des clés.
+        Huit visages, six langues, une exigence commune : que vous compreniez chaque ligne, à chaque étape. Nous ne déléguons rien — chaque dossier est suivi par la même personne, du premier rendez-vous à la remise des clés.
       </p>
     </div>
 
-    <!-- Directrice (featured) -->
-    <div class="grid md:grid-cols-12 gap-10 md:gap-16 items-start mb-24">
-      <div class="md:col-span-5">
-        <div class="director-frame">
-          <div class="frame aspect-[4/5] overflow-hidden">
-            <img src="assets/team/nathalie-haik.jpg" alt="Nathalie Haik — Directrice d'agence" class="w-full h-full object-cover ken-burns">
-          </div>
-        </div>
-      </div>
-      <div class="md:col-span-7 md:pt-8">
-        <div class="cinzel text-[11px] tracking-[0.4em] text-[var(--gold-deep)]">— DIRECTRICE D'AGENCE · MMXVIII</div>
-        <div class="display text-5xl md:text-6xl mt-5" style="color: var(--teal)">Nathalie <span class="display-i text-[var(--gold-deep)]">Haik.</span></div>
-        <div class="hr-gold mt-6 mb-6" style="max-width: 80px"></div>
-        <p class="text-lg leading-relaxed text-[var(--ink-soft)]">
-          Parisienne d'origine, Nathalie pilote l'ensemble du cabinet francophone depuis Tel Aviv. Elle accompagne plus de 80 % de la clientèle française, suisse et belge — du premier rendez-vous parisien jusqu'à la remise des clés à Herzliya. Elle parle votre langue, comprend votre fiscalité, et tient à ce que vous lisiez chaque ligne avant de signer.
-        </p>
-        <p class="mt-5 text-base leading-relaxed text-[var(--ink-soft)]">
-          Son cabinet privé reçoit sur rendez-vous, à Paris (8ᵉ) comme à Tel Aviv (Rothschild). Discrétion absolue, méthode tranquille, exigence sans concession.
-        </p>
+    <!-- Direction · Shahar + Nathalie -->
+    <div class="grid md:grid-cols-2 gap-10 md:gap-12 mb-24">
 
-        <div class="grid grid-cols-2 gap-8 mt-10 pt-8 border-t border-[var(--line)]">
-          <div>
-            <div class="label">— FORMATION</div>
-            <div class="text-sm mt-3 leading-relaxed">Sciences Po Paris<br>EM Lyon · MBA Real Estate<br>Membre FNAIM, FIABCI</div>
-          </div>
-          <div>
-            <div class="label">— LANGUES</div>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="lang-pill"><span class="dot"></span>Français</span>
-              <span class="lang-pill"><span class="dot"></span>Hébreu</span>
-              <span class="lang-pill"><span class="dot"></span>Anglais</span>
+      <!-- Shahar Levi · Directeur fondateur -->
+      <div class="grid grid-cols-12 gap-6 items-start">
+        <div class="col-span-5">
+          <div class="director-frame">
+            <div class="frame aspect-[4/5] overflow-hidden">
+              <img src="assets/team/shahar-levi.jpg" alt="Shahar Levi — Directeur fondateur" class="w-full h-full object-cover ken-burns">
             </div>
           </div>
         </div>
-
-        <div class="mt-10 flex flex-wrap gap-3">
-          <a href="contact.html" class="btn-teal">Prendre rendez-vous →</a>
-          <a href="mailto:nathalie@shaharlevi.co.il" class="btn-line text-[var(--teal)]">nathalie@shaharlevi.co.il</a>
+        <div class="col-span-7 pt-3">
+          <div class="cinzel text-[10px] tracking-[0.4em] text-[var(--gold-deep)]">— DIRECTEUR FONDATEUR · MMXIV</div>
+          <div class="display text-3xl md:text-4xl mt-4" style="color: var(--teal)">Shahar <span class="display-i text-[var(--gold-deep)]">Levi.</span></div>
+          <div class="hr-gold mt-4 mb-4" style="max-width: 60px"></div>
+          <p class="text-sm leading-relaxed text-[var(--ink-soft)]">
+            Fondateur de la maison à Tel Aviv en 2014, après dix années en finance entre Paris et Londres. Il pilote la stratégie globale, les négociations sensibles et les relations avec les familles propriétaires.
+          </p>
+          <div class="mt-5 flex flex-wrap gap-1.5">
+            <span class="lang-pill"><span class="dot"></span>Hébreu</span>
+            <span class="lang-pill"><span class="dot"></span>Anglais</span>
+            <span class="lang-pill"><span class="dot"></span>Français</span>
+          </div>
         </div>
       </div>
+
+      <!-- Nathalie Haik · Directrice d'agence -->
+      <div class="grid grid-cols-12 gap-6 items-start">
+        <div class="col-span-5">
+          <div class="director-frame director-frame-fr">
+            <div class="frame aspect-[4/5] overflow-hidden">
+              <img src="assets/team/nathalie-haik.jpg" alt="Nathalie Haik — Directrice d'agence" class="w-full h-full object-cover ken-burns">
+            </div>
+          </div>
+        </div>
+        <div class="col-span-7 pt-3">
+          <div class="cinzel text-[10px] tracking-[0.4em] text-[var(--gold-deep)]">— DIRECTRICE D'AGENCE · MMXVIII</div>
+          <div class="display text-3xl md:text-4xl mt-4" style="color: var(--teal)">Nathalie <span class="display-i text-[var(--gold-deep)]">Haik.</span></div>
+          <div class="hr-gold mt-4 mb-4" style="max-width: 60px"></div>
+          <p class="text-sm leading-relaxed text-[var(--ink-soft)]">
+            Parisienne d'origine, Nathalie pilote l'ensemble du cabinet francophone. Elle accompagne plus de 80 % de la clientèle française, suisse et belge — du premier rendez-vous parisien jusqu'à la remise des clés à Herzliya.
+          </p>
+          <div class="mt-5 flex flex-wrap gap-1.5">
+            <span class="lang-pill"><span class="dot"></span>Français</span>
+            <span class="lang-pill"><span class="dot"></span>Hébreu</span>
+            <span class="lang-pill"><span class="dot"></span>Anglais</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Direction CTA -->
+    <div class="text-center mb-24 -mt-8">
+      <a href="contact.html" class="btn-teal">Prendre rendez-vous avec la direction →</a>
     </div>
 
     <!-- Agents grid -->
-    <div class="text-center mb-12">
+    <div class="text-center mb-14">
       <div class="cinzel text-[11px] tracking-[0.4em] text-[var(--gold-deep)]">— LE CABINET</div>
-      <h3 class="display mt-4" style="font-size: clamp(1.75rem, 3.5vw, 2.5rem)">Cinq conseiller·ère·s, <em class="display-i text-[var(--gold-deep)]">cinq langues maîtrisées.</em></h3>
+      <h3 class="display mt-4" style="font-size: clamp(1.75rem, 3.5vw, 2.5rem)">Six conseiller·ère·s, <em class="display-i text-[var(--gold-deep)]">six langues maîtrisées.</em></h3>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-8">
 
-      <!-- Chloé Mimoun -->
+      <!-- 1. Eyal Barone (M) -->
       <article class="team-card">
         <div class="frame aspect-[4/5] mb-6">
-          <img src="assets/team/chloe-mimoun.jpg" alt="Chloé Mimoun — Conseillère">
+          <img src="assets/team/eyal-barone.jpg" alt="Eyal Barone — Conseiller">
+        </div>
+        <div class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">CONSEILLER</div>
+        <div class="display text-2xl mt-2" style="color: var(--teal)">Eyal Barone</div>
+        <p class="text-sm text-[var(--ink-soft)] leading-relaxed mt-3">Caesarea & côte nord. Villas, golfs, biens d'exception — un œil pour la pierre rare.</p>
+        <div class="mt-4 flex flex-wrap gap-1.5">
+          <span class="lang-pill"><span class="dot"></span>Français</span>
+          <span class="lang-pill"><span class="dot"></span>Hébreu</span>
+        </div>
+      </article>
+
+      <!-- 2. Chloé Mimoun (F) -->
+      <article class="team-card">
+        <div class="frame aspect-[4/5] mb-6">
+          <img src="assets/team/chloe-mimoun.jpg" alt="Chloé Mimoun — Conseillère senior">
         </div>
         <div class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">CONSEILLÈRE SENIOR</div>
         <div class="display text-2xl mt-2" style="color: var(--teal)">Chloé Mimoun</div>
@@ -321,35 +352,7 @@
         </div>
       </article>
 
-      <!-- Salomon Benhamou -->
-      <article class="team-card">
-        <div class="frame aspect-[4/5] mb-6">
-          <img src="assets/team/salomon-benhamou.jpg" alt="Salomon Benhamou — Conseiller">
-        </div>
-        <div class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">CONSEILLER</div>
-        <div class="display text-2xl mt-2" style="color: var(--teal)">Salomon Benhamou</div>
-        <p class="text-sm text-[var(--ink-soft)] leading-relaxed mt-3">Jérusalem & Netanya. Connaissance fine des quartiers résidentiels francophones et des projets neufs.</p>
-        <div class="mt-4 flex flex-wrap gap-1.5">
-          <span class="lang-pill"><span class="dot"></span>Français</span>
-          <span class="lang-pill"><span class="dot"></span>Hébreu</span>
-        </div>
-      </article>
-
-      <!-- Eyal Barone -->
-      <article class="team-card">
-        <div class="frame aspect-[4/5] mb-6">
-          <img src="assets/team/eyal-barone.jpg" alt="Eyal Barone — Conseillère">
-        </div>
-        <div class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">CONSEILLÈRE</div>
-        <div class="display text-2xl mt-2" style="color: var(--teal)">Eyal Barone</div>
-        <p class="text-sm text-[var(--ink-soft)] leading-relaxed mt-3">Caesarea & côte nord. Villas, golfs, biens d'exception — un œil pour la pierre rare.</p>
-        <div class="mt-4 flex flex-wrap gap-1.5">
-          <span class="lang-pill"><span class="dot"></span>Français</span>
-          <span class="lang-pill"><span class="dot"></span>Hébreu</span>
-        </div>
-      </article>
-
-      <!-- Eden Rabinkov -->
+      <!-- 3. Eden Rabinkov (F) -->
       <article class="team-card">
         <div class="frame aspect-[4/5] mb-6">
           <img src="assets/team/eden-rabinkov.jpg" alt="Eden Rabinkov — Conseillère internationale">
@@ -364,7 +367,21 @@
         </div>
       </article>
 
-      <!-- Neve Betan -->
+      <!-- 4. Salomon Benhamou (M) -->
+      <article class="team-card">
+        <div class="frame aspect-[4/5] mb-6">
+          <img src="assets/team/salomon-benhamou.jpg" alt="Salomon Benhamou — Conseiller">
+        </div>
+        <div class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">CONSEILLER</div>
+        <div class="display text-2xl mt-2" style="color: var(--teal)">Salomon Benhamou</div>
+        <p class="text-sm text-[var(--ink-soft)] leading-relaxed mt-3">Jérusalem & Netanya. Connaissance fine des quartiers résidentiels francophones et des projets neufs.</p>
+        <div class="mt-4 flex flex-wrap gap-1.5">
+          <span class="lang-pill"><span class="dot"></span>Français</span>
+          <span class="lang-pill"><span class="dot"></span>Hébreu</span>
+        </div>
+      </article>
+
+      <!-- 5. Neve Betan (F) -->
       <article class="team-card">
         <div class="frame aspect-[4/5] mb-6">
           <img src="assets/team/neve-betan.jpg" alt="Neve Betan — Conseillère Aliyah">
@@ -374,6 +391,20 @@
         <p class="text-sm text-[var(--ink-soft)] leading-relaxed mt-3">Première installation et accompagnement aliyah. Du Misrad Haklita à la remise des clés.</p>
         <div class="mt-4 flex flex-wrap gap-1.5">
           <span class="lang-pill"><span class="dot"></span>Français</span>
+          <span class="lang-pill"><span class="dot"></span>Hébreu</span>
+        </div>
+      </article>
+
+      <!-- 6. Gal Hirschl (F) -->
+      <article class="team-card">
+        <div class="frame aspect-[4/5] mb-6">
+          <img src="assets/team/gal-hirschl.jpg" alt="Gal Hirschl — Conseillère anglophone">
+        </div>
+        <div class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">CONSEILLÈRE ANGLOPHONE</div>
+        <div class="display text-2xl mt-2" style="color: var(--teal)">Gal Hirschl</div>
+        <p class="text-sm text-[var(--ink-soft)] leading-relaxed mt-3">Clientèle internationale anglophone. Investisseurs étrangers, expatriés, primo-acquéreurs en Israël.</p>
+        <div class="mt-4 flex flex-wrap gap-1.5">
+          <span class="lang-pill"><span class="dot"></span>Anglais</span>
           <span class="lang-pill"><span class="dot"></span>Hébreu</span>
         </div>
       </article>
