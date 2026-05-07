@@ -401,3 +401,33 @@ html {
 .img-clip.is-revealed img {
   transform: scale(1);
 }
+
+/* === RTL (Hebrew) ====================================================== */
+body.lang-he {
+  font-family: 'Plus Jakarta Sans', 'Heebo', 'Assistant', 'Arial Hebrew', sans-serif;
+}
+body.lang-he .display,
+body.lang-he .display-i,
+body.lang-he .cinzel,
+body.lang-he .brand-logo .name,
+body.lang-he .brand-logo .desc {
+  font-family: 'Heebo', 'Assistant', 'Frank Ruhl Libre', 'Plus Jakarta Sans', serif;
+  letter-spacing: 0.04em;
+}
+body.lang-he .mono {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+html[dir="rtl"] body { direction: rtl; }
+html[dir="rtl"] .vertical { writing-mode: vertical-lr; }
+html[dir="rtl"] .reveal-mask span { display: inline-block; }
+html[dir="rtl"] .label::before,
+html[dir="rtl"] .label-gold::before,
+html[dir="rtl"] .label-teal::before { content: none; }
+html[dir="rtl"] [class*="text-left"] { text-align: right !important; }
+html[dir="rtl"] [class*="text-right"] { text-align: left !important; }
+html[dir="rtl"] .num-tile { border-right: none; border-left: 1px solid var(--line); }
+html[dir="rtl"] .num-tile:last-child { border-left: none; }
+html[dir="rtl"] .ref-tag { right: auto; left: 14px; }
+html[dir="rtl"] .arrow-after::after { content: '←'; }
+html[dir="rtl"] .arrow-before::before { content: '←'; }
+
