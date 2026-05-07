@@ -179,6 +179,32 @@
   .num-tile:last-child { border-right: none; }
   @media (max-width: 768px) { .num-tile { border-right: none; border-bottom: 1px solid var(--line); } .num-tile:last-child { border-bottom: none; } }
 
+  /* === Hero search (homepage) === */
+  .hero-search-section { background: var(--teal); padding: 4rem 1.5rem 4.5rem; position: relative; }
+  .hero-search-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 20%, rgba(196,168,119,0.06) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(196,168,119,0.04) 0%, transparent 50%); pointer-events: none; }
+  .hero-search-wrap { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero-search-eyebrow { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); text-align: center; }
+  .hero-search-title { font-family: 'Playfair Display', serif; font-weight: 400; font-size: clamp(2rem, 4vw, 3rem); color: var(--paper); text-align: center; margin: 0.85rem 0 2.5rem; line-height: 1.1; }
+  .hero-search-title em { font-style: italic; color: var(--gold); }
+  .hero-search-form { display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 0; background: var(--paper); border: 1px solid var(--gold-deep); align-items: stretch; box-shadow: 0 6px 32px rgba(0,0,0,0.18); }
+  .hero-field { display: flex; flex-direction: column; padding: 1rem 1.2rem; border-right: 1px solid var(--line); }
+  .hero-field:last-of-type { border-right: 1px solid var(--line); }
+  .hero-lbl { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 0.4rem; }
+  .hero-field select { border: 0; outline: 0; background: transparent; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--ink); padding: 0; cursor: pointer; appearance: none; -webkit-appearance: none; padding-right: 1.4rem; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a78c5c' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 0 center; }
+  .hero-search-btn { background: var(--teal); color: var(--gold); border: 0; padding: 0 2.4rem; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; cursor: pointer; transition: all 0.45s; }
+  .hero-search-btn:hover { background: var(--teal-deep); letter-spacing: 0.42em; }
+  @media (max-width: 900px) {
+    .hero-search-form { grid-template-columns: 1fr 1fr; }
+    .hero-field { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .hero-field:nth-child(2n) { border-right: none; }
+    .hero-search-btn { grid-column: 1 / -1; padding: 1.2rem; }
+  }
+  @media (max-width: 560px) {
+    .hero-search-form { grid-template-columns: 1fr; }
+    .hero-field { border-right: none; }
+    .hero-search-section { padding: 3rem 1rem; }
+  }
+
   .hero-text { text-shadow: 0 2px 30px rgba(0,0,0,0.25); }
 
   ::-webkit-scrollbar { width: 10px; }
@@ -289,6 +315,62 @@
 
   <div class="absolute bottom-6 left-6 md:left-10 flex items-center gap-3 text-[var(--paper)]/70 mono text-[10px] uppercase tracking-[0.3em]">
     <span class="w-12 h-px bg-[var(--paper)]/40"></span><span>défiler</span>
+  </div>
+</section>
+
+<!-- HERO SEARCH — quick filters that redirect to /portefeuille.html -->
+<section class="hero-search-section">
+  <div class="hero-search-wrap">
+    <div class="hero-search-eyebrow">— TROUVER UNE PIÈCE</div>
+    <h2 class="hero-search-title">Composez votre <em>recherche.</em></h2>
+    <form class="hero-search-form" id="heroSearchForm">
+      <div class="hero-field">
+        <span class="hero-lbl">— Ville</span>
+        <select name="city">
+          <option value="">Toutes les villes</option>
+          <option value="tel-aviv">Tel Aviv</option>
+          <option value="herzliya">Herzliya</option>
+          <option value="caesarea">Caesarea</option>
+          <option value="netanya">Netanya</option>
+          <option value="jerusalem">Jérusalem</option>
+        </select>
+      </div>
+      <div class="hero-field">
+        <span class="hero-lbl">— Type</span>
+        <select name="type">
+          <option value="">Tous les types</option>
+          <option value="appartement">Appartement</option>
+          <option value="penthouse">Penthouse</option>
+          <option value="villa">Villa</option>
+          <option value="loft">Loft</option>
+          <option value="maison">Maison</option>
+        </select>
+      </div>
+      <div class="hero-field">
+        <span class="hero-lbl">— Pièces minimum</span>
+        <select name="min_r">
+          <option value="">Indifférent</option>
+          <option value="3">3+</option>
+          <option value="4">4+</option>
+          <option value="5">5+</option>
+          <option value="6">6+</option>
+          <option value="7">7+</option>
+        </select>
+      </div>
+      <div class="hero-field">
+        <span class="hero-lbl">— Budget</span>
+        <select name="price">
+          <option value="">Tous budgets</option>
+          <option value="0-3000000">Jusqu'à $3M</option>
+          <option value="3000000-5000000">$3M — $5M</option>
+          <option value="5000000-8000000">$5M — $8M</option>
+          <option value="8000000-12000000">$8M — $12M</option>
+          <option value="12000000-18000000">$12M — $18M</option>
+          <option value="18000000-0">Au-delà de $18M</option>
+        </select>
+      </div>
+      <button type="submit" class="hero-search-btn">Rechercher →</button>
+    </form>
   </div>
 </section>
 

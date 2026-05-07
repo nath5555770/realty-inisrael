@@ -151,6 +151,46 @@
   .filter-pill:hover { border-color: var(--teal); color: var(--teal); }
   .filter-pill.active { background: var(--teal); color: var(--gold); border-color: var(--teal); }
 
+  /* === Comprehensive search bar === */
+  .search-row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: stretch; }
+  .search-input-wrap { display: flex; align-items: center; gap: 0.55rem; flex: 1 1 280px; min-width: 240px; padding: 0.65rem 0.95rem; background: var(--surface); border: 1px solid var(--line); transition: border-color 0.25s; }
+  .search-input-wrap:focus-within { border-color: var(--gold); }
+  .search-input-wrap svg { color: var(--gold-deep); flex-shrink: 0; }
+  .search-input-wrap input { flex: 1; border: 0; outline: 0; background: transparent; font: inherit; color: var(--ink); font-size: 14px; }
+  .search-input-wrap input::placeholder { color: var(--muted); }
+  .search-select { padding: 0.65rem 2rem 0.65rem 0.95rem; background: var(--surface); border: 1px solid var(--line); font: inherit; font-size: 13px; color: var(--ink); cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a78c5c' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 0.7rem center; min-width: 150px; transition: border-color 0.25s; }
+  .search-select:focus { outline: 0; border-color: var(--gold); }
+  .more-btn { padding: 0.65rem 1.1rem; background: transparent; border: 1px solid var(--line); font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-deep); cursor: pointer; transition: all 0.25s; }
+  .more-btn:hover, .more-btn.is-open { border-color: var(--gold); color: var(--teal); }
+  .more-filters { display: flex; flex-wrap: wrap; gap: 0.7rem 1rem; padding-top: 0.9rem; margin-top: 0.9rem; border-top: 1px solid var(--line); align-items: end; }
+  .micro-field { display: flex; flex-direction: column; gap: 0.3rem; }
+  .micro-lbl { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); }
+  .micro-field input[type="number"] { padding: 0.55rem 0.8rem; background: var(--surface); border: 1px solid var(--line); font: inherit; font-size: 13px; color: var(--ink); width: 130px; }
+  .micro-field input[type="number"]:focus { outline: 0; border-color: var(--gold); }
+  .micro-toggle { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.85rem; background: var(--surface); border: 1px solid var(--line); cursor: pointer; font-size: 12px; font-family: 'Cinzel', serif; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft); transition: all 0.25s; }
+  .micro-toggle:hover { border-color: var(--gold); }
+  .micro-toggle input { accent-color: var(--gold); }
+  .micro-toggle:has(input:checked) { background: var(--teal); color: var(--gold); border-color: var(--teal); }
+  .search-summary { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.7rem; margin-top: 0.9rem; }
+  .active-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; min-height: 1px; }
+  .chip { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.32rem 0.45rem 0.32rem 0.85rem; background: var(--teal); color: var(--gold); border-radius: 999px; font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; }
+  .chip-close { width: 18px; height: 18px; border: 0; background: rgba(196, 168, 119, 0.22); color: var(--gold); border-radius: 50%; cursor: pointer; font-size: 13px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; padding: 0; transition: background 0.2s; }
+  .chip-close:hover { background: rgba(196, 168, 119, 0.5); }
+  .result-count { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ink-soft); display: flex; align-items: baseline; gap: 0.45rem; }
+  .result-count #resultCount { font-family: 'Playfair Display', serif; font-size: 20px; font-style: italic; color: var(--teal); letter-spacing: 0; line-height: 1; }
+  .reset-link { background: 0; border: 0; font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-deep); cursor: pointer; padding: 0; margin-left: 0.6rem; text-decoration: underline; text-underline-offset: 4px; transition: color 0.2s; }
+  .reset-link:hover { color: var(--teal); }
+  .empty-results { padding: 5rem 1rem; text-align: center; color: var(--ink-soft); }
+  .empty-results .display { color: var(--teal); }
+  .empty-results p { margin-top: 0.75rem; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+  @media (max-width: 768px) {
+    .search-row { gap: 0.5rem; }
+    .search-input-wrap, .search-select { width: 100%; min-width: 0; flex-basis: auto; }
+    .more-btn { width: 100%; }
+    .more-filters { gap: 0.6rem; }
+    .micro-field input[type="number"] { width: 100%; }
+  }
+
   ::-webkit-scrollbar { width: 10px; }
   ::-webkit-scrollbar-track { background: var(--paper); }
   ::-webkit-scrollbar-thumb { background: var(--gold-deep); }
@@ -249,21 +289,89 @@
   </div>
 </section>
 
-<!-- FILTERS BAR -->
-<section class="px-6 md:px-10 py-8 border-b border-[var(--line)] bg-[var(--paper-light)] sticky top-[81px] z-40 backdrop-blur-md">
-  <div class="max-w-[1500px] mx-auto flex flex-wrap items-center gap-3 md:gap-5">
-    <div class="label-gold mr-2 hidden md:block">— FILTRER</div>
-    <button class="filter-pill active">Tous · 19</button>
-    <button class="filter-pill">Tel Aviv · 8</button>
-    <button class="filter-pill">Herzliya · 4</button>
-    <button class="filter-pill">Caesarea · 3</button>
-    <button class="filter-pill">Netanya · 2</button>
-    <button class="filter-pill">Jérusalem · 2</button>
-    <span class="hidden md:inline-block h-6 w-px bg-[var(--line)] mx-2"></span>
-    <button class="filter-pill">Penthouse</button>
-    <button class="filter-pill">Villa</button>
-    <button class="filter-pill">Appartement</button>
-    <span class="ml-auto label hidden md:inline">— TRI · PRIX DÉCROISSANT</span>
+<!-- SEARCH BAR -->
+<section class="search-section px-6 md:px-10 py-7 border-b border-[var(--line)] bg-[var(--paper-light)] sticky top-[81px] z-40 backdrop-blur-md">
+  <div class="max-w-[1500px] mx-auto">
+    <form class="search-row" onsubmit="event.preventDefault()">
+      <div class="search-input-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+        <input type="search" id="searchQ" placeholder="Adresse, référence, quartier…" autocomplete="off">
+      </div>
+      <select id="searchCity" class="search-select" aria-label="Ville">
+        <option value="">— Toutes les villes</option>
+        <option value="tel-aviv">Tel Aviv</option>
+        <option value="herzliya">Herzliya</option>
+        <option value="caesarea">Caesarea</option>
+        <option value="netanya">Netanya</option>
+        <option value="jerusalem">Jérusalem</option>
+      </select>
+      <select id="searchType" class="search-select" aria-label="Type">
+        <option value="">— Tous les types</option>
+        <option value="appartement">Appartement</option>
+        <option value="penthouse">Penthouse</option>
+        <option value="villa">Villa</option>
+        <option value="loft">Loft</option>
+        <option value="maison">Maison</option>
+      </select>
+      <select id="searchRooms" class="search-select" aria-label="Pièces">
+        <option value="">— Pièces</option>
+        <option value="2">2+ pièces</option>
+        <option value="3">3+ pièces</option>
+        <option value="4">4+ pièces</option>
+        <option value="5">5+ pièces</option>
+        <option value="6">6+ pièces</option>
+        <option value="7">7+ pièces</option>
+        <option value="8">8+ pièces</option>
+      </select>
+      <select id="searchPrice" class="search-select" aria-label="Budget">
+        <option value="">— Budget</option>
+        <option value="0-3000000">Jusqu'à $3M</option>
+        <option value="3000000-5000000">$3M — $5M</option>
+        <option value="5000000-8000000">$5M — $8M</option>
+        <option value="8000000-12000000">$8M — $12M</option>
+        <option value="12000000-18000000">$12M — $18M</option>
+        <option value="18000000-0">Au-delà de $18M</option>
+      </select>
+      <button type="button" id="moreFiltersBtn" class="more-btn" aria-expanded="false">＋ Plus</button>
+    </form>
+
+    <div id="moreFilters" class="more-filters" hidden>
+      <label class="micro-field">
+        <span class="micro-lbl">Surface min</span>
+        <input type="number" id="surfaceMin" placeholder="m²" min="0" step="10">
+      </label>
+      <label class="micro-field">
+        <span class="micro-lbl">Surface max</span>
+        <input type="number" id="surfaceMax" placeholder="m²" min="0" step="10">
+      </label>
+      <label class="micro-toggle">
+        <input type="checkbox" id="sigOnly">
+        <span>★ Pièces signature</span>
+      </label>
+      <label class="micro-toggle">
+        <input type="checkbox" id="feaOnly">
+        <span>À la une</span>
+      </label>
+      <label class="micro-field">
+        <span class="micro-lbl">Trier par</span>
+        <select id="sortBy" class="search-select">
+          <option value="pertinence">Pertinence</option>
+          <option value="price-desc">Prix décroissant</option>
+          <option value="price-asc">Prix croissant</option>
+          <option value="surface-desc">Surface ↓</option>
+          <option value="rooms-desc">Pièces ↓</option>
+          <option value="newest">Récent</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="search-summary">
+      <div class="active-chips" id="activeChips"></div>
+      <div class="result-count">
+        <span id="resultCount">—</span> bien<span id="resultPlural"></span>
+        <button type="button" id="resetBtn" class="reset-link">Réinitialiser</button>
+      </div>
+    </div>
   </div>
 </section>
 
