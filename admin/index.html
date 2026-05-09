@@ -46,7 +46,7 @@
 </section>
 
 <!-- ===== TOPBAR (always visible when logged in) ===== -->
-<header class="topbar" data-when="dashboard editor article-editor team-editor" hidden>
+<header class="topbar" data-when="dashboard editor article-editor team-editor member-editor" hidden>
   <div class="topbar-brand">
     <div class="brand-name">SHAHAR LEVI</div>
     <div class="brand-desc">Espace privé</div>
@@ -54,6 +54,7 @@
   <nav class="topbar-nav">
     <button class="nav-btn active" data-tab="listings">Annonces</button>
     <button class="nav-btn" data-tab="journal">Journal</button>
+    <button class="nav-btn" data-tab="agency" data-admin-only>Agence</button>
     <button class="nav-btn" data-tab="team" data-admin-only>Équipe</button>
   </nav>
   <div class="topbar-right">
@@ -142,6 +143,39 @@
         </select>
       </div>
       <div class="listings-table" id="articlesTable">
+        <div class="loading">Chargement…</div>
+      </div>
+    </div>
+
+    <!-- Tab: Agency members (admin only) — public team page CMS -->
+    <div class="tab-pane" data-tab-pane="agency" hidden>
+      <div class="dash-head">
+        <div>
+          <div class="eyebrow">— PAGE AGENCE</div>
+          <h2>Visages <em>de la maison.</em></h2>
+          <p class="dash-sub">Gérez la vitrine publique : photos, titres, biographies, langues. Ce qui apparaît ici s'affiche sur la page <strong>L'Agence</strong> du site.</p>
+        </div>
+        <div class="dash-actions">
+          <button class="btn-ghost" id="reloadAgencyBtn">↻ Actualiser</button>
+          <button class="btn-primary" id="newMemberBtn">＋ Nouveau membre</button>
+        </div>
+      </div>
+      <div class="stats-strip">
+        <div class="stat"><span class="stat-num" id="memStatTotal">—</span><span class="stat-lbl">Total</span></div>
+        <div class="stat"><span class="stat-num" id="memStatDirectors">—</span><span class="stat-lbl">Direction</span></div>
+        <div class="stat"><span class="stat-num" id="memStatAgents">—</span><span class="stat-lbl">Conseillers</span></div>
+        <div class="stat"><span class="stat-num" id="memStatVisible">—</span><span class="stat-lbl">Visibles</span></div>
+        <div class="stat"><span class="stat-num" id="memStatHidden">—</span><span class="stat-lbl">Masqués</span></div>
+      </div>
+      <div class="toolbar">
+        <input type="search" id="memSearchInput" placeholder="Rechercher un membre…">
+        <select id="memFilterCategory">
+          <option value="">Tous</option>
+          <option value="director">Direction</option>
+          <option value="agent">Conseiller·ère</option>
+        </select>
+      </div>
+      <div class="listings-table" id="agencyTable">
         <div class="loading">Chargement…</div>
       </div>
     </div>
@@ -339,6 +373,111 @@
           <div><div class="field-label">Dernière modification</div><div id="artMetaUpdatedBy">—</div></div>
         </div>
       </fieldset>
+    </form>
+  </main>
+</section>
+
+<!-- ===== AGENCY MEMBER EDITOR ===== -->
+<section class="view view-member-editor" data-view="member-editor" hidden>
+  <div class="editor-topbar">
+    <button class="back-btn" id="memberBackBtn">← Retour</button>
+    <span class="editor-title" id="memberEditorTitle">Modifier un membre</span>
+    <div class="editor-actions">
+      <button class="btn-ghost" id="memberDeleteBtn">Supprimer</button>
+      <button class="btn-primary" id="memberSaveBtn">💾 Enregistrer</button>
+    </div>
+  </div>
+  <main class="editor">
+    <form id="memberForm" class="editor-form">
+
+      <fieldset class="field-group field-images">
+        <legend>Portrait</legend>
+        <div class="image-zone">
+          <div class="image-preview" id="memberImagePreview">
+            <div class="image-empty">Aucune photo</div>
+          </div>
+          <div class="image-actions">
+            <label class="btn-ghost">
+              <input type="file" id="memberFileUpload" accept="image/*" style="display:none">
+              Choisir une photo…
+            </label>
+            <input type="url" id="memberPhotoUrl" placeholder="ou coller une URL / chemin assets/team/…" class="field-image-url">
+            <span class="field-hint">Format portrait recommandé (4:5). Max 5 MB.</span>
+            <div class="upload-progress" id="memberUploadProgress" hidden></div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="field-group">
+        <legend>Affichage</legend>
+        <div class="grid-2">
+          <label class="toggle">
+            <input type="checkbox" id="memberVisible" checked>
+            <span class="toggle-track"></span>
+            <span class="toggle-text"><strong>Visible</strong> · affiché sur la page L'Agence</span>
+          </label>
+          <label class="field">
+            <span class="field-label">Position d'affichage</span>
+            <input type="number" id="memberPosition" min="0" step="1" placeholder="0">
+            <span class="field-hint">Plus le chiffre est petit, plus le membre apparaît en haut.</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="field-group">
+        <legend>Identité</legend>
+        <div class="grid-2">
+          <label class="field">
+            <span class="field-label">Nom complet</span>
+            <input type="text" id="memberFullName" placeholder="Chloé Mimoun">
+          </label>
+          <label class="field">
+            <span class="field-label">Catégorie</span>
+            <select id="memberCategory">
+              <option value="agent">Conseiller·ère (grille principale)</option>
+              <option value="director">Direction (en haut, cadre or)</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span class="field-label">Titre / rôle (en majuscules)</span>
+          <input type="text" id="memberRoleLabel" placeholder="CONSEILLÈRE SENIOR">
+        </label>
+        <label class="field">
+          <span class="field-label">Spécialité géographique</span>
+          <input type="text" id="memberCityFocus" placeholder="Tel Aviv & Herzliya">
+        </label>
+      </fieldset>
+
+      <fieldset class="field-group">
+        <legend>Présentation</legend>
+        <label class="field">
+          <span class="field-label">Biographie courte</span>
+          <textarea id="memberBio" rows="4" placeholder="Spécialiste des biens en bord de mer…"></textarea>
+        </label>
+      </fieldset>
+
+      <fieldset class="field-group">
+        <legend>Langues parlées</legend>
+        <div class="lang-checklist" id="memberLangsChecks">
+          <label class="lang-check"><input type="checkbox" data-lang="fr"> 🇫🇷 Français</label>
+          <label class="lang-check"><input type="checkbox" data-lang="he"> 🇮🇱 Hébreu</label>
+          <label class="lang-check"><input type="checkbox" data-lang="en"> 🇬🇧 Anglais</label>
+          <label class="lang-check"><input type="checkbox" data-lang="ru"> 🇷🇺 Russe</label>
+          <label class="lang-check"><input type="checkbox" data-lang="es"> 🇪🇸 Espagnol</label>
+          <label class="lang-check"><input type="checkbox" data-lang="ar"> 🇸🇦 Arabe</label>
+        </div>
+        <span class="field-hint">Les langues cochées apparaissent sous le portrait avec leur drapeau.</span>
+      </fieldset>
+
+      <fieldset class="field-group" id="memberMetaGroup" hidden>
+        <legend>Lien avec compte de connexion</legend>
+        <div class="grid-2 meta-grid">
+          <div><div class="field-label">Compte associé</div><div id="memberMetaUser">—</div></div>
+          <div><div class="field-label">Dernière modification</div><div id="memberMetaUpdated">—</div></div>
+        </div>
+      </fieldset>
+
     </form>
   </main>
 </section>

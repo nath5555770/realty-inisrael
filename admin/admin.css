@@ -759,6 +759,22 @@ body {
 /* ===== ARTICLE CONTENT TEXTAREA ===== */
 .content-area { font-family: 'JetBrains Mono', monospace !important; font-size: 13px !important; line-height: 1.5; min-height: 300px !important; }
 
+/* ===== LANGUAGE CHECKLIST (Agency editor) ===== */
+.lang-checklist { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.lang-check {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.55rem 0.95rem; background: var(--paper-light);
+  border: 1px solid var(--line); cursor: pointer;
+  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.18em;
+  color: var(--ink-soft); transition: all 0.25s;
+}
+.lang-check:hover { border-color: var(--gold); }
+.lang-check input { accent-color: var(--gold); width: 14px; height: 14px; }
+.lang-check:has(input:checked) { background: var(--teal); color: var(--gold); border-color: var(--teal); }
+
+/* Bigger thumb for team rows */
+.team-row .thumb { width: 60px; height: 75px; border-radius: 0; }
+
 /* ===== META GRID (audit) ===== */
 .meta-grid > div > div:last-child { font-family: 'Playfair Display', serif; font-style: italic; color: var(--teal); padding-top: 0.4rem; }
 .mono-text { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }

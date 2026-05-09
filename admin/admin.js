@@ -17,6 +17,7 @@
 
   const BUCKET_LISTINGS = 'listing-images';
   const BUCKET_ARTICLES = 'article-images';
+  const BUCKET_TEAM = 'team-photos';
   const FN_ADMIN_AGENT = window.SL_SUPABASE.url + '/functions/v1/admin-agent';
 
   // ------------------------------------------------------------------
@@ -673,6 +674,189 @@
   }
 
   // ------------------------------------------------------------------
+  // AGENCY MEMBERS (admin only — public-facing team page CMS)
+  // ------------------------------------------------------------------
+  STATE.members = [];
+  STATE.currentMember = null;
+  STATE.pendingMemberFile = null;
+
+  async function loadMembers() {
+    const { data, error } = await sb.from('team_members').select('*').order('position', { ascending: true });
+    if (error) { toast(error.message, 'error', 'Erreur'); throw error; }
+    STATE.members = data || [];
+    return data;
+  }
+
+  function membersStats() {
+    const m = STATE.members;
+    $('#memStatTotal').textContent = m.length;
+    $('#memStatDirectors').textContent = m.filter(x => x.category === 'director').length;
+    $('#memStatAgents').textContent = m.filter(x => x.category === 'agent').length;
+    $('#memStatVisible').textContent = m.filter(x => x.visible !== false).length;
+    $('#memStatHidden').textContent = m.filter(x => x.visible === false).length;
+  }
+
+  function renderAgencyTable() {
+    const search = ($('#memSearchInput').value || '').trim().toLowerCase();
+    const cat = $('#memFilterCategory').value;
+    const filtered = STATE.members.map((m, i) => ({ m, i })).filter(({ m }) => {
+      if (cat && m.category !== cat) return false;
+      if (search) {
+        const blob = ((m.full_name || '') + ' ' + (m.role_label || '') + ' ' + (m.city_focus || '')).toLowerCase();
+        if (!blob.includes(search)) return false;
+      }
+      return true;
+    });
+    const root = $('#agencyTable');
+    if (!filtered.length) {
+      root.innerHTML = '<div class="empty-state"><div class="display">Aucun membre</div><p>Cliquez sur "+ Nouveau membre" pour commencer.</p></div>';
+      return;
+    }
+    root.innerHTML = filtered.map(({ m, i }) => {
+      const badges = [];
+      if (m.category === 'director') badges.push('<span class="badge badge-signature">Direction</span>');
+      else badges.push('<span class="badge badge-off">Conseiller·ère</span>');
+      if (m.visible === false) badges.push('<span class="badge badge-hidden">Masqué</span>');
+      const langs = (m.languages || []).map(l => ({ fr: '🇫🇷', he: '🇮🇱', en: '🇬🇧', ru: '🇷🇺', es: '🇪🇸', ar: '🇸🇦' })[l.code] || '').join(' ');
+      const photo = imageUrlFor(BUCKET_TEAM, m.photo_url);
+      return '<div class="listing-row team-row" data-i="' + i + '">' +
+        '<div class="thumb" style="background-image:url(\'' + escapeHtml(photo) + '\')"></div>' +
+        '<div class="info">' +
+          '<div class="title">' + escapeHtml(m.full_name) + '</div>' +
+          '<div class="sub">' + escapeHtml(m.role_label || '') + ' · ' + escapeHtml(m.city_focus || '') + ' · ' + langs + '</div>' +
+        '</div>' +
+        '<div class="city-tag">#' + (m.position || 0) + '</div>' +
+        '<div class="badges">' + badges.join('') + '</div>' +
+        '<div class="price">—</div>' +
+        '<div class="row-actions"><button class="icon-btn" data-act="edit">✎</button></div>' +
+      '</div>';
+    }).join('');
+    root.querySelectorAll('.listing-row').forEach(row => {
+      row.addEventListener('click', () => openMemberEditor(parseInt(row.dataset.i, 10)));
+    });
+  }
+
+  function openMemberEditor(idx) {
+    STATE.currentMember = idx;
+    STATE.pendingMemberFile = null;
+    const isNew = idx === 'new';
+    const m = isNew
+      ? { category: 'agent', visible: true, position: STATE.members.length, languages: [] }
+      : STATE.members[idx];
+
+    $('#memberEditorTitle').textContent = isNew ? 'Nouveau membre' : 'Modifier · ' + (m.full_name || '');
+    $('#memberDeleteBtn').hidden = isNew;
+    $('#memberFullName').value = m.full_name || '';
+    $('#memberRoleLabel').value = m.role_label || '';
+    $('#memberCategory').value = m.category || 'agent';
+    $('#memberCityFocus').value = m.city_focus || '';
+    $('#memberBio').value = m.bio || '';
+    $('#memberPhotoUrl').value = m.photo_url || '';
+    $('#memberVisible').checked = m.visible !== false;
+    $('#memberPosition').value = m.position != null ? m.position : '';
+    $$('#memberLangsChecks input[data-lang]').forEach(cb => {
+      const lang = cb.dataset.lang;
+      cb.checked = (m.languages || []).some(l => l.code === lang);
+    });
+    setMemberPreview(imageUrlFor(BUCKET_TEAM, m.photo_url));
+    $('#memberUploadProgress').hidden = true;
+
+    if (!isNew) {
+      $('#memberMetaGroup').hidden = false;
+      const linkedUser = m.user_id ? authorLabel(m.user_id) : '— aucun';
+      $('#memberMetaUser').textContent = linkedUser;
+      $('#memberMetaUpdated').textContent = fmtDate(m.updated_at);
+    } else {
+      $('#memberMetaGroup').hidden = true;
+    }
+    showView('member-editor');
+    window.scrollTo(0, 0);
+  }
+
+  function setMemberPreview(url) {
+    const p = $('#memberImagePreview');
+    if (url) { p.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')"; p.innerHTML = ''; }
+    else { p.style.backgroundImage = ''; p.innerHTML = '<div class="image-empty">Aucune photo</div>'; }
+  }
+
+  function readMemberForm(base) {
+    const langCodes = $$('#memberLangsChecks input[data-lang]:checked').map(cb => cb.dataset.lang);
+    const langLabels = { fr: 'Français', he: 'Hébreu', en: 'Anglais', ru: 'Russe', es: 'Espagnol', ar: 'Arabe' };
+    const langs = langCodes.map(c => ({ code: c, label: langLabels[c] || c }));
+    return {
+      full_name: $('#memberFullName').value.trim(),
+      role_label: $('#memberRoleLabel').value.trim() || null,
+      category: $('#memberCategory').value,
+      city_focus: $('#memberCityFocus').value.trim() || null,
+      bio: $('#memberBio').value.trim() || null,
+      photo_url: $('#memberPhotoUrl').value.trim() || null,
+      visible: $('#memberVisible').checked,
+      position: $('#memberPosition').value ? parseInt($('#memberPosition').value, 10) : 0,
+      languages: langs
+    };
+  }
+
+  function imageUrlFor(bucket, path) {
+    if (!path) return '';
+    if (/^https?:\/\//i.test(path)) return path;
+    if (/^assets\//i.test(path)) return '../' + path; // local repo asset (admin is at /admin/)
+    return window.SL_SUPABASE.url + '/storage/v1/object/public/' + bucket + '/' + path.replace(/^\/+/, '');
+  }
+
+  async function saveMember() {
+    const isNew = STATE.currentMember === 'new';
+    const base = isNew ? null : STATE.members[STATE.currentMember];
+    if (!$('#memberFullName').value.trim()) { toast('Le nom complet est requis.', 'error'); return; }
+    const btn = $('#memberSaveBtn'); btn.disabled = true; const old = btn.textContent; btn.textContent = '⏳…';
+    try {
+      const payload = readMemberForm(base);
+      if (STATE.pendingMemberFile) {
+        const slug = slugify(payload.full_name);
+        payload.photo_url = await uploadImage(BUCKET_TEAM, slug, STATE.pendingMemberFile, $('#memberUploadProgress'));
+      }
+      if (isNew) {
+        const { error } = await sb.from('team_members').insert(payload);
+        if (error) throw error;
+      } else {
+        const { error } = await sb.from('team_members').update(payload).eq('id', base.id);
+        if (error) throw error;
+      }
+      await loadMembers();
+      membersStats();
+      renderAgencyTable();
+      toast('Membre enregistré. La page Agence est mise à jour.', 'success', 'Enregistré');
+      backToAgency();
+    } catch (e) {
+      console.error(e); toast(e.message || 'Erreur', 'error', 'Échec');
+    } finally { btn.disabled = false; btn.textContent = old; }
+  }
+
+  async function deleteMember() {
+    if (STATE.currentMember === 'new') return backToAgency();
+    const m = STATE.members[STATE.currentMember];
+    const ok = await confirmModal('Retirer ce membre de l\'équipe ?',
+      '"' + m.full_name + '" ne sera plus affiché·e sur la page Agence (le compte de connexion n\'est PAS supprimé).');
+    if (!ok) return;
+    const { error } = await sb.from('team_members').delete().eq('id', m.id);
+    if (error) { toast(error.message, 'error'); return; }
+    await loadMembers();
+    membersStats();
+    renderAgencyTable();
+    toast('Membre retiré.', 'success');
+    backToAgency();
+  }
+
+  function handleMemberFile(file) {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast('Image > 5MB.', 'error'); return; }
+    STATE.pendingMemberFile = file;
+    const r = new FileReader();
+    r.onload = e => { setMemberPreview(e.target.result); $('#memberPhotoUrl').value = '(téléversement à l\'enregistrement)'; };
+    r.readAsDataURL(file);
+    toast('Photo prête.', null, 'Photo en attente');
+  }
+
+  // ------------------------------------------------------------------
   // NAVIGATION
   // ------------------------------------------------------------------
   function backToDashboard() {
@@ -689,6 +873,11 @@
     STATE.currentAgent = null;
     showView('dashboard');
     showTab('team');
+  }
+  function backToAgency() {
+    STATE.currentMember = null; STATE.pendingMemberFile = null;
+    showView('dashboard');
+    showTab('agency');
   }
 
   // ------------------------------------------------------------------
@@ -740,7 +929,7 @@
     // Tab switching
     $$('.nav-btn').forEach(btn => btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
-      if (tab === 'team' && STATE.profile?.role !== 'admin') return;
+      if ((tab === 'team' || tab === 'agency') && STATE.profile?.role !== 'admin') return;
       showView('dashboard');
       showTab(tab);
     }));
@@ -784,6 +973,21 @@
     $('#teamSaveBtn').addEventListener('click', saveAgent);
     $('#teamDeleteBtn').addEventListener('click', deleteAgent);
     $('#teamGenPwd').addEventListener('click', () => { $('#teamPassword').value = genStrongPassword(); });
+
+    // Agency tab
+    $('#reloadAgencyBtn').addEventListener('click', async () => { try { await loadMembers(); membersStats(); renderAgencyTable(); toast('Équipe rechargée.', 'success'); } catch (_) {} });
+    $('#newMemberBtn').addEventListener('click', () => openMemberEditor('new'));
+    $('#memSearchInput').addEventListener('input', renderAgencyTable);
+    $('#memFilterCategory').addEventListener('change', renderAgencyTable);
+    $('#memberBackBtn').addEventListener('click', backToAgency);
+    $('#memberSaveBtn').addEventListener('click', saveMember);
+    $('#memberDeleteBtn').addEventListener('click', deleteMember);
+    $('#memberFileUpload').addEventListener('change', e => handleMemberFile(e.target.files[0]));
+    $('#memberPhotoUrl').addEventListener('change', () => {
+      if ($('#memberPhotoUrl').value && !STATE.pendingMemberFile && !$('#memberPhotoUrl').value.startsWith('(')) {
+        setMemberPreview(imageUrlFor(BUCKET_TEAM, $('#memberPhotoUrl').value));
+      }
+    });
   }
 
   async function enterDashboard() {
@@ -806,13 +1010,19 @@
     showTab('listings');
 
     try {
-      await Promise.all([loadAllProfiles(), loadListings(), loadArticles()]);
+      const promises = [loadAllProfiles(), loadListings(), loadArticles()];
+      if (STATE.profile.role === 'admin') promises.push(loadMembers());
+      await Promise.all(promises);
       listingsStats();
       renderListingsAuthorFilter();
       renderListingsTable();
       articlesStats();
       renderArticlesTable();
-      if (STATE.profile.role === 'admin') renderTeamTable();
+      if (STATE.profile.role === 'admin') {
+        renderTeamTable();
+        membersStats();
+        renderAgencyTable();
+      }
     } catch (e) { console.error(e); }
   }
 

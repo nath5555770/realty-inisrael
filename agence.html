@@ -266,7 +266,11 @@
       </p>
     </div>
 
-    <!-- Direction · Shahar + Nathalie -->
+    <!-- Direction · Loaded dynamically from Supabase team_members where category='director' -->
+    <div class="grid md:grid-cols-2 gap-10 md:gap-12 mb-24" id="team-directors">
+      <div class="text-center py-12 text-[var(--muted)] cinzel text-xs tracking-[0.3em] col-span-full">Chargement…</div>
+    </div>
+    <div id="_team-directors-fallback" hidden>
     <div class="grid md:grid-cols-2 gap-10 md:gap-12 mb-24">
 
       <!-- Shahar Levi · Directeur fondateur -->
@@ -319,6 +323,8 @@
 
     </div>
 
+    </div><!-- /_team-directors-fallback -->
+
     <!-- Direction CTA -->
     <div class="text-center mb-24 -mt-8">
       <a href="contact.html" class="btn-teal">Prendre rendez-vous avec la direction →</a>
@@ -327,9 +333,14 @@
     <!-- Agents grid -->
     <div class="text-center mb-14">
       <div class="cinzel text-[11px] tracking-[0.4em] text-[var(--gold-deep)]">— LE CABINET</div>
-      <h3 class="display mt-4" style="font-size: clamp(1.75rem, 3.5vw, 2.5rem)">Six conseiller·ère·s, <em class="display-i text-[var(--gold-deep)]">six langues maîtrisées.</em></h3>
+      <h3 class="display mt-4" style="font-size: clamp(1.75rem, 3.5vw, 2.5rem)">Nos conseiller·ère·s.</h3>
     </div>
 
+    <!-- Agents grid (dynamic) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-8" id="team-agents">
+      <div class="text-center py-12 text-[var(--muted)] cinzel text-xs tracking-[0.3em] col-span-full">Chargement…</div>
+    </div>
+    <div id="_team-agents-fallback" hidden>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-8">
 
       <!-- 1. Eyal Barone (M) -->
@@ -418,6 +429,7 @@
       </article>
 
     </div>
+    </div><!-- /_team-agents-fallback -->
 
     <!-- Footer note -->
     <div class="mt-20 pt-10 border-t border-[var(--line)] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
@@ -567,6 +579,8 @@
 
 <script src="assets/animations.js" defer></script>
 <script src="assets/i18n.js" defer></script>
+<script src="assets/supabase-config.js" defer></script>
+<script src="assets/agency.js" defer></script>
 <script>
 window.addEventListener('scroll', function() {
   var winScroll = document.documentElement.scrollTop;
