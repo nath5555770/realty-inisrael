@@ -487,7 +487,7 @@
 
     const featured = document.getElementById('listings-featured');
     if (featured) {
-      const count = parseInt(featured.dataset.count || '3', 10);
+      const count = parseInt(featured.dataset.listingsCount || featured.dataset.count || '3', 10);
       renderFeatured(featured, count);
     }
 
