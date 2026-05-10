@@ -231,17 +231,30 @@
   /* === COOKIE BANNER === */
   function initCookieBanner() {
     if (localStorage.getItem('cookies-accepted') === 'true') return;
+
+    // Pick language-specific strings (matches sl-lang from i18n.js)
+    const COOKIE_I18N = {
+      fr: { title: '🍪 Cookies & confidentialité', body: "Nous utilisons des cookies essentiels pour le fonctionnement du site et des cookies analytiques anonymes pour améliorer votre expérience. Aucune donnée personnelle n'est partagée.", reject: 'Refuser', accept: 'Accepter' },
+      en: { title: '🍪 Cookies & privacy', body: 'We use essential cookies for the operation of the site and anonymous analytical cookies to improve your experience. No personal data is shared.', reject: 'Decline', accept: 'Accept' },
+      he: { title: '🍪 עוגיות ופרטיות', body: 'אנו משתמשים בעוגיות חיוניות לתפעול האתר ובעוגיות אנליטיות אנונימיות לשיפור החוויה שלך. שום נתון אישי אינו משותף.', reject: 'סירוב', accept: 'אישור' },
+      ru: { title: '🍪 Cookies и конфиденциальность', body: 'Мы используем необходимые cookies для работы сайта и анонимные аналитические cookies для улучшения вашего опыта. Никакие персональные данные не передаются.', reject: 'Отклонить', accept: 'Принять' }
+    };
+    let _lang = 'fr';
+    try { _lang = localStorage.getItem('sl-lang') || 'fr'; } catch (_) {}
+    const t = COOKIE_I18N[_lang] || COOKIE_I18N.fr;
+
     const banner = document.createElement('div');
     banner.className = 'cookie-banner';
+    banner.setAttribute('data-i18n-skip', '');
     banner.innerHTML = `
       <div class="cookie-banner-inner">
         <div class="cookie-banner-text">
-          <strong>🍪 Cookies & confidentialité</strong>
-          <p>Nous utilisons des cookies essentiels pour le fonctionnement du site et des cookies analytiques anonymes pour améliorer votre expérience. Aucune donnée personnelle n'est partagée.</p>
+          <strong>${t.title}</strong>
+          <p>${t.body}</p>
         </div>
         <div class="cookie-banner-actions">
-          <button class="cookie-btn cookie-btn-secondary" data-cookie-action="reject">Refuser</button>
-          <button class="cookie-btn cookie-btn-primary" data-cookie-action="accept">Accepter</button>
+          <button class="cookie-btn cookie-btn-secondary" data-cookie-action="reject">${t.reject}</button>
+          <button class="cookie-btn cookie-btn-primary" data-cookie-action="accept">${t.accept}</button>
         </div>
       </div>
     `;

@@ -664,6 +664,13 @@
   // We need to translate from FR every time, not from previously translated text.
   let snapshot = null;
 
+  // Convert HTML attribute name to a valid dataset key (camelCase, no dashes)
+  // e.g. 'aria-label' -> 'AriaLabel', 'placeholder' -> 'Placeholder'
+  function attrToDatasetSuffix(attr) {
+    const camel = attr.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+    return camel.charAt(0).toUpperCase() + camel.slice(1);
+  }
+
   function takeSnapshot() {
     snapshot = new Map();
     walkText((node) => snapshot.set(node, node.nodeValue));
@@ -671,8 +678,8 @@
     document.querySelectorAll('[placeholder], [title], [alt], [aria-label]').forEach((el) => {
       ['placeholder', 'title', 'alt', 'aria-label'].forEach((attr) => {
         if (el.hasAttribute(attr)) {
-          if (!el.dataset.i18nAttrs) el.dataset.i18nAttrs = '';
-          if (!el.dataset[`i18nOrig${attr}`]) el.dataset[`i18nOrig${attr}`] = el.getAttribute(attr);
+          const key = `i18nOrig${attrToDatasetSuffix(attr)}`;
+          if (!el.dataset[key]) el.dataset[key] = el.getAttribute(attr);
         }
       });
     });
@@ -709,7 +716,7 @@
     });
     document.querySelectorAll('[data-i18n-orig-placeholder], [data-i18n-orig-title], [data-i18n-orig-alt], [data-i18n-orig-aria-label]').forEach((el) => {
       ['placeholder', 'title', 'alt', 'aria-label'].forEach((attr) => {
-        const key = `i18nOrig${attr}`;
+        const key = `i18nOrig${attrToDatasetSuffix(attr)}`;
         if (el.dataset[key]) el.setAttribute(attr, el.dataset[key]);
       });
     });
@@ -754,7 +761,7 @@
     // Translate attributes
     document.querySelectorAll('[data-i18n-orig-placeholder], [data-i18n-orig-title], [data-i18n-orig-alt], [data-i18n-orig-aria-label]').forEach((el) => {
       ['placeholder', 'title', 'alt', 'aria-label'].forEach((attr) => {
-        const key = `i18nOrig${attr}`;
+        const key = `i18nOrig${attrToDatasetSuffix(attr)}`;
         const orig = el.dataset[key];
         if (!orig) return;
         const t = orig.trim();
