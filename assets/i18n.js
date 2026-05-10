@@ -236,13 +236,13 @@
       'Chaque dossier est porté par un·e seul·e conseiller·ère, soutenu·e par la directrice. Pas de hand-off, pas de relais, pas de mauvaise surprise.': 'Each file is handled by a single advisor, supported by the director. No hand-off, no relay, no bad surprises.',
       'Nous rencontrer →': 'Meet us →',
       "Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014 par Shahar Levi. Aujourd'hui dirigée à deux, accompagnant 214 familles francophones depuis sa création.": "Independent real-estate brokerage, founded in Tel Aviv in 2014 by Shahar Levi. Today led by a pair, accompanying 214 French-speaking families since its inception.",
-      '— LA MAISON · DEPUIS MMXIV': '— THE HOUSE · SINCE MMXIV',
-      '— LA MAISON · MMXIV—MMXXVI': '— THE HOUSE · MMXIV—MMXXVI',
-      '— II. ÉQUIPE · LA RELATION': '— II. TEAM · THE RELATIONSHIP',
-      '— III. MÉTHODE · L\'APPROCHE': '— III. METHOD · THE APPROACH',
-      '— IV. RÉCITS · LES FAMILLES': '— IV. STORIES · THE FAMILIES',
-      '— V. RENDEZ-VOUS · ENTRER EN CONTACT': '— V. APPOINTMENT · GET IN TOUCH',
+      '— La maison · MMXIV—MMXXVI': '— The house · MMXIV—MMXXVI',
+      '— I. Manifeste': '— I. Manifesto',
+      '— III. L\'équipe': '— III. The team',
       '— VI. Reconnaissances et certifications': '— VI. Recognition and certifications',
+      '— VII. Confidences clientes': '— VII. Client confidences',
+      '— Solliciter le cabinet': '— Request the firm',
+      'Envoyer la demande →': 'Send request →',
 
       // Portefeuille
       'Dix-neuf pièces': 'Nineteen properties',
@@ -258,9 +258,11 @@
       'Récent': 'Recent',
       'Treize biens supplémentaires ne figurent pas ici.': 'Thirteen additional properties are not shown here.',
       'supplémentaires': 'additional',
-      'SOLLICITER LE CARNET PRIVÉ →': 'REQUEST THE PRIVATE BOOK →',
+      'Solliciter le carnet privé →': 'Request the private book →',
       'Villa front de mer.': 'Seafront villa.',
       'Bauhaus restauré.': 'Restored Bauhaus.',
+      '— Le portefeuille · printemps MMXXVI': '— The portfolio · spring MMXXVI',
+      "Chaque bien du portefeuille porte une référence, une provenance et l'accord explicite des propriétaires. La majorité ne sera jamais publiée publiquement — réservée à notre clientèle qualifiée.": "Every property in the portfolio carries a reference, a provenance and the explicit agreement of the owners. The majority will never be publicly published — reserved for our qualified clientele.",
 
       // Aliyah
       'Acheter avant': 'Buy before',
@@ -271,10 +273,11 @@
       'économiser 6%.': 'save 6%.',
       '8% pour un étranger': '8% for a foreigner',
       '0—5% pour un olé hadash': '0—5% for an olé hadash',
-      'DEMANDER UNE SIMULATION →': 'REQUEST A SIMULATION →',
+      'Demander une simulation →': 'Request a simulation →',
       'Les questions qu\'on nous pose souvent.': 'The questions we are often asked.',
       'qu\'on nous pose souvent.': 'we are often asked.',
-      'VOIR LE PORTEFEUILLE': 'VIEW THE PORTFOLIO',
+      'Voir le portefeuille': 'View the portfolio',
+      'Voir le portefeuille (19) →': 'View the portfolio (19) →',
 
       // Contact
       'Réponse sous 24h ouvrées.': 'Reply within 24 business hours.',
@@ -287,7 +290,6 @@
       '— FORMAT DU RENDEZ-VOUS PRÉFÉRÉ': '— PREFERRED APPOINTMENT FORMAT',
       'Visioconférence': 'Video call',
       'J\'accepte que mes données soient traitées conformément à la politique GDPR de la maison. Aucun partage avec des tiers.': 'I agree that my data may be processed in accordance with the firm\'s GDPR policy. No sharing with third parties.',
-      'ENVOYER LA DEMANDE →': 'SEND REQUEST →',
       'Avant de nous contacter, peut-être ces réponses ?': 'Before contacting us, perhaps these answers?',
       'peut-être ces réponses ?': 'perhaps these answers?',
 
@@ -527,13 +529,13 @@
       'Chaque dossier est porté par un·e seul·e conseiller·ère, soutenu·e par la directrice. Pas de hand-off, pas de relais, pas de mauvaise surprise.': 'כל תיק מטופל על ידי יועץ·ת אחד·ת בלבד, בליווי המנהלת. ללא העברות, ללא ממסר, ללא הפתעות לא נעימות.',
       'Nous rencontrer →': 'בואו ניפגש →',
       "Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014 par Shahar Levi. Aujourd'hui dirigée à deux, accompagnant 214 familles francophones depuis sa création.": "סוכנות תיווך נדל\"ן עצמאית, נוסדה בתל אביב ב-2014 על ידי שחר לוי. כיום בהובלת שתיים, מלווה 214 משפחות דוברות צרפתית מאז הקמתה.",
-      '— LA MAISON · DEPUIS MMXIV': '— הבית · מאז MMXIV',
-      '— LA MAISON · MMXIV—MMXXVI': '— הבית · MMXIV—MMXXVI',
-      '— II. ÉQUIPE · LA RELATION': '— II. צוות · הקשר',
-      '— III. MÉTHODE · L\'APPROCHE': '— III. שיטה · הגישה',
-      '— IV. RÉCITS · LES FAMILLES': '— IV. סיפורים · המשפחות',
-      '— V. RENDEZ-VOUS · ENTRER EN CONTACT': '— V. פגישה · יצירת קשר',
+      '— La maison · MMXIV—MMXXVI': '— הבית · MMXIV—MMXXVI',
+      '— I. Manifeste': '— I. מניפסט',
+      '— III. L\'équipe': '— III. הצוות',
       '— VI. Reconnaissances et certifications': '— VI. הכרות ואישורים',
+      '— VII. Confidences clientes': '— VII. עדויות לקוחות',
+      '— Solliciter le cabinet': '— ליצור קשר עם הקבינט',
+      'Envoyer la demande →': 'שלחו את הבקשה →',
 
       // Portefeuille
       'Dix-neuf pièces': 'תשעה-עשר נכסים',
@@ -549,9 +551,11 @@
       'Récent': 'אחרונים',
       'Treize biens supplémentaires ne figurent pas ici.': 'שלושה-עשר נכסים נוספים אינם מוצגים כאן.',
       'supplémentaires': 'נוספים',
-      'SOLLICITER LE CARNET PRIVÉ →': 'בקשו את הספר הפרטי →',
+      'Solliciter le carnet privé →': 'בקשו את הספר הפרטי →',
       'Villa front de mer.': 'וילה על קו החוף.',
       'Bauhaus restauré.': 'באוהאוס משוחזר.',
+      '— Le portefeuille · printemps MMXXVI': '— התיק · אביב MMXXVI',
+      "Chaque bien du portefeuille porte une référence, une provenance et l'accord explicite des propriétaires. La majorité ne sera jamais publiée publiquement — réservée à notre clientèle qualifiée.": 'כל נכס בתיק נושא הפניה, מקור והסכמה מפורשת של הבעלים. הרוב לעולם לא יפורסם בפומבי — שמור ללקוחותינו המוסמכים.',
 
       // Aliyah
       'Acheter avant': 'לקנות לפני',
@@ -562,10 +566,11 @@
       'économiser 6%.': 'לחסוך 6%.',
       '8% pour un étranger': '8% עבור תושב חוץ',
       '0—5% pour un olé hadash': '0—5% עבור עולה חדש',
-      'DEMANDER UNE SIMULATION →': 'בקשו סימולציה →',
+      'Demander une simulation →': 'בקשו סימולציה →',
       'Les questions qu\'on nous pose souvent.': 'השאלות שאנו נשאלים לעיתים קרובות.',
       'qu\'on nous pose souvent.': 'שאנו נשאלים לעיתים קרובות.',
-      'VOIR LE PORTEFEUILLE': 'צפו בתיק',
+      'Voir le portefeuille': 'צפו בתיק',
+      'Voir le portefeuille (19) →': 'צפו בתיק (19) →',
 
       // Contact
       'Réponse sous 24h ouvrées.': 'תשובה תוך 24 שעות עסקים.',
@@ -578,7 +583,6 @@
       '— FORMAT DU RENDEZ-VOUS PRÉFÉRÉ': '— פורמט פגישה מועדף',
       'Visioconférence': 'שיחת וידאו',
       'J\'accepte que mes données soient traitées conformément à la politique GDPR de la maison. Aucun partage avec des tiers.': 'אני מסכים·ה שהנתונים שלי יעובדו בהתאם למדיניות ה-GDPR של הבית. אין שיתוף עם צדדים שלישיים.',
-      'ENVOYER LA DEMANDE →': 'שלחו את הבקשה →',
       'Avant de nous contacter, peut-être ces réponses ?': 'לפני יצירת הקשר, אולי התשובות האלו?',
       'peut-être ces réponses ?': 'אולי התשובות האלו?',
 
@@ -799,13 +803,13 @@
       'Chaque dossier est porté par un·e seul·e conseiller·ère, soutenu·e par la directrice. Pas de hand-off, pas de relais, pas de mauvaise surprise.': 'Каждое дело ведёт один консультант при поддержке директрисы. Без передач, без посредников, без неприятных сюрпризов.',
       'Nous rencontrer →': 'Встретиться с нами →',
       "Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014 par Shahar Levi. Aujourd'hui dirigée à deux, accompagnant 214 familles francophones depuis sa création.": "Независимое агентство недвижимости, основанное в Тель-Авиве в 2014 году Шахаром Леви. Сегодня под управлением дуэта, сопровождает 214 франкоязычных семей с момента основания.",
-      '— LA MAISON · DEPUIS MMXIV': '— ДОМ · С MMXIV',
-      '— LA MAISON · MMXIV—MMXXVI': '— ДОМ · MMXIV—MMXXVI',
-      '— II. ÉQUIPE · LA RELATION': '— II. КОМАНДА · ОТНОШЕНИЯ',
-      '— III. MÉTHODE · L\'APPROCHE': '— III. МЕТОД · ПОДХОД',
-      '— IV. RÉCITS · LES FAMILLES': '— IV. ИСТОРИИ · СЕМЬИ',
-      '— V. RENDEZ-VOUS · ENTRER EN CONTACT': '— V. ВСТРЕЧА · СВЯЗАТЬСЯ С НАМИ',
+      '— La maison · MMXIV—MMXXVI': '— Дом · MMXIV—MMXXVI',
+      '— I. Manifeste': '— I. Манифест',
+      '— III. L\'équipe': '— III. Команда',
       '— VI. Reconnaissances et certifications': '— VI. Признание и сертификации',
+      '— VII. Confidences clientes': '— VII. Отзывы клиентов',
+      '— Solliciter le cabinet': '— Запросить кабинет',
+      'Envoyer la demande →': 'Отправить запрос →',
 
       // Portefeuille
       'Dix-neuf pièces': 'Девятнадцать объектов',
@@ -821,9 +825,11 @@
       'Récent': 'Недавние',
       'Treize biens supplémentaires ne figurent pas ici.': 'Тринадцать дополнительных объектов не отображаются здесь.',
       'supplémentaires': 'дополнительных',
-      'SOLLICITER LE CARNET PRIVÉ →': 'ЗАПРОСИТЬ ЧАСТНЫЙ КАТАЛОГ →',
+      'Solliciter le carnet privé →': 'Запросить частный каталог →',
       'Villa front de mer.': 'Вилла на берегу моря.',
       'Bauhaus restauré.': 'Реставрированный Баухаус.',
+      '— Le portefeuille · printemps MMXXVI': '— Портфолио · весна MMXXVI',
+      "Chaque bien du portefeuille porte une référence, une provenance et l'accord explicite des propriétaires. La majorité ne sera jamais publiée publiquement — réservée à notre clientèle qualifiée.": 'Каждый объект в портфолио имеет референс, происхождение и явное согласие собственников. Большинство никогда не будет опубликовано публично — зарезервировано для нашей квалифицированной клиентуры.',
 
       // Aliyah
       'Acheter avant': 'Купить до',
@@ -834,10 +840,11 @@
       'économiser 6%.': 'сэкономить 6%.',
       '8% pour un étranger': '8% для иностранца',
       '0—5% pour un olé hadash': '0—5% для оле хадаш',
-      'DEMANDER UNE SIMULATION →': 'ЗАПРОСИТЬ СИМУЛЯЦИЮ →',
+      'Demander une simulation →': 'Запросить симуляцию →',
       'Les questions qu\'on nous pose souvent.': 'Часто задаваемые вопросы.',
       'qu\'on nous pose souvent.': 'часто задаваемые.',
-      'VOIR LE PORTEFEUILLE': 'СМОТРЕТЬ ПОРТФОЛИО',
+      'Voir le portefeuille': 'Смотреть портфолио',
+      'Voir le portefeuille (19) →': 'Смотреть портфолио (19) →',
 
       // Contact
       'Réponse sous 24h ouvrées.': 'Ответ в течение 24 рабочих часов.',
@@ -850,7 +857,6 @@
       '— FORMAT DU RENDEZ-VOUS PRÉFÉRÉ': '— ПРЕДПОЧТИТЕЛЬНЫЙ ФОРМАТ ВСТРЕЧИ',
       'Visioconférence': 'Видеоконференция',
       'J\'accepte que mes données soient traitées conformément à la politique GDPR de la maison. Aucun partage avec des tiers.': 'Я согласен(на), что мои данные будут обработаны в соответствии с политикой GDPR дома. Никакой передачи третьим лицам.',
-      'ENVOYER LA DEMANDE →': 'ОТПРАВИТЬ ЗАПРОС →',
       'Avant de nous contacter, peut-être ces réponses ?': 'Перед тем как связаться с нами, может быть, эти ответы?',
       'peut-être ces réponses ?': 'может быть, эти ответы?',
 
