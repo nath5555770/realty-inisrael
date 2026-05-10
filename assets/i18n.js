@@ -220,6 +220,20 @@
       'Mandat exclusif': 'Exclusive mandate',
       'Conseil patrimonial': 'Wealth advisory',
 
+      // Agence — section titles
+      'Une boussole': 'A compass',
+      'francophone.': 'French-speaking.',
+      'Une conversation,': 'A conversation,',
+      'jamais une démonstration.': 'never a demonstration.',
+      'Quatre familles,': 'Four families,',
+      'quatre récits.': 'four stories.',
+      'Un rendez-vous,': 'An appointment,',
+      'en confidence.': 'in confidence.',
+      'Nos conseiller·ère·s.': 'Our advisors.',
+      'Membre des principales institutions immobilières.': 'Member of the leading real-estate institutions.',
+      'Chaque dossier est porté par un·e seul·e conseiller·ère, soutenu·e par la directrice. Pas de hand-off, pas de relais, pas de mauvaise surprise.': 'Each file is handled by a single advisor, supported by the director. No hand-off, no relay, no bad surprises.',
+      'Nous rencontrer →': 'Meet us →',
+
       // Footer common
       '— Bureau & contact': '— Office & contact',
       'Tel Aviv 6688314 · Israël': 'Tel Aviv 6688314 · Israel',
@@ -440,6 +454,20 @@
       'Mandat exclusif': 'ייפוי כוח בלעדי',
       'Conseil patrimonial': 'ייעוץ נכסים',
 
+      // Agence — section titles
+      'Une boussole': 'מצפן',
+      'francophone.': 'דובר צרפתית.',
+      'Une conversation,': 'שיחה,',
+      'jamais une démonstration.': 'לעולם לא הדגמה.',
+      'Quatre familles,': 'ארבע משפחות,',
+      'quatre récits.': 'ארבעה סיפורים.',
+      'Un rendez-vous,': 'פגישה,',
+      'en confidence.': 'בדיסקרטיות.',
+      'Nos conseiller·ère·s.': 'היועצים שלנו.',
+      'Membre des principales institutions immobilières.': 'חבר במוסדות הנדל״ן המובילים.',
+      'Chaque dossier est porté par un·e seul·e conseiller·ère, soutenu·e par la directrice. Pas de hand-off, pas de relais, pas de mauvaise surprise.': 'כל תיק מטופל על ידי יועץ·ת אחד·ת בלבד, בליווי המנהלת. ללא העברות, ללא ממסר, ללא הפתעות לא נעימות.',
+      'Nous rencontrer →': 'בואו ניפגש →',
+
       // Footer common
       '— Bureau & contact': '— משרד וצור קשר',
       'Tel Aviv 6688314 · Israël': 'תל אביב 6688314 · ישראל',
@@ -638,6 +666,22 @@
       'Cession (côté vendeur)': 'Продажа (сторона продавца)',
       'Mandat exclusif': 'Эксклюзивный мандат',
       'Conseil patrimonial': 'Консультация по имуществу',
+
+      // Agence — section titles
+      'Une boussole': 'Компас',
+      'francophone.': 'франкоязычный.',
+      'Une équipe': 'Команда',
+      'à taille humaine.': 'на человеческий уровень.',
+      'Une conversation,': 'Беседа,',
+      'jamais une démonstration.': 'никогда не демонстрация.',
+      'Quatre familles,': 'Четыре семьи,',
+      'quatre récits.': 'четыре истории.',
+      'Un rendez-vous,': 'Встреча,',
+      'en confidence.': 'наедине.',
+      'Nos conseiller·ère·s.': 'Наши консультанты.',
+      'Membre des principales institutions immobilières.': 'Член ведущих институтов недвижимости.',
+      'Chaque dossier est porté par un·e seul·e conseiller·ère, soutenu·e par la directrice. Pas de hand-off, pas de relais, pas de mauvaise surprise.': 'Каждое дело ведёт один консультант при поддержке директрисы. Без передач, без посредников, без неприятных сюрпризов.',
+      'Nous rencontrer →': 'Встретиться с нами →',
 
       // Footer common
       '— Bureau & contact': '— Офис и контакты',
