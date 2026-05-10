@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SHAHAR LEVI REAL ESTATE — Internationalisation (FR / EN / HE)
+   SHAHAR LEVI REAL ESTATE — Internationalisation (FR / EN / HE / RU)
    Smart phrase-based translation that walks the DOM and swaps known phrases.
    No HTML markup changes required — works with the existing French content.
    ========================================================================== */
@@ -7,7 +7,7 @@
   'use strict';
 
   const STORAGE_KEY = 'sl-lang';
-  const SUPPORTED = ['fr', 'en', 'he'];
+  const SUPPORTED = ['fr', 'en', 'he', 'ru'];
 
   // ---- Dictionary ---------------------------------------------------------
   // Keys are the original French strings (trimmed). Values are the EN / HE.
@@ -453,12 +453,212 @@
       'Page non trouvée': 'הדף לא נמצא',
       "La page que vous cherchez n'existe pas ou a été déplacée.": 'הדף שחיפשתם לא קיים או הועבר.',
       "Retour à l'accueil": 'חזרה לעמוד הבית'
+    },
+
+    ru: {
+      // Top bar
+      'EN LIGNE · LUN—JEU 9H—18H IST': 'ОНЛАЙН · ПН—ЧТ 9:00—18:00 IST',
+      'EN LIGNE': 'ОНЛАЙН',
+      "MOSSI'A #4218": 'ЛИЦЕНЗИЯ #4218',
+
+      // Header / nav
+      'Accueil': 'Главная',
+      'Portefeuille': 'Портфолио',
+      "L'Agence": 'Агентство',
+      'Aliyah': 'Алия',
+      'Journal': 'Журнал',
+      'Contact': 'Контакты',
+      'Cabinet privé': 'Частный кабинет',
+      'Cabinet privé →': 'Частный кабинет →',
+
+      // Footer
+      'MENTIONS': 'УСЛОВИЯ',
+      'RGPD': 'GDPR',
+      'HONORAIRES': 'УСЛУГИ',
+      'NAVIGATION': 'НАВИГАЦИЯ',
+      'VILLES': 'ГОРОДА',
+      'CONTACT': 'КОНТАКТЫ',
+      'NOUS SUIVRE': 'СЛЕДИТЕ ЗА НАМИ',
+      '— NOUS SUIVRE': '— СЛЕДИТЕ ЗА НАМИ',
+
+      // Hero
+      "L'immobilier israélien,": 'Недвижимость Израиля,',
+      'en français.': 'на французском.',
+      "Maison de courtage indépendante fondée à Tel Aviv en 2014. Acquisitions et cessions privées sur invitation, accompagnement aliyah, investissement patrimonial — pour une clientèle francophone exigeante.": 'Независимое брокерское агентство, основанное в Тель-Авиве в 2014 году. Частные приобретения и продажи по приглашению, сопровождение алии, имущественные инвестиции — для требовательной франкоязычной клиентуры.',
+      'Voir le portefeuille (19) →': 'Посмотреть портфолио (19) →',
+      'Confier un mandat': 'Передать мандат',
+      'défiler': 'листать',
+      '— MAISON DEPUIS MMXIV · TEL AVIV · PARIS': '— ДОМ С MMXIV · ТЕЛЬ-АВИВ · ПАРИЖ',
+      '— TEL AVIV · HERZLIYA · CAESAREA · NETANYA · JÉRUSALEM': '— ТЕЛЬ-АВИВ · ГЕРЦЛИЯ · КЕСАРИЯ · НЕТАНИЯ · ИЕРУСАЛИМ',
+
+      // Trust band
+      '— EXPÉRIENCE': '— ОПЫТ',
+      '— CESSIONS': '— СДЕЛКИ',
+      '— FAMILLES': '— СЕМЬИ',
+      '— FRANCOPHONIE': '— ФРАНЦУЗСКИЙ',
+      'ans': 'лет',
+      'sur le marché israélien': 'на израильском рынке',
+      'de transactions accompagnées': 'сопровождённых сделок',
+      'familles francophones': 'франкоязычных семей',
+      'tout en français · A à Z': 'всё на французском · от А до Я',
+
+      // Sélection
+      '— Sélection · printemps MMXXVI': '— Подборка · весна MMXXVI',
+      'Trois pièces': 'Три объекта',
+      'de notre portefeuille.': 'из нашего портфолио.',
+      "Un aperçu des dix-neuf biens disponibles. Chaque pièce porte une référence, une provenance, et l'accord explicite des propriétaires.": 'Обзор девятнадцати доступных объектов. Каждый объект имеет номер, происхождение и явное согласие владельцев.',
+      'VOIR TOUT LE PORTEFEUILLE (19) →': 'СМОТРЕТЬ ВСЁ ПОРТФОЛИО (19) →',
+      'Découvrir les 19 biens →': 'Открыть 19 объектов →',
+      '5 PIÈCES': '5 КОМНАТ',
+      '9 PIÈCES · VUE MER': '9 КОМНАТ · ВИД НА МОРЕ',
+      '8 P · 600 M² JARDIN': '8 К · САД 600 М²',
+      'Penthouse': 'Пентхаус',
+      'Villa': 'Вилла',
+      'Akirov.': 'Акиров.',
+      'Carmel.': 'Кармель.',
+      'front de mer.': 'на берегу моря.',
+
+      // Manifesto
+      '— La maison': '— Дом',
+      "d'exception": 'исключительная',
+      'rencontres improbables.': 'невероятные встречи.',
+      "Découvrir l'agence →": 'Открыть агентство →',
+
+      // Cities
+      '— Couverture territoriale': '— Территориальное покрытие',
+      'Cinq villes,': 'Пять городов,',
+      'une équipe.': 'одна команда.',
+      '— 8 BIENS': '— 8 ОБЪЕКТОВ',
+      '— 4 BIENS': '— 4 ОБЪЕКТА',
+      '— 3 BIENS': '— 3 ОБЪЕКТА',
+      '— 2 BIENS': '— 2 ОБЪЕКТА',
+      'Tel Aviv': 'Тель-Авив',
+      'Herzliya': 'Герцлия',
+      'Caesarea': 'Кесария',
+      'Netanya': 'Нетания',
+      'Jérusalem': 'Иерусалим',
+
+      // Portefeuille page
+      'Notre portefeuille': 'Наше портфолио',
+      'Dix-neuf pièces signées par la maison.': 'Девятнадцать объектов от нашего дома.',
+      'Filtrer par ville': 'Фильтр по городу',
+      'Toutes les villes': 'Все города',
+      'Tous les types': 'Все типы',
+      'Tous les budgets': 'Все бюджеты',
+      'Réinitialiser': 'Сбросить',
+      'Découvrir': 'Открыть',
+      'En savoir plus': 'Узнать больше',
+      'biens disponibles': 'доступных объектов',
+      'biens en portefeuille': 'объектов в портфолио',
+      'À VENDRE': 'ПРОДАЁТСЯ',
+      'CONFIDENTIEL': 'КОНФИДЕНЦИАЛЬНО',
+      'NOUVEAU': 'НОВОЕ',
+      'EXCLUSIVITÉ': 'ЭКСКЛЮЗИВ',
+
+      // Agence page
+      'La maison': 'Дом',
+      'Notre méthode': 'Наш метод',
+      'Notre équipe': 'Наша команда',
+      'Distinctions': 'Награды',
+      'Presse': 'Пресса',
+      'Nos engagements': 'Наши обязательства',
+      'Lire le manifeste': 'Читать манифест',
+      'Fondatrice': 'Основательница',
+      'Directrice associée': 'Ассоциированный директор',
+      'Conseiller principal': 'Главный консультант',
+      'Six visages, cinq langues, une exigence commune : que vous compreniez chaque ligne, à chaque étape. Nous ne déléguons rien — chaque dossier est suivi par la même personne, du premier rendez-vous à la remise des clés.': 'Шесть лиц, пять языков, одно общее требование: чтобы вы понимали каждую строку на каждом этапе. Мы ничего не делегируем — каждое дело ведёт один и тот же человек, от первой встречи до передачи ключей.',
+      'Huit visages, six langues, une exigence commune : que vous compreniez chaque ligne, à chaque étape. Nous ne déléguons rien — chaque dossier est suivi par la même personne, du premier rendez-vous à la remise des clés.': 'Восемь лиц, шесть языков, одно общее требование: чтобы вы понимали каждую строку на каждом этапе. Мы ничего не делегируем — каждое дело ведёт один и тот же человек, от первой встречи до передачи ключей.',
+      '— DIRECTEUR FONDATEUR · MMXIV': '— ДИРЕКТОР-ОСНОВАТЕЛЬ · MMXIV',
+      'Fondateur de la maison à Tel Aviv en 2014, après dix années en finance entre Paris et Londres. Il pilote la stratégie globale, les négociations sensibles et les relations avec les familles propriétaires.': 'Основатель дома в Тель-Авиве в 2014 году, после десяти лет работы в финансах между Парижем и Лондоном. Он руководит общей стратегией, деликатными переговорами и отношениями с семьями-владельцами.',
+      "— DIRECTRICE D'AGENCE · MMXVIII": '— ДИРЕКТОР АГЕНТСТВА · MMXVIII',
+      "Parisienne d'origine, Nathalie pilote l'ensemble du cabinet francophone. Elle accompagne plus de 80 % de la clientèle française, suisse et belge — du premier rendez-vous parisien jusqu'à la remise des clés à Herzliya.": 'Парижанка по происхождению, Натали руководит всей франкоязычной практикой. Она лично сопровождает более 80% французских, швейцарских и бельгийских клиентов — от первой встречи в Париже до передачи ключей в Герцлии.',
+      'Prendre rendez-vous avec la direction →': 'Записаться на встречу с руководством →',
+      'Six conseiller·ère·s,': 'Шесть консультантов,',
+      'six langues maîtrisées.': 'шесть освоенных языков.',
+      'CONSEILLÈRE ANGLOPHONE': 'АНГЛОЯЗЫЧНАЯ КОНСУЛЬТАНТКА',
+      'Clientèle internationale anglophone. Investisseurs étrangers, expatriés, primo-acquéreurs en Israël.': 'Международная англоязычная клиентура. Иностранные инвесторы, экспаты, первые покупатели в Израиле.',
+      'CONSEILLÈRE SENIOR': 'СТАРШАЯ КОНСУЛЬТАНТКА',
+      'CONSEILLÈRE INTERNATIONALE': 'МЕЖДУНАРОДНАЯ КОНСУЛЬТАНТКА',
+      'CONSEILLÈRE · ALIYAH': 'КОНСУЛЬТАНТКА · АЛИЯ',
+      'CONSEILLER': 'КОНСУЛЬТАНТ',
+      'Français': 'Французский',
+      'Hébreu': 'Иврит',
+      'Anglais': 'Английский',
+      'Russe': 'Русский',
+
+      // Aliyah page
+      'Votre aliyah, accompagnée.': 'Ваша алия, с поддержкой.',
+      "Sept étapes pour s'installer en Israël.": 'Семь шагов для переезда в Израиль.',
+      'Étape': 'Шаг',
+      'Étapes': 'Шаги',
+      'Calculateur Mas Rechisha': 'Калькулятор Мас Рехиша',
+      'Calculer': 'Рассчитать',
+      'Prix du bien (₪)': 'Цена объекта (₪)',
+      'Statut fiscal': 'Налоговый статус',
+      'Olé Hadash (nouvel immigrant)': 'Оле Хадаш (новый репатриант)',
+      'Résident fiscal israélien': 'Налоговый резидент Израиля',
+      'Investisseur étranger': 'Иностранный инвестор',
+      'Mas Rechisha estimé': 'Расчётный Мас Рехиша',
+      'Demander un accompagnement': 'Запросить сопровождение',
+
+      // Journal
+      'Le Journal': 'Журнал',
+      'Articles, analyses et regards sur le marché israélien.': 'Статьи, аналитика и взгляды на израильский рынок.',
+      "Lire l'article →": 'Читать статью →',
+      'Tous les articles': 'Все статьи',
+      'Marché': 'Рынок',
+      'Patrimoine': 'Имущество',
+      'Décryptage': 'Анализ',
+      'Min de lecture': 'мин чтения',
+
+      // Contact
+      'Confions-nous.': 'Доверьтесь нам.',
+      'Le premier échange est confidentiel et sans engagement.': 'Первая беседа конфиденциальна и без обязательств.',
+      'Nom': 'Фамилия',
+      'Prénom': 'Имя',
+      'Email': 'Эл. почта',
+      'Téléphone': 'Телефон',
+      'Sujet': 'Тема',
+      'Message': 'Сообщение',
+      'Envoyer le message': 'Отправить сообщение',
+      'Acquisition': 'Приобретение',
+      'Cession': 'Продажа',
+      'Conseil': 'Консультация',
+      'Autre': 'Другое',
+      'Nos bureaux': 'Наши офисы',
+      'Tel Aviv (siège)': 'Тель-Авив (главный офис)',
+      'Paris (représentation)': 'Париж (представительство)',
+      'Sur rendez-vous uniquement.': 'Только по записи.',
+      'Questions fréquentes': 'Частые вопросы',
+
+      // Honoraires
+      'Nos honoraires': 'Наши гонорары',
+      'Transparence et clarté.': 'Прозрачность и ясность.',
+      'Acquisition (côté acheteur)': 'Приобретение (сторона покупателя)',
+      'Cession (côté vendeur)': 'Продажа (сторона продавца)',
+      'Mandat exclusif': 'Эксклюзивный мандат',
+      'Conseil patrimonial': 'Консультация по имуществу',
+
+      // Footer common
+      '— Bureau & contact': '— Офис и контакты',
+      'Tel Aviv 6688314 · Israël': 'Тель-Авив 6688314 · Израиль',
+
+      // Misc
+      'En savoir +': 'Узнать больше',
+      'Retour': 'Назад',
+      'Suivant': 'Далее',
+      'Précédent': 'Предыдущий',
+      'Voir tout': 'Смотреть всё',
+      'Page non trouvée': 'Страница не найдена',
+      "La page que vous cherchez n'existe pas ou a été déplacée.": 'Страница, которую вы ищете, не существует или была перемещена.',
+      "Retour à l'accueil": 'Вернуться на главную'
     }
   };
 
   // Phrase keys (for ordered/longest-first replacement)
   const KEYS_EN = Object.keys(DICT.en).sort((a, b) => b.length - a.length);
   const KEYS_HE = Object.keys(DICT.he).sort((a, b) => b.length - a.length);
+  const KEYS_RU = Object.keys(DICT.ru).sort((a, b) => b.length - a.length);
 
   // ---- Snapshot original FR text -----------------------------------------
   // We need to translate from FR every time, not from previously translated text.
@@ -520,6 +720,7 @@
     document.body.classList.toggle('lang-he', lang === 'he');
     document.body.classList.toggle('lang-en', lang === 'en');
     document.body.classList.toggle('lang-fr', lang === 'fr');
+    document.body.classList.toggle('lang-ru', lang === 'ru');
 
     if (lang === 'fr') {
       updateSwitcher(lang);
@@ -527,7 +728,7 @@
     }
 
     const dict = DICT[lang];
-    const keys = lang === 'en' ? KEYS_EN : KEYS_HE;
+    const keys = lang === 'en' ? KEYS_EN : (lang === 'he' ? KEYS_HE : KEYS_RU);
 
     // Translate text nodes
     snapshot.forEach((origValue, node) => {
@@ -583,7 +784,7 @@
     const candidates = document.querySelectorAll('a, button');
     candidates.forEach((el) => {
       const txt = (el.textContent || '').trim().toUpperCase();
-      if (txt === 'FR' || txt === 'EN' || txt === 'HE') {
+      if (txt === 'FR' || txt === 'EN' || txt === 'HE' || txt === 'RU') {
         el.dataset.lang = txt.toLowerCase();
         el.style.cursor = 'pointer';
         if (!el.hasAttribute('href')) el.setAttribute('href', '#');
