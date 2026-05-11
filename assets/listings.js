@@ -509,14 +509,14 @@
     container.classList.remove('grid', 'md:grid-cols-3', 'gap-6');
     container.classList.add('featured-carousel');
     container.innerHTML =
-      '<div class="featured-viewport">' +
-        '<div class="featured-track"></div>' +
+      '<div class="featured-stage">' +
+        '<button class="featured-arrow featured-prev" aria-label="Précédent"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><polyline points="15 18 9 12 15 6"/></svg></button>' +
+        '<div class="featured-viewport">' +
+          '<div class="featured-track"></div>' +
+        '</div>' +
+        '<button class="featured-arrow featured-next" aria-label="Suivant"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><polyline points="9 18 15 12 9 6"/></svg></button>' +
       '</div>' +
-      '<div class="featured-controls">' +
-        '<button class="featured-arrow featured-prev" aria-label="Précédent"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg></button>' +
-        '<div class="featured-dots"></div>' +
-        '<button class="featured-arrow featured-next" aria-label="Suivant"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"/></svg></button>' +
-      '</div>';
+      '<div class="featured-controls"><div class="featured-dots"></div></div>';
 
     const track = container.querySelector('.featured-track');
     const dotsRoot = container.querySelector('.featured-dots');

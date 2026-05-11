@@ -525,9 +525,18 @@ body.admin-page .floating-wa { display: none; }
   display: block;
   position: relative;
 }
+/* Stage = the row that holds [arrow] [viewport] [arrow]. Arrows sit on the
+   side and the viewport occupies the remaining space, so no card ever gets
+   clipped by the wrong width math. */
+.featured-carousel .featured-stage {
+  position: relative;
+  display: block;
+}
 .featured-carousel .featured-viewport {
   overflow: hidden;
-  padding: 4px 2px; /* lets card shadows breathe without clipping */
+  /* No padding here — the carousel JS uses clientWidth to size cards, and
+     any padding would offset the final card past the right edge. */
+  padding: 0;
 }
 .featured-carousel .featured-track {
   display: flex;
@@ -543,34 +552,46 @@ body.admin-page .floating-wa { display: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.4rem;
   margin-top: 2.5rem;
 }
+/* Arrows: discreet, overlaid on the left/right edges of the carousel.
+   They float above the cards, vertically centered, semi-transparent until
+   you point at them. */
 .featured-carousel .featured-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   width: 44px;
   height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  border: 1px solid var(--line);
+  background: rgba(244, 237, 224, 0.55); /* paper @ 55% — barely there */
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(196, 168, 119, 0.35); /* gold @ 35% */
   color: var(--gold-deep);
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.2, 0.85, 0.2, 1);
-  border-radius: 0;
+  transition: all 0.45s cubic-bezier(0.2, 0.85, 0.2, 1);
+  border-radius: 50%;
   padding: 0;
+  z-index: 5;
+  opacity: 0.75;
 }
 .featured-carousel .featured-arrow:hover {
+  opacity: 1;
   background: var(--teal);
   border-color: var(--teal);
   color: var(--gold);
-  transform: scale(1.06);
+  transform: translateY(-50%) scale(1.08);
 }
 .featured-carousel .featured-arrow svg { display: block; }
+.featured-carousel .featured-prev { left: 0.85rem; }
+.featured-carousel .featured-next { right: 0.85rem; }
 .featured-carousel .featured-dots {
   display: flex;
   gap: 0.55rem;
   align-items: center;
+  justify-content: center;
 }
 .featured-carousel .featured-dot {
   width: 7px;
@@ -587,6 +608,11 @@ body.admin-page .floating-wa { display: none; }
   width: 28px;
   border-radius: 4px;
   background: var(--gold-deep);
+}
+@media (max-width: 640px) {
+  .featured-carousel .featured-arrow { width: 38px; height: 38px; }
+  .featured-carousel .featured-prev { left: 0.4rem; }
+  .featured-carousel .featured-next { right: 0.4rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .featured-carousel .featured-track { transition: none; }
