@@ -345,9 +345,9 @@
       if (STATE.pendingListingFile) {
         payload.image = await uploadImage(BUCKET_LISTINGS, payload.slug, STATE.pendingListingFile, $('#uploadProgress'));
       }
-      if (payload.featured && !base?.featured) {
-        await sb.from('listings').update({ featured: false }).neq('id', base?.id || '00000000-0000-0000-0000-000000000000').eq('featured', true);
-      }
+      // 'featured' (À la une) is multi-select on purpose — the homepage
+      // shows up to 3 featured listings, so users typically want 1–3 marked.
+      // 'signature' stays exclusive (only one signature piece at a time).
       if (payload.signature && !base?.signature) {
         await sb.from('listings').update({ signature: false }).neq('id', base?.id || '00000000-0000-0000-0000-000000000000').eq('signature', true);
       }
