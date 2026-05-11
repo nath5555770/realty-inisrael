@@ -301,14 +301,10 @@
       <fieldset class="field-group">
         <legend>Prix</legend>
         <div class="grid-3">
-          <label class="field"><span class="field-label">Prix USD</span><input type="number" id="fPriceUsd" placeholder="14800000" step="50000"><span class="field-hint">Sans formatage. Sert au tri.</span></label>
-          <label class="field"><span class="field-label">Prix affiché</span><input type="text" id="fPriceDisplay" placeholder="$14.8M"></label>
-          <label class="field"><span class="field-label">Équivalents</span>
-            <div class="grid-2-tight">
-              <input type="text" id="fPriceEur" placeholder="≈ 13.6 M€">
-              <input type="text" id="fPriceIls" placeholder="≈ 53.5 M ₪">
-            </div>
-          </label>
+          <label class="field"><span class="field-label">Prix de référence ($ interne)</span><input type="number" id="fPriceUsd" placeholder="14800000" step="50000"><span class="field-hint">Stocké en USD pour le tri. Affiché en ₪ sur le site (× 3.7).</span></label>
+          <input type="hidden" id="fPriceDisplay" value="">
+          <input type="hidden" id="fPriceEur" value="">
+          <input type="hidden" id="fPriceIls" value="">
         </div>
       </fieldset>
 
