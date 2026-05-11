@@ -74,13 +74,13 @@
     const langsHTML = langs.map(langPill).join('');
     return [
       '<article class="team-card">',
-      '  <div class="frame aspect-[4/5] mb-6">',
+      '  <div class="frame aspect-[4/5] mb-5">',
       '    <img src="', escapeHtml(imageUrl(a.photo_url)), '" alt="', escapeHtml(a.full_name), ' — ', escapeHtml(a.role_label || ''), '">',
       '  </div>',
-      '  <div class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">', escapeHtml(a.role_label || ''), '</div>',
-      '  <div class="display text-2xl mt-2" style="color: var(--teal)">', escapeHtml(a.full_name), '</div>',
-      a.bio ? '  <p class="text-sm text-[var(--ink-soft)] leading-relaxed mt-3">' + escapeHtml(a.bio) + '</p>' : '',
-      '  <div class="mt-4 flex flex-wrap gap-1.5">', langsHTML, '</div>',
+      '  <div class="cinzel text-[9px] tracking-[0.3em] text-[var(--gold-deep)]">', escapeHtml(a.role_label || ''), '</div>',
+      '  <div class="display text-xl mt-1.5" style="color: var(--teal)">', escapeHtml(a.full_name), '</div>',
+      a.bio ? '  <p class="text-[13px] text-[var(--ink-soft)] leading-relaxed mt-2">' + escapeHtml(a.bio) + '</p>' : '',
+      '  <div class="mt-3 flex flex-wrap gap-1">', langsHTML, '</div>',
       '</article>'
     ].join('');
   }
