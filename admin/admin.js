@@ -278,6 +278,7 @@
     $('#fFeatured').checked = !!l.featured;
     $('#fSignature').checked = !!l.signature;
     $('#fOffMarket').checked = !!l.off_market;
+    $('#fHasElevator').checked = !!l.has_elevator;
     setListingPreview(imageUrl(BUCKET_LISTINGS, l.image));
     $('#uploadProgress').hidden = true;
 
@@ -320,7 +321,8 @@
       price_ils_eq: $('#fPriceIls').value.trim() || null,
       image: $('#fImage').value.trim() || null,
       visible: $('#fVisible').checked, featured: $('#fFeatured').checked,
-      signature: $('#fSignature').checked, off_market: $('#fOffMarket').checked
+      signature: $('#fSignature').checked, off_market: $('#fOffMarket').checked,
+      has_elevator: $('#fHasElevator').checked
     };
   }
 

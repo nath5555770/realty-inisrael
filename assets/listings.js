@@ -20,13 +20,14 @@
     type: '',              // type slug (appartement/penthouse/villa/loft/maison)
     kind: '',              // property kind (neuf/occasion/projet/commercial)
     deal: '',              // transaction type (sale/rent) — '' = both
-    min_p: 0,              // min price in USD
-    max_p: 0,              // max price in USD (0 = unlimited)
+    min_p: 0,              // min price in shekels
+    max_p: 0,              // max price in shekels (0 = unlimited)
     min_r: 0,              // min number of rooms
     min_s: 0,              // min surface m²
     max_s: 0,              // max surface m² (0 = unlimited)
     sig_only: false,
     fea_only: false,
+    elev_only: false,      // only listings with an elevator
     sort: 'pertinence'     // pertinence | price-desc | price-asc | surface-desc | rooms-desc | newest
   };
 
@@ -159,6 +160,7 @@
     if (f.max_s) r = r.filter(l => parseFirstNumber(l.surface) <= f.max_s);
     if (f.sig_only) r = r.filter(l => l.signature === true);
     if (f.fea_only) r = r.filter(l => l.featured === true);
+    if (f.elev_only) r = r.filter(l => l.has_elevator === true);
 
     switch (f.sort) {
       case 'price-desc':   r = [...r].sort((a, b) => (b.price_usd || 0) - (a.price_usd || 0)); break;
@@ -208,7 +210,7 @@
         '      <div class="grid grid-cols-3 gap-4 mt-6 border-t border-[var(--line)] pt-5">',
         '        <div><div class="label">SURFACE</div><div class="display text-xl mt-1.5">', escapeHtml(l.surface || ''), '</div></div>',
         '        <div><div class="label">PIÈCES</div><div class="display text-xl mt-1.5">', escapeHtml(l.rooms || ''), '</div></div>',
-        '        <div><div class="label">RÉF</div><div class="display text-xl mt-1.5">', escapeHtml(l.ref), '</div></div>',
+        '        <div><div class="label">ASCENSEUR</div><div class="display text-xl mt-1.5">', l.has_elevator ? 'Oui' : 'Non', '</div></div>',
         '      </div>',
         '      <div class="mt-6 border-t border-[var(--line)] pt-5 flex items-end justify-between">',
         '        <div>',
@@ -237,7 +239,7 @@
       '    <h3 class="display text-2xl mt-3 leading-tight">', escapeHtml(l.title_main), ' <span class="display-i text-[var(--gold-deep)]">', escapeHtml(l.title_accent || ''), '</span></h3>',
       '    <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtml(l.description || ''), '</p>',
       '    <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">',
-      '      <span class="label !tracking-[0.2em]">', escapeHtml(l.rooms || ''), l.extra_label ? ' · ' + escapeHtml(l.extra_label) : '', '</span>',
+      '      <span class="label !tracking-[0.2em]">', escapeHtml(l.rooms || ''), l.extra_label ? ' · ' + escapeHtml(l.extra_label) : '', l.has_elevator ? ' · <span class="elev-tag" title="Ascenseur">⇡ ASC</span>' : '', '</span>',
       '      <span class="display text-2xl text-[var(--teal)]">', escapeHtml(priceLabel(l)), '</span>',
       '    </div>',
       '  </div>',
@@ -264,6 +266,7 @@
     else if (f.max_s) chips.push({ key: 'surface', label: '< ' + f.max_s + ' m²' });
     if (f.sig_only) chips.push({ key: 'sig_only', label: '★ Signature' });
     if (f.fea_only) chips.push({ key: 'fea_only', label: 'À la une' });
+    if (f.elev_only) chips.push({ key: 'elev_only', label: 'Ascenseur' });
 
     if (!chips.length) return '';
     return chips.map(c =>
@@ -283,6 +286,7 @@
     else if (key === 'min_r') FILTER.min_r = 0;
     else if (key === 'sig_only') FILTER.sig_only = false;
     else if (key === 'fea_only') FILTER.fea_only = false;
+    else if (key === 'elev_only') FILTER.elev_only = false;
     syncFormFromFilter();
     rerender();
   }
@@ -372,6 +376,7 @@
     const sMax = get('surfaceMax'); if (sMax) FILTER.max_s = parseInt(sMax.value || '0', 10) || 0;
     const sig = get('sigOnly'); if (sig) FILTER.sig_only = !!sig.checked;
     const fea = get('feaOnly'); if (fea) FILTER.fea_only = !!fea.checked;
+    const elev = get('elevOnly'); if (elev) FILTER.elev_only = !!elev.checked;
     const sort = get('sortBy'); if (sort) FILTER.sort = sort.value || 'pertinence';
   }
 
@@ -410,6 +415,7 @@
     set('surfaceMax', FILTER.max_s || '');
     const sig = document.getElementById('sigOnly'); if (sig) sig.checked = !!FILTER.sig_only;
     const fea = document.getElementById('feaOnly'); if (fea) fea.checked = !!FILTER.fea_only;
+    const elev = document.getElementById('elevOnly'); if (elev) elev.checked = !!FILTER.elev_only;
     set('sortBy', FILTER.sort);
   }
 
@@ -418,7 +424,7 @@
   // ------------------------------------------------------------------
   function wireSearchForm() {
     const ids = ['searchQ', 'searchCity', 'searchKind', 'searchType', 'searchRooms', 'searchPrice',
-                 'surfaceMin', 'surfaceMax', 'sigOnly', 'feaOnly', 'sortBy'];
+                 'surfaceMin', 'surfaceMax', 'sigOnly', 'feaOnly', 'elevOnly', 'sortBy'];
     ids.forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
