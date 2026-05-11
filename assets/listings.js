@@ -550,10 +550,15 @@
     function setTransition(on) {
       track.style.transition = on ? '' : 'none';
     }
+    // Cached at relayout time so applyTransform doesn't measure the DOM each tick.
+    let slotPx = 0;
     function applyTransform() {
       const physical = logicalIdx + PAD;
-      const offsetPct = -(physical * (100 / perView));
-      track.style.transform = 'translateX(' + offsetPct + '%)';
+      // Translate in pixels (card width + gap per slot). Using % was buggy:
+      // translateX(-100%) is 100% of the TRACK's own width, not the viewport,
+      // so multi-slot translations overshot wildly.
+      const offsetPx = -(physical * slotPx);
+      track.style.transform = 'translateX(' + offsetPx + 'px)';
     }
     function rebuildDots() {
       dotsRoot.innerHTML = '';
@@ -628,6 +633,8 @@
       const total = container.querySelector('.featured-viewport').clientWidth;
       const cardW = (total - gap * (perView - 1)) / perView;
       cards.forEach(c => { c.style.flex = '0 0 ' + cardW + 'px'; });
+      // One "slot" advance = one card + one gap (in pixels).
+      slotPx = cardW + gap;
       logicalIdx = ((logicalIdx % N) + N) % N;
       rebuildDots();
       setTransition(false);
