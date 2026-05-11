@@ -40,6 +40,8 @@
       // Hero (index)
       "L'immobilier israélien,": 'Israeli real estate,',
       'en français.': 'in French.',
+      'Votre projet immobilier en Israël,': 'Your real-estate project in Israel,',
+      'en toute sérénité.': 'with complete peace of mind.',
       "Maison de courtage indépendante fondée à Tel Aviv en 2014. Acquisitions et cessions privées sur invitation, accompagnement aliyah, investissement patrimonial — pour une clientèle francophone exigeante.": 'Independent brokerage house founded in Tel Aviv in 2014. Off-market acquisitions and disposals, aliyah support, patrimonial investment — for a discerning French-speaking clientele.',
       'Voir le portefeuille (19) →': 'View portfolio (19) →',
       'Confier un mandat': 'Entrust a mandate',
@@ -508,6 +510,8 @@
       // Hero
       "L'immobilier israélien,": 'נדל״ן ישראלי,',
       'en français.': 'בצרפתית.',
+      'Votre projet immobilier en Israël,': 'פרויקט הנדל״ן שלכם בישראל,',
+      'en toute sérénité.': 'בשלוות נפש מלאה.',
       "Maison de courtage indépendante fondée à Tel Aviv en 2014. Acquisitions et cessions privées sur invitation, accompagnement aliyah, investissement patrimonial — pour une clientèle francophone exigeante.": 'בית תיווך עצמאי שהוקם בתל אביב בשנת 2014. רכישות ומכירות פרטיות בהזמנה, ליווי לעלייה והשקעה בנכסים — עבור לקוחות דוברי צרפתית תובעניים.',
       'Voir le portefeuille (19) →': '← צפו בתיק הנכסים (19)',
       'Confier un mandat': 'הפקדת ייפוי כוח',
@@ -976,6 +980,8 @@
       // Hero
       "L'immobilier israélien,": 'Недвижимость Израиля,',
       'en français.': 'на французском.',
+      'Votre projet immobilier en Israël,': 'Ваш проект недвижимости в Израиле,',
+      'en toute sérénité.': 'с полным спокойствием.',
       "Maison de courtage indépendante fondée à Tel Aviv en 2014. Acquisitions et cessions privées sur invitation, accompagnement aliyah, investissement patrimonial — pour une clientèle francophone exigeante.": 'Независимое брокерское агентство, основанное в Тель-Авиве в 2014 году. Частные приобретения и продажи по приглашению, сопровождение алии, имущественные инвестиции — для требовательной франкоязычной клиентуры.',
       'Voir le portefeuille (19) →': 'Посмотреть портфолио (19) →',
       'Confier un mandat': 'Передать мандат',
