@@ -303,7 +303,7 @@
       // Journal — article cards & modal
       // Journal — page chrome
       '— LE JOURNAL · ANALYSES, CONSEILS, REPORTAGES': '— THE JOURNAL · ANALYSES, ADVICE, REPORTS',
-      '— LE JOURNAL · MMXXVI': '— THE JOURNAL · MMXXVI',
+      '— Le journal · MMXXVI': '— The journal · MMXXVI',
       'Analyses, conseils,': 'Analyses, advice,',
       'reportages.': 'reports.',
       "Quarante-sept articles publiés depuis 2019 — sur l'immobilier israélien, l'aliyah, la fiscalité FR/IL, les quartiers, les notaires. Des analyses honnêtes, jamais commerciales.": "Forty-seven articles published since 2019 — on Israeli real estate, aliyah, FR/IL taxation, neighborhoods, notaries. Honest analyses, never commercial.",
@@ -665,7 +665,7 @@
       // Journal — article cards & modal
       // Journal — page chrome
       '— LE JOURNAL · ANALYSES, CONSEILS, REPORTAGES': '— הז׳ורנל · ניתוחים, ייעוץ, כתבות',
-      '— LE JOURNAL · MMXXVI': '— הז׳ורנל · MMXXVI',
+      '— Le journal · MMXXVI': '— הז׳ורנל · MMXXVI',
       'Analyses, conseils,': 'ניתוחים, ייעוץ,',
       'reportages.': 'כתבות.',
       "Quarante-sept articles publiés depuis 2019 — sur l'immobilier israélien, l'aliyah, la fiscalité FR/IL, les quartiers, les notaires. Des analyses honnêtes, jamais commerciales.": 'ארבעים ושבע כתבות שפורסמו מאז 2019 — על נדל״ן ישראלי, עלייה, מיסוי צרפת/ישראל, השכונות, הנוטריונים. ניתוחים כנים, לעולם לא מסחריים.',
@@ -1008,7 +1008,7 @@
       // Journal — article cards & modal
       // Journal — page chrome
       '— LE JOURNAL · ANALYSES, CONSEILS, REPORTAGES': '— ЖУРНАЛ · АНАЛИЗ, СОВЕТЫ, РЕПОРТАЖИ',
-      '— LE JOURNAL · MMXXVI': '— ЖУРНАЛ · MMXXVI',
+      '— Le journal · MMXXVI': '— Журнал · MMXXVI',
       'Analyses, conseils,': 'Анализ, советы,',
       'reportages.': 'репортажи.',
       "Quarante-sept articles publiés depuis 2019 — sur l'immobilier israélien, l'aliyah, la fiscalité FR/IL, les quartiers, les notaires. Des analyses honnêtes, jamais commerciales.": 'Сорок семь статей опубликовано с 2019 года — об израильской недвижимости, алии, налогообложении FR/IL, районах, нотариусах. Честный анализ, никогда не коммерческий.',
