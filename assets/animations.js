@@ -273,13 +273,34 @@
     });
   }
 
-  /* === MOBILE MENU TOGGLE === */
+  /* === MOBILE MENU TOGGLE ===
+     Defensive: some iOS Safari versions silently swallow taps when the
+     burger sits inside a sticky header with a noise overlay on top. We:
+     1. Cancel the bubbling so nothing intercepts the tap further up.
+     2. Listen on BOTH click and touchend (touchend fires earlier on iOS
+        and lets us avoid the 300 ms tap delay if the user double-taps).
+     3. Use capture phase so we run before any other handler.
+     4. Force pointer-events:auto inline in case a parent sets none. */
   function initMobileMenu() {
+    function toggleMenu(e) {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      document.body.classList.toggle('menu-open');
+    }
+    function closeMenu() { document.body.classList.remove('menu-open'); }
+
     document.querySelectorAll('.burger').forEach(burger => {
-      burger.addEventListener('click', () => document.body.classList.toggle('menu-open'));
+      burger.setAttribute('type', 'button');
+      burger.style.pointerEvents = 'auto';
+      burger.addEventListener('click', toggleMenu, { capture: true });
+      // touchend mirrors click for iOS Safari where the click can race with scroll.
+      burger.addEventListener('touchend', toggleMenu, { capture: true, passive: false });
     });
     document.querySelectorAll('.mobile-menu a').forEach(a => {
-      a.addEventListener('click', () => document.body.classList.remove('menu-open'));
+      a.addEventListener('click', closeMenu);
+    });
+    // Tapping the dark background outside the menu items also closes it.
+    document.querySelectorAll('.mobile-menu').forEach(menu => {
+      menu.addEventListener('click', (e) => { if (e.target === menu) closeMenu(); });
     });
   }
 
