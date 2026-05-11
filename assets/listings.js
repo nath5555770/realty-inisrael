@@ -300,6 +300,7 @@
       const er = document.getElementById('emptyResetBtn');
       if (er) er.addEventListener('click', resetFilter);
       writeFilterToURL(FILTER);
+      if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
       return;
     }
 
@@ -314,6 +315,11 @@
     }
     root.innerHTML = html.join('');
     writeFilterToURL(FILTER);
+    // Re-apply current language to translate freshly inserted static labels
+    // (Visiter →, RÉF., SURFACE, PIÈCES, PRIX, PIÈCE SIGNATURE…).
+    if (window.SLI18n && typeof window.SLI18n.refresh === 'function') {
+      window.SLI18n.refresh();
+    }
   }
 
   function rerender() {
@@ -439,6 +445,7 @@
       }).join('');
 
       container.innerHTML = html;
+      if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
     }).catch(e => console.error('[featured] failed:', e));
   }
 

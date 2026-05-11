@@ -261,8 +261,38 @@
       'Solliciter le carnet privé →': 'Request the private book →',
       'Villa front de mer.': 'Seafront villa.',
       'Bauhaus restauré.': 'Restored Bauhaus.',
+      'restauré.': 'restored.',
       '— Le portefeuille · printemps MMXXVI': '— The portfolio · spring MMXXVI',
       "Chaque bien du portefeuille porte une référence, une provenance et l'accord explicite des propriétaires. La majorité ne sera jamais publiée publiquement — réservée à notre clientèle qualifiée.": "Every property in the portfolio carries a reference, a provenance and the explicit agreement of the owners. The majority will never be publicly published — reserved for our qualified clientele.",
+      // Portefeuille — listing cards & filters
+      'PIÈCES TOTAL': 'TOTAL PROPERTIES',
+      'PIÈCE SIGNATURE': 'SIGNATURE PROPERTY',
+      'PIÈCES': 'ROOMS',
+      'SURFACE': 'AREA',
+      'PRIX': 'PRICE',
+      'RÉF': 'REF',
+      'RÉF.': 'REF.',
+      'ÉTAGE': 'FLOOR',
+      'Visiter →': 'Visit →',
+      'Aucun bien ne correspond.': 'No property matches.',
+      "Essayez d'élargir vos critères, ou": 'Try broadening your criteria, or',
+      "demandez l'accès au carnet privé": 'request access to the private book',
+      '(13 pièces off-market non listées ici).': '(13 off-market properties not listed here).',
+      'Réinitialiser les filtres': 'Reset filters',
+      'Chargement…': 'Loading…',
+      'Adresse, référence, quartier…': 'Address, reference, neighborhood…',
+      '— Pièces': '— Rooms',
+      '— Budget': '— Budget',
+      '+ Plus': '+ More',
+      '— BIENS OFF-MARKET': '— OFF-MARKET PROPERTIES',
+      '★ Signature': '★ Signature',
+      'pièces': 'rooms',
+      'pièce': 'room',
+      'Retirer': 'Remove',
+      'bien': 'property',
+      'biens': 'properties',
+      'BIEN': 'PROPERTY',
+      'BIENS': 'PROPERTIES',
 
       // Aliyah
       'Acheter avant': 'Buy before',
@@ -554,8 +584,38 @@
       'Solliciter le carnet privé →': 'בקשו את הספר הפרטי →',
       'Villa front de mer.': 'וילה על קו החוף.',
       'Bauhaus restauré.': 'באוהאוס משוחזר.',
+      'restauré.': 'משוחזר.',
       '— Le portefeuille · printemps MMXXVI': '— התיק · אביב MMXXVI',
       "Chaque bien du portefeuille porte une référence, une provenance et l'accord explicite des propriétaires. La majorité ne sera jamais publiée publiquement — réservée à notre clientèle qualifiée.": 'כל נכס בתיק נושא הפניה, מקור והסכמה מפורשת של הבעלים. הרוב לעולם לא יפורסם בפומבי — שמור ללקוחותינו המוסמכים.',
+      // Portefeuille — listing cards & filters
+      'PIÈCES TOTAL': 'סך נכסים',
+      'PIÈCE SIGNATURE': 'נכס חתימה',
+      'PIÈCES': 'חדרים',
+      'SURFACE': 'שטח',
+      'PRIX': 'מחיר',
+      'RÉF': 'מס׳',
+      'RÉF.': 'מס׳',
+      'ÉTAGE': 'קומה',
+      'Visiter →': 'לבקר →',
+      'Aucun bien ne correspond.': 'אין נכס תואם.',
+      "Essayez d'élargir vos critères, ou": 'נסו להרחיב את הקריטריונים, או',
+      "demandez l'accès au carnet privé": 'בקשו גישה לספר הפרטי',
+      '(13 pièces off-market non listées ici).': '(13 נכסים off-market שאינם מופיעים כאן).',
+      'Réinitialiser les filtres': 'איפוס המסננים',
+      'Chargement…': 'טוען…',
+      'Adresse, référence, quartier…': 'כתובת, הפניה, שכונה…',
+      '— Pièces': '— חדרים',
+      '— Budget': '— תקציב',
+      '+ Plus': '+ עוד',
+      '— BIENS OFF-MARKET': '— נכסי OFF-MARKET',
+      '★ Signature': '★ חתימה',
+      'pièces': 'חדרים',
+      'pièce': 'חדר',
+      'Retirer': 'הסר',
+      'bien': 'נכס',
+      'biens': 'נכסים',
+      'BIEN': 'נכס',
+      'BIENS': 'נכסים',
 
       // Aliyah
       'Acheter avant': 'לקנות לפני',
@@ -828,8 +888,38 @@
       'Solliciter le carnet privé →': 'Запросить частный каталог →',
       'Villa front de mer.': 'Вилла на берегу моря.',
       'Bauhaus restauré.': 'Реставрированный Баухаус.',
+      'restauré.': 'реставрированный.',
       '— Le portefeuille · printemps MMXXVI': '— Портфолио · весна MMXXVI',
       "Chaque bien du portefeuille porte une référence, une provenance et l'accord explicite des propriétaires. La majorité ne sera jamais publiée publiquement — réservée à notre clientèle qualifiée.": 'Каждый объект в портфолио имеет референс, происхождение и явное согласие собственников. Большинство никогда не будет опубликовано публично — зарезервировано для нашей квалифицированной клиентуры.',
+      // Portefeuille — listing cards & filters
+      'PIÈCES TOTAL': 'ВСЕГО ОБЪЕКТОВ',
+      'PIÈCE SIGNATURE': 'ПОДПИСНОЙ ОБЪЕКТ',
+      'PIÈCES': 'КОМНАТ',
+      'SURFACE': 'ПЛОЩАДЬ',
+      'PRIX': 'ЦЕНА',
+      'RÉF': '№',
+      'RÉF.': '№',
+      'ÉTAGE': 'ЭТАЖ',
+      'Visiter →': 'Посетить →',
+      'Aucun bien ne correspond.': 'Нет подходящих объектов.',
+      "Essayez d'élargir vos critères, ou": 'Попробуйте расширить критерии, или',
+      "demandez l'accès au carnet privé": 'запросите доступ к частному каталогу',
+      '(13 pièces off-market non listées ici).': '(13 off-market объектов не указаны здесь).',
+      'Réinitialiser les filtres': 'Сбросить фильтры',
+      'Chargement…': 'Загрузка…',
+      'Adresse, référence, quartier…': 'Адрес, референс, район…',
+      '— Pièces': '— Комнат',
+      '— Budget': '— Бюджет',
+      '+ Plus': '+ Больше',
+      '— BIENS OFF-MARKET': '— OFF-MARKET ОБЪЕКТЫ',
+      '★ Signature': '★ Подпись',
+      'pièces': 'комнат',
+      'pièce': 'комната',
+      'Retirer': 'Удалить',
+      'bien': 'объект',
+      'biens': 'объектов',
+      'BIEN': 'ОБЪЕКТ',
+      'BIENS': 'ОБЪЕКТОВ',
 
       // Aliyah
       'Acheter avant': 'Купить до',
@@ -893,8 +983,14 @@
   }
 
   function takeSnapshot() {
-    snapshot = new Map();
-    walkText((node) => snapshot.set(node, node.nodeValue));
+    // Additive: do not overwrite existing snapshot entries. This lets
+    // dynamically inserted content (e.g. listings.js, journal modals) be
+    // captured on subsequent applyLang calls without losing the original
+    // FR value of text already in the snapshot.
+    if (!snapshot) snapshot = new Map();
+    walkText((node) => {
+      if (!snapshot.has(node)) snapshot.set(node, node.nodeValue);
+    });
     // Snapshot translatable attributes too
     document.querySelectorAll('[placeholder], [title], [alt], [aria-label]').forEach((el) => {
       ['placeholder', 'title', 'alt', 'aria-label'].forEach((attr) => {
@@ -929,7 +1025,9 @@
   // ---- Apply ---------------------------------------------------------------
   function applyLang(lang) {
     if (!SUPPORTED.includes(lang)) lang = 'fr';
-    if (!snapshot) takeSnapshot();
+    // Always (re)take snapshot — additive, so it only picks up new nodes.
+    // This makes applyLang safe to call again after dynamic DOM insertions.
+    takeSnapshot();
 
     // Restore original FR
     snapshot.forEach((origValue, node) => {
@@ -1049,6 +1147,24 @@
       try { localStorage.setItem(STORAGE_KEY, lang); } catch (_) {}
       applyLang(lang);
     },
-    get: () => document.documentElement.lang || 'fr'
+    get: () => document.documentElement.lang || 'fr',
+    // Re-apply current language. Use after inserting dynamic DOM (listings,
+    // journal cards, modals…) so the new text nodes get translated.
+    refresh: () => {
+      let lang = 'fr';
+      try { lang = localStorage.getItem(STORAGE_KEY) || 'fr'; } catch (_) {}
+      if (!SUPPORTED.includes(lang)) lang = 'fr';
+      applyLang(lang);
+    },
+    // Translate a single FR string to the current language. Returns the
+    // original string when no translation exists. Useful for JS-rendered UI
+    // labels in template strings.
+    translate: (text) => {
+      let lang = 'fr';
+      try { lang = localStorage.getItem(STORAGE_KEY) || 'fr'; } catch (_) {}
+      if (!SUPPORTED.includes(lang) || lang === 'fr') return text;
+      const d = DICT[lang];
+      return d && d[text] ? d[text] : text;
+    }
   };
 })();
