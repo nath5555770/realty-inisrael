@@ -285,6 +285,8 @@
       'Pièces ↓': 'Rooms ↓',
       'Récent': 'Recent',
       'Treize biens supplémentaires ne figurent pas ici.': 'Thirteen additional properties are not shown here.',
+      'bien': 'property',
+      'biens': 'properties',
       'supplémentaires': 'additional',
       'Solliciter le carnet privé →': 'Request the private book →',
       'Villa front de mer.': 'Seafront villa.',
@@ -301,8 +303,11 @@
       'Rechercher →': 'Search →',
       'Indifférent': 'Any',
       'Tous budgets': 'All budgets',
-      "Jusqu'à $3M": 'Up to $3M',
-      'Au-delà de $18M': 'Above $18M',
+      "Jusqu'à 11 M ₪": 'Up to 11 M ₪',
+      'Au-delà de 65 M ₪': 'Above 65 M ₪',
+      // Contact form budget ranges
+      'Préfère ne pas dire': 'Prefer not to say',
+      '< 7 M ₪': '< 7 M ₪',
       // Footer (homepage)
       '— LA MAISON': '— THE HOUSE',
       'Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014. Acquisitions et cessions privées sur invitation. Mossi\'a #4218 · FNAIM partenaire · FIABCI.': 'Independent real-estate brokerage, founded in Tel Aviv in 2014. Private acquisitions and disposals by invitation. Mossi\'a #4218 · FNAIM partner · FIABCI.',
@@ -770,6 +775,8 @@
       'Pièces ↓': 'חדרים ↓',
       'Récent': 'אחרונים',
       'Treize biens supplémentaires ne figurent pas ici.': 'שלושה-עשר נכסים נוספים אינם מוצגים כאן.',
+      'bien': 'נכס',
+      'biens': 'נכסים',
       'supplémentaires': 'נוספים',
       'Solliciter le carnet privé →': 'בקשו את הספר הפרטי →',
       'Villa front de mer.': 'וילה על קו החוף.',
@@ -786,8 +793,8 @@
       'Rechercher →': 'חפש →',
       'Indifférent': 'אין העדפה',
       'Tous budgets': 'כל התקציבים',
-      "Jusqu'à $3M": 'עד 3M $',
-      'Au-delà de $18M': 'מעל 18M $',
+      "Jusqu'à 11 M ₪": 'עד 11 M ₪',
+      'Au-delà de 65 M ₪': 'מעל 65 M ₪',
       // Footer (homepage)
       '— LA MAISON': '— הבית',
       'Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014. Acquisitions et cessions privées sur invitation. Mossi\'a #4218 · FNAIM partenaire · FIABCI.': 'סוכנות תיווך נדל"ן עצמאית, נוסדה בתל אביב ב-2014. רכישות ומכירות פרטיות לפי הזמנה. רישיון #4218 · שותף FNAIM · FIABCI.',
@@ -1236,6 +1243,8 @@
       'Pièces ↓': 'Комнат ↓',
       'Récent': 'Недавние',
       'Treize biens supplémentaires ne figurent pas ici.': 'Тринадцать дополнительных объектов не отображаются здесь.',
+      'bien': 'объект',
+      'biens': 'объекта',
       'supplémentaires': 'дополнительных',
       'Solliciter le carnet privé →': 'Запросить частный каталог →',
       'Villa front de mer.': 'Вилла на берегу моря.',
@@ -1252,8 +1261,8 @@
       'Rechercher →': 'Искать →',
       'Indifférent': 'Не важно',
       'Tous budgets': 'Все бюджеты',
-      "Jusqu'à $3M": 'До $3M',
-      'Au-delà de $18M': 'Свыше $18M',
+      "Jusqu'à 11 M ₪": 'До 11 M ₪',
+      'Au-delà de 65 M ₪': 'Свыше 65 M ₪',
       // Footer (homepage)
       '— LA MAISON': '— ДОМ',
       'Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014. Acquisitions et cessions privées sur invitation. Mossi\'a #4218 · FNAIM partenaire · FIABCI.': 'Независимое агентство недвижимости, основано в Тель-Авиве в 2014 году. Частные приобретения и продажи по приглашению. Лицензия #4218 · партнёр FNAIM · FIABCI.',
@@ -1542,33 +1551,26 @@
     const dict = DICT[lang];
     const keys = lang === 'en' ? KEYS_EN : (lang === 'he' ? KEYS_HE : KEYS_RU);
 
-    // Translate text nodes
+    // Translate text nodes.
+    //
+    // Policy (May 2026): translate ONLY on exact match of the trimmed text
+    // node value. We deliberately removed the substring/phrase-fallback
+    // pass because it produced "franglais" artifacts inside untranslated
+    // dynamic content — e.g. a listing description "Cinq pièces au 28ᵉ
+    // étage..." became "Cinq rooms au 28ᵉ étage..." in EN mode because
+    // 'pièces' had a dict entry but the surrounding sentence didn't.
+    //
+    // Trade-off: any string not present verbatim in the dict stays in
+    // French rather than getting partially translated. That's the right
+    // call for brand integrity — half-translated luxury copy reads worse
+    // than honestly untranslated copy. To translate a new string, add it
+    // as a full phrase to DICT.{en,he,ru}.
     snapshot.forEach((origValue, node) => {
       const trimmed = origValue.trim();
       if (!trimmed) return;
-      // Exact match first (most reliable)
       if (dict[trimmed]) {
         node.nodeValue = origValue.replace(trimmed, dict[trimmed]);
-        return;
       }
-      // Fallback: phrase replacement for nodes with mixed content
-      let result = origValue;
-      for (let i = 0; i < keys.length; i++) {
-        const k = keys[i];
-        if (result.indexOf(k) !== -1) {
-          // Short alpha keys (≤ 5 letters) use word boundaries to avoid
-          // corrupting longer words — e.g. without this, 'ans' would
-          // turn "transparent" into "tr<TRANS>parent".
-          if (k.length <= 5 && /^[A-Za-zÀ-ÿ]+$/.test(k)) {
-            const re = new RegExp('\\b' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g');
-            result = result.replace(re, dict[k]);
-          } else {
-            // Use split/join for global replacement without regex special-char risks
-            result = result.split(k).join(dict[k]);
-          }
-        }
-      }
-      if (result !== origValue) node.nodeValue = result;
     });
 
     // Translate attributes

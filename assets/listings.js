@@ -309,9 +309,9 @@
     }
     const filtered = applyFilter(CACHE, FILTER);
     const countEl = document.getElementById('resultCount');
-    const pluralEl = document.getElementById('resultPlural');
+    const nounEl = document.getElementById('resultNoun');
     if (countEl) countEl.textContent = filtered.length;
-    if (pluralEl) pluralEl.textContent = filtered.length > 1 ? 's' : '';
+    if (nounEl) nounEl.textContent = filtered.length > 1 ? 'biens' : 'bien';
 
     const chipsEl = document.getElementById('activeChips');
     if (chipsEl) {
