@@ -214,6 +214,8 @@
 
       // Honoraires
       'Nos honoraires': 'Our fees',
+      'Nos': 'Our',
+      'honoraires.': 'fees.',
       'Transparence et clarté.': 'Transparency and clarity.',
       'Acquisition (côté acheteur)': 'Acquisition (buyer side)',
       'Cession (côté vendeur)': 'Disposal (seller side)',
@@ -442,6 +444,8 @@
       'Retour à l\'accueil': 'Back to home',
       // Legal & 404 page chrome
       "— BARÈME D'HONORAIRES · TRANSPARENT": "— FEE SCHEDULE · TRANSPARENT",
+      '— Barème transparent · MMXXVI': '— Transparent fee schedule · MMXXVI',
+      "Notre grille d'honoraires est publique, dégressive selon le montant de la transaction. Aucun frais caché, aucune facturation supplémentaire — tout est inclus dans le mandat signé.": 'Our fee schedule is public, sliding-scale based on transaction amount. No hidden fees, no extra invoicing — everything is included in the signed mandate.',
       '— MENTIONS LÉGALES': '— LEGAL NOTICE',
       '— POLITIQUE RGPD · CONFORMITÉ EUROPE': '— GDPR POLICY · EU COMPLIANCE',
       '— ERREUR 404 · PAGE INTROUVABLE': '— ERROR 404 · PAGE NOT FOUND',
@@ -652,6 +656,8 @@
 
       // Honoraires
       'Nos honoraires': 'העמלות שלנו',
+      'Nos': 'העמלות',
+      'honoraires.': 'שלנו.',
       'Transparence et clarté.': 'שקיפות ובהירות.',
       'Acquisition (côté acheteur)': 'רכישה (צד קונה)',
       'Cession (côté vendeur)': 'מכירה (צד מוכר)',
@@ -880,6 +886,8 @@
       "Retour à l'accueil": 'חזרה לעמוד הבית',
       // Legal & 404 page chrome
       "— BARÈME D'HONORAIRES · TRANSPARENT": "— תעריפי שירות · שקיפות",
+      '— Barème transparent · MMXXVI': '— תעריף שקוף · MMXXVI',
+      "Notre grille d'honoraires est publique, dégressive selon le montant de la transaction. Aucun frais caché, aucune facturation supplémentaire — tout est inclus dans le mandat signé.": 'תעריפי השירות שלנו פומביים, יורדים בהדרגה לפי גובה העסקה. ללא עלויות חבויות, ללא חיובים נוספים — הכל כלול במנדט החתום.',
       '— MENTIONS LÉGALES': '— תקנון משפטי',
       '— POLITIQUE RGPD · CONFORMITÉ EUROPE': '— מדיניות GDPR · תאימות לאירופה',
       '— ERREUR 404 · PAGE INTROUVABLE': '— שגיאה 404 · הדף לא נמצא',
@@ -1069,6 +1077,8 @@
 
       // Honoraires
       'Nos honoraires': 'Наши гонорары',
+      'Nos': 'Наши',
+      'honoraires.': 'гонорары.',
       'Transparence et clarté.': 'Прозрачность и ясность.',
       'Acquisition (côté acheteur)': 'Приобретение (сторона покупателя)',
       'Cession (côté vendeur)': 'Продажа (сторона продавца)',
@@ -1299,6 +1309,8 @@
       "Retour à l'accueil": 'Вернуться на главную',
       // Legal & 404 page chrome
       "— BARÈME D'HONORAIRES · TRANSPARENT": "— ТАРИФНАЯ СЕТКА · ПРОЗРАЧНОСТЬ",
+      '— Barème transparent · MMXXVI': '— Прозрачная тарифная сетка · MMXXVI',
+      "Notre grille d'honoraires est publique, dégressive selon le montant de la transaction. Aucun frais caché, aucune facturation supplémentaire — tout est inclus dans le mandat signé.": 'Наша тарифная сетка публична, регрессивна в зависимости от суммы сделки. Никаких скрытых платежей, никаких дополнительных счетов — всё включено в подписанный мандат.',
       '— MENTIONS LÉGALES': '— ПРАВОВЫЕ УВЕДОМЛЕНИЯ',
       '— POLITIQUE RGPD · CONFORMITÉ EUROPE': '— ПОЛИТИКА GDPR · СООТВЕТСТВИЕ ЕС',
       '— ERREUR 404 · PAGE INTROUVABLE': '— ОШИБКА 404 · СТРАНИЦА НЕ НАЙДЕНА',
@@ -1415,8 +1427,16 @@
       for (let i = 0; i < keys.length; i++) {
         const k = keys[i];
         if (result.indexOf(k) !== -1) {
-          // Use split/join for global replacement without regex special-char risks
-          result = result.split(k).join(dict[k]);
+          // Short alpha keys (≤ 5 letters) use word boundaries to avoid
+          // corrupting longer words — e.g. without this, 'ans' would
+          // turn "transparent" into "tr<TRANS>parent".
+          if (k.length <= 5 && /^[A-Za-zÀ-ÿ]+$/.test(k)) {
+            const re = new RegExp('\\b' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g');
+            result = result.replace(re, dict[k]);
+          } else {
+            // Use split/join for global replacement without regex special-char risks
+            result = result.split(k).join(dict[k]);
+          }
         }
       }
       if (result !== origValue) node.nodeValue = result;
