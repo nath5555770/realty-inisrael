@@ -35,22 +35,28 @@
     }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
   }
 
-  // Directors render as compact full-image cards (the small layout) — the
-  // inversion is deliberate: advisors take the bigger side-by-side cards
-  // below to highlight the day-to-day relationship.
   function directorBlock(d, isFr) {
     const langs = Array.isArray(d.languages) ? d.languages : [];
     const langsHTML = langs.map(langPill).join('');
     return [
-      '<article class="team-card', isFr ? ' director-card-fr' : '', '">',
-      '  <div class="frame aspect-[4/5] mb-5 overflow-hidden">',
-      '    <img src="', escapeHtml(imageUrl(d.photo_url)), '" alt="', escapeHtml(d.full_name), ' — ', escapeHtml(d.role_label || ''), '" class="w-full h-full object-cover ken-burns">',
+      '<div class="grid grid-cols-12 gap-6 items-start">',
+      '  <div class="col-span-5">',
+      '    <div class="director-frame', isFr ? ' director-frame-fr' : '', '">',
+      '      <div class="frame aspect-[4/5] overflow-hidden">',
+      '        <img src="', escapeHtml(imageUrl(d.photo_url)), '" alt="', escapeHtml(d.full_name), '" class="w-full h-full object-cover ken-burns">',
+      '      </div>',
+      '    </div>',
       '  </div>',
-      '  <div class="cinzel text-[9px] tracking-[0.3em] text-[var(--gold-deep)]">— ', escapeHtml(d.role_label || ''), '</div>',
-      '  <div class="display text-xl mt-1.5" style="color: var(--teal)">', escapeHtml(d.full_name), '</div>',
-      d.bio ? '  <p class="text-[13px] text-[var(--ink-soft)] leading-relaxed mt-2">' + escapeHtml(d.bio) + '</p>' : '',
-      '  <div class="mt-3 flex flex-wrap gap-1">', langsHTML, '</div>',
-      '</article>'
+      '  <div class="col-span-7 pt-3">',
+      '    <div class="cinzel text-[10px] tracking-[0.4em] text-[var(--gold-deep)]">— ', escapeHtml(d.role_label || ''), '</div>',
+      '    <div class="display text-3xl md:text-4xl mt-4" style="color: var(--teal)">',
+      formatNameSplit(d.full_name),
+      '    </div>',
+      '    <div class="hr-gold mt-4 mb-4" style="max-width: 60px"></div>',
+      d.bio ? '    <p class="text-sm leading-relaxed text-[var(--ink-soft)]">' + escapeHtml(d.bio) + '</p>' : '',
+      '    <div class="mt-5 flex flex-wrap gap-1.5">', langsHTML, '</div>',
+      '  </div>',
+      '</div>'
     ].join('');
   }
 
@@ -63,29 +69,18 @@
     return first + ' <span class="display-i text-[var(--gold-deep)]">' + rest + '</span>';
   }
 
-  // Advisors get the bigger side-by-side layout (image + bio side-by-side)
-  // — they're the day-to-day point of contact, so they're highlighted.
   function agentCard(a) {
     const langs = Array.isArray(a.languages) ? a.languages : [];
     const langsHTML = langs.map(langPill).join('');
     return [
-      '<article class="agent-block">',
-      '  <div class="grid grid-cols-12 gap-6 items-start">',
-      '    <div class="col-span-5">',
-      '      <div class="frame aspect-[4/5] overflow-hidden">',
-      '        <img src="', escapeHtml(imageUrl(a.photo_url)), '" alt="', escapeHtml(a.full_name), ' — ', escapeHtml(a.role_label || ''), '" class="w-full h-full object-cover ken-burns">',
-      '      </div>',
-      '    </div>',
-      '    <div class="col-span-7 pt-3">',
-      '      <div class="cinzel text-[10px] tracking-[0.4em] text-[var(--gold-deep)]">— ', escapeHtml(a.role_label || ''), '</div>',
-      '      <div class="display text-2xl md:text-3xl mt-3" style="color: var(--teal)">',
-      formatNameSplit(a.full_name),
-      '      </div>',
-      '      <div class="hr-gold mt-3 mb-3" style="max-width: 60px"></div>',
-      a.bio ? '      <p class="text-sm leading-relaxed text-[var(--ink-soft)]">' + escapeHtml(a.bio) + '</p>' : '',
-      '      <div class="mt-4 flex flex-wrap gap-1.5">', langsHTML, '</div>',
-      '    </div>',
+      '<article class="team-card">',
+      '  <div class="frame aspect-[4/5] mb-6">',
+      '    <img src="', escapeHtml(imageUrl(a.photo_url)), '" alt="', escapeHtml(a.full_name), ' — ', escapeHtml(a.role_label || ''), '">',
       '  </div>',
+      '  <div class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">', escapeHtml(a.role_label || ''), '</div>',
+      '  <div class="display text-2xl mt-2" style="color: var(--teal)">', escapeHtml(a.full_name), '</div>',
+      a.bio ? '  <p class="text-sm text-[var(--ink-soft)] leading-relaxed mt-3">' + escapeHtml(a.bio) + '</p>' : '',
+      '  <div class="mt-4 flex flex-wrap gap-1.5">', langsHTML, '</div>',
       '</article>'
     ].join('');
   }
