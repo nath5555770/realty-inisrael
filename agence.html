@@ -267,8 +267,8 @@
     </div>
 
     <!-- Direction · Loaded dynamically from Supabase team_members where category='director' -->
-    <!-- Directors: 2-col grid, big full-card photos -->
-    <div class="grid md:grid-cols-2 gap-12 md:gap-16 mb-24" id="team-directors">
+    <!-- Directors: 2-col grid capped in a narrower container so each portrait is slightly smaller -->
+    <div class="grid md:grid-cols-2 gap-12 md:gap-16 mb-24 max-w-[1100px] mx-auto" id="team-directors">
       <div class="text-center py-12 text-[var(--muted)] cinzel text-xs tracking-[0.3em] col-span-full">Chargement…</div>
     </div>
     <div id="_team-directors-fallback" hidden>
