@@ -496,14 +496,21 @@
   }
 
   // ------------------------------------------------------------------
-  // FEATURED CAROUSEL — luxury auto-sliding carousel for > 3 featured
+  // FEATURED CAROUSEL — luxury infinite auto-sliding carousel
+  //
+  // Uses the "cloned slides" technique so the loop is truly infinite:
+  //   • The track is built as [tail clones] [real items] [head clones].
+  //   • When the user scrolls past the last real item, the transition
+  //     completes onto the head clones, then we snap (no animation)
+  //     back to the equivalent real position. The user never sees a
+  //     reverse jump.
   // ------------------------------------------------------------------
   function renderFeaturedCarousel(container, items, slotsPerView) {
     container.classList.remove('grid', 'md:grid-cols-3', 'gap-6');
     container.classList.add('featured-carousel');
     container.innerHTML =
       '<div class="featured-viewport">' +
-        '<div class="featured-track">' + items.map(featuredCardHTML).join('') + '</div>' +
+        '<div class="featured-track"></div>' +
       '</div>' +
       '<div class="featured-controls">' +
         '<button class="featured-arrow featured-prev" aria-label="Précédent"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg></button>' +
@@ -515,48 +522,97 @@
     const dotsRoot = container.querySelector('.featured-dots');
     const prevBtn = container.querySelector('.featured-prev');
     const nextBtn = container.querySelector('.featured-next');
-    const cards = Array.from(track.children);
+    const N = items.length;
     let perView = slotsPerView;
-    let idx = 0;
+    // Pad count = how many clones to inject on each side. Always equal to
+    // the largest possible perView we'll ever use, so when perView grows
+    // (e.g. orientation change) the carousel still has enough buffer.
+    const PAD = Math.max(slotsPerView, 3);
+
+    // Build the cloned track: last PAD items + real items + first PAD items.
+    // Logical index 0 maps to actual DOM index PAD (the first real card).
+    function buildClonedHTML() {
+      const tail = items.slice(-PAD);  // last PAD items, cloned at the start
+      const head = items.slice(0, PAD); // first PAD items, cloned at the end
+      const all = tail.concat(items).concat(head);
+      return all.map(featuredCardHTML).join('');
+    }
+    track.innerHTML = buildClonedHTML();
+    let cards = Array.from(track.children); // length = N + 2*PAD
+
+    // logicalIdx ∈ [0, N) — the conceptual "current page" the user sees.
+    // physicalIdx is logicalIdx + PAD — the actual position in the cloned track.
+    let logicalIdx = 0;
     let timer = null;
+    let isAnimating = false;
     const AUTOPLAY_MS = 6000;
 
-    function pages() {
-      // Number of distinct "starting positions" we can slide to.
-      return Math.max(1, cards.length - perView + 1);
+    function setTransition(on) {
+      track.style.transition = on ? '' : 'none';
+    }
+    function applyTransform() {
+      const physical = logicalIdx + PAD;
+      const offsetPct = -(physical * (100 / perView));
+      track.style.transform = 'translateX(' + offsetPct + '%)';
     }
     function rebuildDots() {
       dotsRoot.innerHTML = '';
-      const n = pages();
-      for (let i = 0; i < n; i++) {
+      for (let i = 0; i < N; i++) {
         const b = document.createElement('button');
-        b.className = 'featured-dot' + (i === idx ? ' is-active' : '');
+        b.className = 'featured-dot' + (i === logicalIdx ? ' is-active' : '');
         b.setAttribute('aria-label', 'Aller à la diapo ' + (i + 1));
         b.addEventListener('click', () => { goTo(i, true); });
         dotsRoot.appendChild(b);
       }
     }
     function syncDots() {
-      Array.from(dotsRoot.children).forEach((d, i) => d.classList.toggle('is-active', i === idx));
+      Array.from(dotsRoot.children).forEach((d, i) => d.classList.toggle('is-active', i === ((logicalIdx % N) + N) % N));
     }
-    function applyTransform() {
-      // Each card occupies (100/perView)% of the viewport — translate by idx slots.
-      const offsetPct = -(idx * (100 / perView));
-      track.style.transform = 'translateX(' + offsetPct + '%)';
+    function settleAfterAnim() {
+      // If we landed on a cloned region, snap back into the real range with
+      // no transition so the loop is invisible.
+      let normalized = logicalIdx;
+      if (logicalIdx >= N) normalized = logicalIdx - N;
+      else if (logicalIdx < 0) normalized = logicalIdx + N;
+      if (normalized !== logicalIdx) {
+        logicalIdx = normalized;
+        setTransition(false);
+        applyTransform();
+        // Force reflow so the no-transition transform is committed before re-enabling
+        void track.offsetWidth;
+        setTransition(true);
+      }
+      isAnimating = false;
     }
-    function goTo(i, fromUser) {
-      const n = pages();
-      idx = ((i % n) + n) % n;
+    function goTo(target, fromUser) {
+      if (isAnimating) return;
+      // For dot clicks, target is a logical index 0..N-1. Choose the shortest
+      // direction so dots don't always force a long forward sweep.
+      const cur = ((logicalIdx % N) + N) % N;
+      let delta = target - cur;
+      if (delta > N / 2) delta -= N;
+      if (delta < -N / 2) delta += N;
+      logicalIdx = logicalIdx + delta;
+      isAnimating = true;
+      setTransition(true);
       applyTransform();
       syncDots();
       if (fromUser) restartTimer();
     }
-    function next() { goTo(idx + 1, false); }
-    function prev() { goTo(idx - 1, true); }
-    function startTimer() {
-      stopTimer();
-      timer = setInterval(next, AUTOPLAY_MS);
+    function step(direction, fromUser) {
+      if (isAnimating) return;
+      logicalIdx += direction;
+      isAnimating = true;
+      setTransition(true);
+      applyTransform();
+      syncDots();
+      if (fromUser) restartTimer();
     }
+    track.addEventListener('transitionend', (e) => {
+      if (e.propertyName === 'transform') settleAfterAnim();
+    });
+
+    function startTimer() { stopTimer(); timer = setInterval(() => step(1, false), AUTOPLAY_MS); }
     function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
     function restartTimer() { stopTimer(); startTimer(); }
 
@@ -568,21 +624,20 @@
     }
     function relayout() {
       perView = computePerView();
-      // Set each card's width so perView cards fit in the viewport
-      const gap = 24; // matches gap-6 CSS
-      const card = cards[0];
-      if (card) {
-        const total = container.querySelector('.featured-viewport').clientWidth;
-        const cardW = (total - gap * (perView - 1)) / perView;
-        cards.forEach(c => { c.style.flex = '0 0 ' + cardW + 'px'; });
-      }
-      idx = Math.min(idx, pages() - 1);
+      const gap = 24; // matches gap CSS
+      const total = container.querySelector('.featured-viewport').clientWidth;
+      const cardW = (total - gap * (perView - 1)) / perView;
+      cards.forEach(c => { c.style.flex = '0 0 ' + cardW + 'px'; });
+      logicalIdx = ((logicalIdx % N) + N) % N;
       rebuildDots();
+      setTransition(false);
       applyTransform();
+      void track.offsetWidth;
+      setTransition(true);
     }
 
-    nextBtn.addEventListener('click', () => { next(); restartTimer(); });
-    prevBtn.addEventListener('click', () => { prev(); restartTimer(); });
+    nextBtn.addEventListener('click', () => step(1, true));
+    prevBtn.addEventListener('click', () => step(-1, true));
     container.addEventListener('mouseenter', stopTimer);
     container.addEventListener('mouseleave', startTimer);
     window.addEventListener('resize', () => { relayout(); });
