@@ -103,10 +103,11 @@
   }
 
   function priceLabel(l) {
-    if (l.price_display) return l.price_display;
+    // price_usd is now a shekel amount (column name kept for legacy).
+    // price_display (legacy "$14.8M" strings) is intentionally ignored.
     if (typeof l.price_usd === 'number' && l.price_usd > 0) {
       const m = l.price_usd / 1_000_000;
-      return '$' + (m % 1 === 0 ? m.toFixed(1) : m.toFixed(2)) + 'M';
+      return (m >= 100 ? m.toFixed(0) : m % 1 === 0 ? m.toFixed(1) : m.toFixed(1)) + ' M ₪';
     }
     return '—';
   }
