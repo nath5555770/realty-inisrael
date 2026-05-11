@@ -439,7 +439,18 @@
       'Voir tout': 'View all',
       'Page non trouvée': 'Page not found',
       "La page que vous cherchez n'existe pas ou a été déplacée.": "The page you're looking for doesn't exist or has been moved.",
-      'Retour à l\'accueil': 'Back to home'
+      'Retour à l\'accueil': 'Back to home',
+      // Legal & 404 page chrome
+      "— BARÈME D'HONORAIRES · TRANSPARENT": "— FEE SCHEDULE · TRANSPARENT",
+      '— MENTIONS LÉGALES': '— LEGAL NOTICE',
+      '— POLITIQUE RGPD · CONFORMITÉ EUROPE': '— GDPR POLICY · EU COMPLIANCE',
+      '— ERREUR 404 · PAGE INTROUVABLE': '— ERROR 404 · PAGE NOT FOUND',
+      'Cette pièce': 'This property',
+      "n'est plus": 'is no longer',
+      'au portefeuille.': 'in the portfolio.',
+      "Comme certains biens off-market, cette page a peut-être été retirée de la circulation. Reprenons la visite depuis le début.": 'Like some off-market properties, this page may have been withdrawn. Let us restart the tour from the beginning.',
+      "Retour à l'accueil →": 'Back to home →',
+      'Si le problème persiste, contactez-nous :': 'If the problem persists, contact us:'
     },
 
     he: {
@@ -866,7 +877,18 @@
       'Voir tout': 'הצג הכל',
       'Page non trouvée': 'הדף לא נמצא',
       "La page que vous cherchez n'existe pas ou a été déplacée.": 'הדף שחיפשתם לא קיים או הועבר.',
-      "Retour à l'accueil": 'חזרה לעמוד הבית'
+      "Retour à l'accueil": 'חזרה לעמוד הבית',
+      // Legal & 404 page chrome
+      "— BARÈME D'HONORAIRES · TRANSPARENT": "— תעריפי שירות · שקיפות",
+      '— MENTIONS LÉGALES': '— תקנון משפטי',
+      '— POLITIQUE RGPD · CONFORMITÉ EUROPE': '— מדיניות GDPR · תאימות לאירופה',
+      '— ERREUR 404 · PAGE INTROUVABLE': '— שגיאה 404 · הדף לא נמצא',
+      'Cette pièce': 'נכס זה',
+      "n'est plus": 'אינו עוד',
+      'au portefeuille.': 'בתיק.',
+      "Comme certains biens off-market, cette page a peut-être été retirée de la circulation. Reprenons la visite depuis le début.": 'כמו חלק מהנכסים off-market, ייתכן שהדף הזה הוסר. נתחיל מחדש את הסיור.',
+      "Retour à l'accueil →": 'חזרה לעמוד הבית →',
+      'Si le problème persiste, contactez-nous :': 'אם הבעיה נמשכת, צרו קשר :'
     },
 
     ru: {
@@ -1274,7 +1296,18 @@
       'Voir tout': 'Смотреть всё',
       'Page non trouvée': 'Страница не найдена',
       "La page que vous cherchez n'existe pas ou a été déplacée.": 'Страница, которую вы ищете, не существует или была перемещена.',
-      "Retour à l'accueil": 'Вернуться на главную'
+      "Retour à l'accueil": 'Вернуться на главную',
+      // Legal & 404 page chrome
+      "— BARÈME D'HONORAIRES · TRANSPARENT": "— ТАРИФНАЯ СЕТКА · ПРОЗРАЧНОСТЬ",
+      '— MENTIONS LÉGALES': '— ПРАВОВЫЕ УВЕДОМЛЕНИЯ',
+      '— POLITIQUE RGPD · CONFORMITÉ EUROPE': '— ПОЛИТИКА GDPR · СООТВЕТСТВИЕ ЕС',
+      '— ERREUR 404 · PAGE INTROUVABLE': '— ОШИБКА 404 · СТРАНИЦА НЕ НАЙДЕНА',
+      'Cette pièce': 'Этот объект',
+      "n'est plus": 'больше не',
+      'au portefeuille.': 'в портфолио.',
+      "Comme certains biens off-market, cette page a peut-être été retirée de la circulation. Reprenons la visite depuis le début.": 'Как и некоторые off-market объекты, эта страница, возможно, была изъята. Начнём осмотр сначала.',
+      "Retour à l'accueil →": 'Вернуться на главную →',
+      'Si le problème persiste, contactez-nous :': 'Если проблема не устранена, свяжитесь с нами :'
     }
   };
 
