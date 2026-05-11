@@ -449,38 +449,147 @@
   // ------------------------------------------------------------------
   // FEATURED HOME RENDERER
   // ------------------------------------------------------------------
+  function featuredCardHTML(l) {
+    const img = imageUrl(l.image);
+    return [
+      '<article class="estate featured-card">',
+      '  <div class="frame aspect-[4/5] mb-5">',
+      '    <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
+      '    <div class="ref-tag">', (l.signature ? '★ ' : ''), escapeHtml(l.ref || ''), '</div>',
+      '  </div>',
+      '  <div class="label-teal">', cityLabel(l.city), ' · ', escapeHtml((l.neighborhood || '').toUpperCase()), '</div>',
+      '  <h3 class="display text-3xl mt-3 leading-tight">', escapeHtml(l.title_main), ' <span class="display-i text-[var(--gold-deep)]">', escapeHtml(l.title_accent || ''), '</span></h3>',
+      '  <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtml(l.description || ''), '</p>',
+      '  <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">',
+      '    <span class="label !tracking-[0.2em]">', escapeHtml(l.rooms || ''), l.extra_label ? ' · ' + escapeHtml(l.extra_label) : '', '</span>',
+      '    <span class="display text-2xl text-[var(--teal)]">', escapeHtml(priceLabel(l)), '</span>',
+      '  </div>',
+      '</article>'
+    ].join('');
+  }
+
   function renderFeatured(container, count) {
     return load().then(rows => {
       count = count || 3;
       let featured = rows.filter(l => l.featured === true);
+      // If too few are flagged featured, top up with non-featured to keep the
+      // section visually full — but the carousel mode below only triggers on
+      // the truly featured count, not the padded one.
+      const trulyFeaturedCount = featured.length;
       if (featured.length < count) {
         const extras = rows.filter(l => !l.featured).slice(0, count - featured.length);
         featured = featured.concat(extras);
       }
-      featured = featured.slice(0, count);
 
-      const html = featured.map(l => {
-        const img = imageUrl(l.image);
-        return [
-          '<article class="estate">',
-          '  <div class="frame aspect-[4/5] mb-5">',
-          '    <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
-          '    <div class="ref-tag">', (l.signature ? '★ ' : ''), escapeHtml(l.ref || ''), '</div>',
-          '  </div>',
-          '  <div class="label-teal">', cityLabel(l.city), ' · ', escapeHtml((l.neighborhood || '').toUpperCase()), '</div>',
-          '  <h3 class="display text-3xl mt-3 leading-tight">', escapeHtml(l.title_main), ' <span class="display-i text-[var(--gold-deep)]">', escapeHtml(l.title_accent || ''), '</span></h3>',
-          '  <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtml(l.description || ''), '</p>',
-          '  <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">',
-          '    <span class="label !tracking-[0.2em]">', escapeHtml(l.rooms || ''), l.extra_label ? ' · ' + escapeHtml(l.extra_label) : '', '</span>',
-          '    <span class="display text-2xl text-[var(--teal)]">', escapeHtml(priceLabel(l)), '</span>',
-          '  </div>',
-          '</article>'
-        ].join('');
-      }).join('');
-
-      container.innerHTML = html;
+      // Carousel mode kicks in when the user has flagged MORE than the static
+      // slot count (count = 3 by default). Below that we render the classic
+      // static grid (no carousel chrome, no auto-play, no chevrons).
+      const useCarousel = trulyFeaturedCount > count;
+      if (useCarousel) {
+        renderFeaturedCarousel(container, featured.slice(0, trulyFeaturedCount), count);
+      } else {
+        container.classList.remove('featured-carousel');
+        container.classList.add('grid', 'md:grid-cols-3', 'gap-6');
+        container.innerHTML = featured.slice(0, count).map(featuredCardHTML).join('');
+      }
       if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
     }).catch(e => console.error('[featured] failed:', e));
+  }
+
+  // ------------------------------------------------------------------
+  // FEATURED CAROUSEL — luxury auto-sliding carousel for > 3 featured
+  // ------------------------------------------------------------------
+  function renderFeaturedCarousel(container, items, slotsPerView) {
+    container.classList.remove('grid', 'md:grid-cols-3', 'gap-6');
+    container.classList.add('featured-carousel');
+    container.innerHTML =
+      '<div class="featured-viewport">' +
+        '<div class="featured-track">' + items.map(featuredCardHTML).join('') + '</div>' +
+      '</div>' +
+      '<div class="featured-controls">' +
+        '<button class="featured-arrow featured-prev" aria-label="Précédent"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg></button>' +
+        '<div class="featured-dots"></div>' +
+        '<button class="featured-arrow featured-next" aria-label="Suivant"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"/></svg></button>' +
+      '</div>';
+
+    const track = container.querySelector('.featured-track');
+    const dotsRoot = container.querySelector('.featured-dots');
+    const prevBtn = container.querySelector('.featured-prev');
+    const nextBtn = container.querySelector('.featured-next');
+    const cards = Array.from(track.children);
+    let perView = slotsPerView;
+    let idx = 0;
+    let timer = null;
+    const AUTOPLAY_MS = 6000;
+
+    function pages() {
+      // Number of distinct "starting positions" we can slide to.
+      return Math.max(1, cards.length - perView + 1);
+    }
+    function rebuildDots() {
+      dotsRoot.innerHTML = '';
+      const n = pages();
+      for (let i = 0; i < n; i++) {
+        const b = document.createElement('button');
+        b.className = 'featured-dot' + (i === idx ? ' is-active' : '');
+        b.setAttribute('aria-label', 'Aller à la diapo ' + (i + 1));
+        b.addEventListener('click', () => { goTo(i, true); });
+        dotsRoot.appendChild(b);
+      }
+    }
+    function syncDots() {
+      Array.from(dotsRoot.children).forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    }
+    function applyTransform() {
+      // Each card occupies (100/perView)% of the viewport — translate by idx slots.
+      const offsetPct = -(idx * (100 / perView));
+      track.style.transform = 'translateX(' + offsetPct + '%)';
+    }
+    function goTo(i, fromUser) {
+      const n = pages();
+      idx = ((i % n) + n) % n;
+      applyTransform();
+      syncDots();
+      if (fromUser) restartTimer();
+    }
+    function next() { goTo(idx + 1, false); }
+    function prev() { goTo(idx - 1, true); }
+    function startTimer() {
+      stopTimer();
+      timer = setInterval(next, AUTOPLAY_MS);
+    }
+    function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+    function restartTimer() { stopTimer(); startTimer(); }
+
+    function computePerView() {
+      const w = container.clientWidth;
+      if (w < 640) return 1;
+      if (w < 960) return 2;
+      return slotsPerView;
+    }
+    function relayout() {
+      perView = computePerView();
+      // Set each card's width so perView cards fit in the viewport
+      const gap = 24; // matches gap-6 CSS
+      const card = cards[0];
+      if (card) {
+        const total = container.querySelector('.featured-viewport').clientWidth;
+        const cardW = (total - gap * (perView - 1)) / perView;
+        cards.forEach(c => { c.style.flex = '0 0 ' + cardW + 'px'; });
+      }
+      idx = Math.min(idx, pages() - 1);
+      rebuildDots();
+      applyTransform();
+    }
+
+    nextBtn.addEventListener('click', () => { next(); restartTimer(); });
+    prevBtn.addEventListener('click', () => { prev(); restartTimer(); });
+    container.addEventListener('mouseenter', stopTimer);
+    container.addEventListener('mouseleave', startTimer);
+    window.addEventListener('resize', () => { relayout(); });
+
+    relayout();
+    startTimer();
   }
 
   // ------------------------------------------------------------------

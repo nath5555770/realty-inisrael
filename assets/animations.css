@@ -516,4 +516,79 @@ html[dir="rtl"] .arrow-before::before { content: '←'; }
 /* Hide floating WA on the admin pages (clean UI) */
 body.admin-page .floating-wa { display: none; }
 
+/* ==========================================================================
+   FEATURED CAROUSEL — gold-trimmed sliding carousel on the homepage when
+   more than 3 listings are flagged À la une. Quiet motion, big breathing
+   room, no jank. Auto-plays every 6s, pauses on hover, arrows + dots.
+   ========================================================================== */
+.featured-carousel {
+  display: block;
+  position: relative;
+}
+.featured-carousel .featured-viewport {
+  overflow: hidden;
+  padding: 4px 2px; /* lets card shadows breathe without clipping */
+}
+.featured-carousel .featured-track {
+  display: flex;
+  gap: 24px;
+  transition: transform 1.1s cubic-bezier(0.65, 0, 0.35, 1);
+  will-change: transform;
+}
+.featured-carousel .featured-card {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+.featured-carousel .featured-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  margin-top: 2.5rem;
+}
+.featured-carousel .featured-arrow {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--gold-deep);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.2, 0.85, 0.2, 1);
+  border-radius: 0;
+  padding: 0;
+}
+.featured-carousel .featured-arrow:hover {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--gold);
+  transform: scale(1.06);
+}
+.featured-carousel .featured-arrow svg { display: block; }
+.featured-carousel .featured-dots {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+}
+.featured-carousel .featured-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--gold-deep);
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.2, 0.85, 0.2, 1);
+}
+.featured-carousel .featured-dot:hover { background: var(--gold-deep); }
+.featured-carousel .featured-dot.is-active {
+  width: 28px;
+  border-radius: 4px;
+  background: var(--gold-deep);
+}
+@media (prefers-reduced-motion: reduce) {
+  .featured-carousel .featured-track { transition: none; }
+}
 
