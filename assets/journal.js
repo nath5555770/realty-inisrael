@@ -23,7 +23,10 @@
     if (!iso) return '';
     try {
       const d = new Date(iso);
-      return d.toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' }).toUpperCase();
+      let lang = 'fr';
+      try { lang = localStorage.getItem('sl-lang') || 'fr'; } catch (_) {}
+      const locale = { fr: 'fr-FR', en: 'en-US', he: 'he-IL', ru: 'ru-RU' }[lang] || 'fr-FR';
+      return d.toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' }).toUpperCase();
     } catch (_) { return ''; }
   }
   function categoryLabel(cat) {

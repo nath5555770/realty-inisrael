@@ -301,6 +301,19 @@
       'BIENS': 'PROPERTIES',
 
       // Journal — article cards & modal
+      // Journal — page chrome
+      '— LE JOURNAL · ANALYSES, CONSEILS, REPORTAGES': '— THE JOURNAL · ANALYSES, ADVICE, REPORTS',
+      '— LE JOURNAL · MMXXVI': '— THE JOURNAL · MMXXVI',
+      'Analyses, conseils,': 'Analyses, advice,',
+      'reportages.': 'reports.',
+      "Quarante-sept articles publiés depuis 2019 — sur l'immobilier israélien, l'aliyah, la fiscalité FR/IL, les quartiers, les notaires. Des analyses honnêtes, jamais commerciales.": "Forty-seven articles published since 2019 — on Israeli real estate, aliyah, FR/IL taxation, neighborhoods, notaries. Honest analyses, never commercial.",
+      '— THÈMES': '— THEMES',
+      'Tous': 'All',
+      'Fiscalité': 'Taxation',
+      'Notarial': 'Notarial',
+      'Quartiers': 'Neighborhoods',
+      'Recevoir le journal': 'Receive the journal',
+      'avant publication.': 'before publication.',
       '★ À LA UNE · MARCHÉ': '★ FEATURED · MARKET',
       '★ À LA UNE · ALIYAH': '★ FEATURED · ALIYAH',
       '★ À LA UNE · PATRIMOINE': '★ FEATURED · WEALTH',
@@ -650,6 +663,19 @@
       'BIENS': 'נכסים',
 
       // Journal — article cards & modal
+      // Journal — page chrome
+      '— LE JOURNAL · ANALYSES, CONSEILS, REPORTAGES': '— הז׳ורנל · ניתוחים, ייעוץ, כתבות',
+      '— LE JOURNAL · MMXXVI': '— הז׳ורנל · MMXXVI',
+      'Analyses, conseils,': 'ניתוחים, ייעוץ,',
+      'reportages.': 'כתבות.',
+      "Quarante-sept articles publiés depuis 2019 — sur l'immobilier israélien, l'aliyah, la fiscalité FR/IL, les quartiers, les notaires. Des analyses honnêtes, jamais commerciales.": 'ארבעים ושבע כתבות שפורסמו מאז 2019 — על נדל״ן ישראלי, עלייה, מיסוי צרפת/ישראל, השכונות, הנוטריונים. ניתוחים כנים, לעולם לא מסחריים.',
+      '— THÈMES': '— נושאים',
+      'Tous': 'הכל',
+      'Fiscalité': 'מיסוי',
+      'Notarial': 'נוטריון',
+      'Quartiers': 'שכונות',
+      'Recevoir le journal': 'לקבל את הז׳ורנל',
+      'avant publication.': 'לפני הפרסום.',
       '★ À LA UNE · MARCHÉ': '★ מובחר · שוק',
       '★ À LA UNE · ALIYAH': '★ מובחר · עלייה',
       '★ À LA UNE · PATRIMOINE': '★ מובחר · נכסים',
@@ -980,6 +1006,19 @@
       'BIENS': 'ОБЪЕКТОВ',
 
       // Journal — article cards & modal
+      // Journal — page chrome
+      '— LE JOURNAL · ANALYSES, CONSEILS, REPORTAGES': '— ЖУРНАЛ · АНАЛИЗ, СОВЕТЫ, РЕПОРТАЖИ',
+      '— LE JOURNAL · MMXXVI': '— ЖУРНАЛ · MMXXVI',
+      'Analyses, conseils,': 'Анализ, советы,',
+      'reportages.': 'репортажи.',
+      "Quarante-sept articles publiés depuis 2019 — sur l'immobilier israélien, l'aliyah, la fiscalité FR/IL, les quartiers, les notaires. Des analyses honnêtes, jamais commerciales.": 'Сорок семь статей опубликовано с 2019 года — об израильской недвижимости, алии, налогообложении FR/IL, районах, нотариусах. Честный анализ, никогда не коммерческий.',
+      '— THÈMES': '— ТЕМЫ',
+      'Tous': 'Все',
+      'Fiscalité': 'Налогообложение',
+      'Notarial': 'Нотариат',
+      'Quartiers': 'Районы',
+      'Recevoir le journal': 'Получать журнал',
+      'avant publication.': 'до публикации.',
       '★ À LA UNE · MARCHÉ': '★ В ФОКУСЕ · РЫНОК',
       '★ À LA UNE · ALIYAH': '★ В ФОКУСЕ · АЛИЯ',
       '★ À LA UNE · PATRIMOINE': '★ В ФОКУСЕ · ИМУЩЕСТВО',
