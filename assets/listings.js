@@ -471,26 +471,25 @@
   function renderFeatured(container, count) {
     return load().then(rows => {
       count = count || 3;
-      let featured = rows.filter(l => l.featured === true);
-      // If too few are flagged featured, top up with non-featured to keep the
-      // section visually full — but the carousel mode below only triggers on
-      // the truly featured count, not the padded one.
-      const trulyFeaturedCount = featured.length;
-      if (featured.length < count) {
-        const extras = rows.filter(l => !l.featured).slice(0, count - featured.length);
-        featured = featured.concat(extras);
-      }
+      const featured = rows.filter(l => l.featured === true);
 
-      // Carousel mode kicks in when the user has flagged MORE than the static
-      // slot count (count = 3 by default). Below that we render the classic
-      // static grid (no carousel chrome, no auto-play, no chevrons).
-      const useCarousel = trulyFeaturedCount > count;
-      if (useCarousel) {
-        renderFeaturedCarousel(container, featured.slice(0, trulyFeaturedCount), count);
+      // No artificial padding: the section honestly reflects what's flagged À la une.
+      // 0 featured → hide the wrapping section so we don't ship empty chrome.
+      // 1–3 featured → static grid (1, 2 or 3 cards naturally).
+      // 4+ featured → luxury carousel kicks in.
+      const wrapper = container.closest('section');
+      if (!featured.length) {
+        if (wrapper) wrapper.hidden = true;
+        return;
+      }
+      if (wrapper) wrapper.hidden = false;
+
+      if (featured.length > count) {
+        renderFeaturedCarousel(container, featured, count);
       } else {
         container.classList.remove('featured-carousel');
         container.classList.add('grid', 'md:grid-cols-3', 'gap-6');
-        container.innerHTML = featured.slice(0, count).map(featuredCardHTML).join('');
+        container.innerHTML = featured.map(featuredCardHTML).join('');
       }
       if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
     }).catch(e => console.error('[featured] failed:', e));
