@@ -167,6 +167,7 @@
       if (!rows.length) {
         if (featured) featured.innerHTML = '<div class="text-center py-20 text-[var(--muted)] cinzel text-xs tracking-[0.3em]">Aucun article publié pour le moment.</div>';
         if (grid) grid.innerHTML = '';
+        if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
         return;
       }
       const top = rows[0];
@@ -175,6 +176,8 @@
       if (grid) grid.innerHTML = others.map(cardHTML).join('');
       const ctaWrap = document.getElementById('journal-cta-wrap');
       if (ctaWrap) ctaWrap.hidden = false;
+      // Re-apply current language to translate dynamically inserted static labels
+      if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
 
       // Wire "Lire" links to open the modal
       const all = [top].concat(others);
@@ -195,6 +198,7 @@
     }).catch(e => {
       console.error('[journal]', e);
       if (featured) featured.innerHTML = '<div class="text-center py-20 text-[var(--muted)]">Impossible de charger les articles.</div>';
+      if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
     });
   }
 

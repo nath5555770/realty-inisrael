@@ -108,9 +108,12 @@
         rows.forEach(r => (r.languages || []).forEach(l => langSet.add(l.code)));
         introRoot.innerHTML = '<span>' + total + ' visages, ' + langSet.size + ' langues</span>';
       }
+      // Re-apply current language to translate dynamically inserted labels
+      if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
     }).catch(e => {
       console.error('[agency]', e);
       if (directorsRoot) directorsRoot.innerHTML = '<div class="text-center py-12 text-[var(--muted)]">Impossible de charger l\'équipe.</div>';
+      if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
     });
   }
 
