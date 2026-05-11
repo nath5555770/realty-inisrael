@@ -35,28 +35,24 @@
     }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
   }
 
+  // Directors render as big full-card portraits (image dominates, name + bio
+  // below). 2-column grid below means each photo takes ~half the page width.
   function directorBlock(d, isFr) {
     const langs = Array.isArray(d.languages) ? d.languages : [];
     const langsHTML = langs.map(langPill).join('');
     return [
-      '<div class="grid grid-cols-12 gap-6 items-start">',
-      '  <div class="col-span-5">',
-      '    <div class="director-frame', isFr ? ' director-frame-fr' : '', '">',
-      '      <div class="frame aspect-[4/5] overflow-hidden">',
-      '        <img src="', escapeHtml(imageUrl(d.photo_url)), '" alt="', escapeHtml(d.full_name), '" class="w-full h-full object-cover ken-burns">',
-      '      </div>',
-      '    </div>',
+      '<article class="team-card director-card', isFr ? ' director-card-fr' : '', '">',
+      '  <div class="frame aspect-[4/5] mb-6 overflow-hidden">',
+      '    <img src="', escapeHtml(imageUrl(d.photo_url)), '" alt="', escapeHtml(d.full_name), ' — ', escapeHtml(d.role_label || ''), '" class="w-full h-full object-cover ken-burns">',
       '  </div>',
-      '  <div class="col-span-7 pt-3">',
-      '    <div class="cinzel text-[10px] tracking-[0.4em] text-[var(--gold-deep)]">— ', escapeHtml(d.role_label || ''), '</div>',
-      '    <div class="display text-3xl md:text-4xl mt-4" style="color: var(--teal)">',
+      '  <div class="cinzel text-[10px] tracking-[0.4em] text-[var(--gold-deep)]">— ', escapeHtml(d.role_label || ''), '</div>',
+      '  <div class="display text-3xl md:text-4xl mt-3" style="color: var(--teal)">',
       formatNameSplit(d.full_name),
-      '    </div>',
-      '    <div class="hr-gold mt-4 mb-4" style="max-width: 60px"></div>',
-      d.bio ? '    <p class="text-sm leading-relaxed text-[var(--ink-soft)]">' + escapeHtml(d.bio) + '</p>' : '',
-      '    <div class="mt-5 flex flex-wrap gap-1.5">', langsHTML, '</div>',
       '  </div>',
-      '</div>'
+      '  <div class="hr-gold mt-4 mb-4" style="max-width: 60px"></div>',
+      d.bio ? '  <p class="text-sm leading-relaxed text-[var(--ink-soft)]">' + escapeHtml(d.bio) + '</p>' : '',
+      '  <div class="mt-5 flex flex-wrap gap-1.5">', langsHTML, '</div>',
+      '</article>'
     ].join('');
   }
 
@@ -69,18 +65,20 @@
     return first + ' <span class="display-i text-[var(--gold-deep)]">' + rest + '</span>';
   }
 
+  // Advisors render in a 4-column grid → smaller photos than the 2-column
+  // directors above. Compact typography keeps the cards balanced.
   function agentCard(a) {
     const langs = Array.isArray(a.languages) ? a.languages : [];
     const langsHTML = langs.map(langPill).join('');
     return [
       '<article class="team-card">',
-      '  <div class="frame aspect-[4/5] mb-6">',
+      '  <div class="frame aspect-[4/5] mb-5">',
       '    <img src="', escapeHtml(imageUrl(a.photo_url)), '" alt="', escapeHtml(a.full_name), ' — ', escapeHtml(a.role_label || ''), '">',
       '  </div>',
-      '  <div class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">', escapeHtml(a.role_label || ''), '</div>',
-      '  <div class="display text-2xl mt-2" style="color: var(--teal)">', escapeHtml(a.full_name), '</div>',
-      a.bio ? '  <p class="text-sm text-[var(--ink-soft)] leading-relaxed mt-3">' + escapeHtml(a.bio) + '</p>' : '',
-      '  <div class="mt-4 flex flex-wrap gap-1.5">', langsHTML, '</div>',
+      '  <div class="cinzel text-[9px] tracking-[0.3em] text-[var(--gold-deep)]">', escapeHtml(a.role_label || ''), '</div>',
+      '  <div class="display text-xl mt-1.5" style="color: var(--teal)">', escapeHtml(a.full_name), '</div>',
+      a.bio ? '  <p class="text-[13px] text-[var(--ink-soft)] leading-relaxed mt-2">' + escapeHtml(a.bio) + '</p>' : '',
+      '  <div class="mt-3 flex flex-wrap gap-1">', langsHTML, '</div>',
       '</article>'
     ].join('');
   }
