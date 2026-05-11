@@ -257,6 +257,15 @@
       '— Solliciter le cabinet': '— Request the firm',
       'Envoyer la demande →': 'Send request →',
 
+      // Section tabs + property kind filter
+      '— Tout': '— All',
+      'À vendre': 'For sale',
+      'À louer': 'For rent',
+      '— Type de bien': '— Property kind',
+      'Neuf': 'New build',
+      'Occasion': 'Resale',
+      'Projet': 'Project',
+      'Local commercial': 'Commercial',
       // Portefeuille
       'Dix-neuf pièces': 'Nineteen properties',
       'à céder discrètement.': 'to be transferred discreetly.',
@@ -727,6 +736,15 @@
       '— Solliciter le cabinet': '— ליצור קשר עם הקבינט',
       'Envoyer la demande →': 'שלחו את הבקשה →',
 
+      // Section tabs + property kind filter
+      '— Tout': '— הכל',
+      'À vendre': 'למכירה',
+      'À louer': 'להשכרה',
+      '— Type de bien': '— סוג הנכס',
+      'Neuf': 'חדש',
+      'Occasion': 'יד שנייה',
+      'Projet': 'פרויקט',
+      'Local commercial': 'מסחרי',
       // Portefeuille
       'Dix-neuf pièces': 'תשעה-עשר נכסים',
       'à céder discrètement.': 'להעברה בדיסקרטיות.',
@@ -1178,6 +1196,15 @@
       '— Solliciter le cabinet': '— Запросить кабинет',
       'Envoyer la demande →': 'Отправить запрос →',
 
+      // Section tabs + property kind filter
+      '— Tout': '— Всё',
+      'À vendre': 'Продажа',
+      'À louer': 'Аренда',
+      '— Type de bien': '— Тип объекта',
+      'Neuf': 'Новостройка',
+      'Occasion': 'Вторичка',
+      'Projet': 'Проект',
+      'Local commercial': 'Коммерческое',
       // Portefeuille
       'Dix-neuf pièces': 'Девятнадцать объектов',
       'à céder discrètement.': 'к передаче в дискретности.',

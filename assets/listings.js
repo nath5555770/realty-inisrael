@@ -17,7 +17,9 @@
   const FILTER_DEFAULTS = {
     q: '',                 // free-text search
     city: '',              // city slug
-    type: '',              // type slug
+    type: '',              // type slug (appartement/penthouse/villa/loft/maison)
+    kind: '',              // property kind (neuf/occasion/projet/commercial)
+    deal: '',              // transaction type (sale/rent) — '' = both
     min_p: 0,              // min price in USD
     max_p: 0,              // max price in USD (0 = unlimited)
     min_r: 0,              // min number of rooms
@@ -144,6 +146,8 @@
     }
     if (f.city) r = r.filter(l => l.city === f.city);
     if (f.type) r = r.filter(l => l.type === f.type);
+    if (f.kind) r = r.filter(l => (l.kind || 'occasion') === f.kind);
+    if (f.deal) r = r.filter(l => (l.deal || 'sale') === f.deal);
     if (f.min_p) r = r.filter(l => (l.price_usd || 0) >= f.min_p);
     if (f.max_p) r = r.filter(l => (l.price_usd || 0) <= f.max_p);
     if (f.min_r) r = r.filter(l => parseFirstNumber(l.rooms) >= f.min_r);
@@ -172,14 +176,23 @@
     const refTag = (l.signature ? '★ ' : '') + (l.ref || '');
     const heart = '<button class="like-btn" aria-label="Favori"><svg width="' + (big ? 18 : 16) + '" height="' + (big ? 18 : 16) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>';
     const img = imageUrl(l.image);
+    // Deal & kind tags (À louer / Neuf / Projet / Local commercial). Surfaced as
+    // small chips because they materially change what the listing is about.
+    const dealTag = (l.deal === 'rent')
+      ? '<div class="deal-chip deal-chip-rent">À louer</div>'
+      : '';
+    const kindTag = (l.kind && l.kind !== 'occasion')
+      ? '<div class="kind-chip">' + escapeHtml(({ neuf: 'Neuf', projet: 'Projet', commercial: 'Local commercial' })[l.kind] || l.kind) + '</div>'
+      : '';
 
     if (big) {
       return [
-        '<article class="estate mb-16" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-ref="', escapeHtml(l.ref), '">',
+        '<article class="estate mb-16" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-kind="', escapeHtml(l.kind || ''), '" data-deal="', escapeHtml(l.deal || ''), '" data-ref="', escapeHtml(l.ref), '">',
         '  <div class="grid md:grid-cols-12 gap-10 items-center">',
         '    <div class="md:col-span-7 frame aspect-[16/10]">',
         '      <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
         '      <div class="ref-tag">', escapeHtml(refTag), (l.signature ? ' · PIÈCE SIGNATURE' : ''), '</div>',
+        dealTag, kindTag,
         heart,
         '    </div>',
         '    <div class="md:col-span-5">',
@@ -208,10 +221,11 @@
     }
 
     return [
-      '<article class="estate" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-ref="', escapeHtml(l.ref), '">',
+      '<article class="estate" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-kind="', escapeHtml(l.kind || ''), '" data-deal="', escapeHtml(l.deal || ''), '" data-ref="', escapeHtml(l.ref), '">',
       '  <div class="frame aspect-[4/5] mb-5">',
       '    <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
       '    <div class="ref-tag">', escapeHtml(refTag), '</div>',
+      dealTag, kindTag,
       heart,
       '  </div>',
       '  <div>',
@@ -234,6 +248,8 @@
     const chips = [];
     if (f.q) chips.push({ key: 'q', label: '« ' + f.q + ' »' });
     if (f.city) chips.push({ key: 'city', label: cityHuman(f.city) });
+    if (f.kind) chips.push({ key: 'kind', label: ({ neuf: 'Neuf', occasion: 'Occasion', projet: 'Projet', commercial: 'Local commercial' })[f.kind] || f.kind });
+    if (f.deal) chips.push({ key: 'deal', label: f.deal === 'rent' ? 'À louer' : 'À vendre' });
     if (f.type) chips.push({ key: 'type', label: typeHuman(f.type) });
     if (f.min_p && f.max_p) chips.push({ key: 'price', label: fmtUSD(f.min_p) + '—' + fmtUSD(f.max_p) });
     else if (f.min_p) chips.push({ key: 'price', label: '> ' + fmtUSD(f.min_p) });
@@ -255,6 +271,8 @@
   function clearChip(key) {
     if (key === 'q') FILTER.q = '';
     else if (key === 'city') FILTER.city = '';
+    else if (key === 'kind') FILTER.kind = '';
+    else if (key === 'deal') FILTER.deal = '';
     else if (key === 'type') FILTER.type = '';
     else if (key === 'price') { FILTER.min_p = 0; FILTER.max_p = 0; }
     else if (key === 'surface') { FILTER.min_s = 0; FILTER.max_s = 0; }
@@ -333,6 +351,7 @@
     const get = id => document.getElementById(id);
     const q = get('searchQ'); if (q) FILTER.q = q.value || '';
     const city = get('searchCity'); if (city) FILTER.city = city.value || '';
+    const kind = get('searchKind'); if (kind) FILTER.kind = kind.value || '';
     const type = get('searchType'); if (type) FILTER.type = type.value || '';
     const rooms = get('searchRooms'); if (rooms) FILTER.min_r = parseInt(rooms.value || '0', 10) || 0;
     const price = get('searchPrice');
@@ -356,8 +375,14 @@
     const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = (v || v === 0) ? v : ''; };
     set('searchQ', FILTER.q);
     set('searchCity', FILTER.city);
+    set('searchKind', FILTER.kind);
     set('searchType', FILTER.type);
     set('searchRooms', FILTER.min_r || '');
+    // Deal tabs (segmented buttons)
+    document.querySelectorAll('.deal-tab').forEach(tab => {
+      const dealVal = tab.getAttribute('data-deal') || '';
+      tab.classList.toggle('is-active', dealVal === (FILTER.deal || ''));
+    });
     // Price uses a range key like "5000000-10000000"
     const priceEl = document.getElementById('searchPrice');
     if (priceEl) {
@@ -388,13 +413,22 @@
   // WIRE FORM
   // ------------------------------------------------------------------
   function wireSearchForm() {
-    const ids = ['searchQ', 'searchCity', 'searchType', 'searchRooms', 'searchPrice',
+    const ids = ['searchQ', 'searchCity', 'searchKind', 'searchType', 'searchRooms', 'searchPrice',
                  'surfaceMin', 'surfaceMax', 'sigOnly', 'feaOnly', 'sortBy'];
     ids.forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       const evt = (el.tagName === 'INPUT' && (el.type === 'text' || el.type === 'search' || el.type === 'number')) ? 'input' : 'change';
       el.addEventListener(evt, () => { syncFilterFromForm(); rerender(); });
+    });
+
+    // Deal-tabs: segmented "À vendre / À louer / Tout"
+    document.querySelectorAll('.deal-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        FILTER.deal = tab.getAttribute('data-deal') || '';
+        document.querySelectorAll('.deal-tab').forEach(t => t.classList.toggle('is-active', t === tab));
+        rerender();
+      });
     });
 
     const reset = document.getElementById('resetBtn');

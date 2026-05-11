@@ -252,13 +252,15 @@
     STATE.pendingListingFile = null;
     const isNew = idx === 'new';
     const l = isNew
-      ? { city: 'tel-aviv', type: 'appartement', visible: true, featured: false, signature: false, off_market: false }
+      ? { city: 'tel-aviv', type: 'appartement', kind: 'occasion', deal: 'sale', visible: true, featured: false, signature: false, off_market: false }
       : STATE.listings[idx];
     $('#editorTitle').textContent = isNew ? 'Nouvelle annonce' : 'Modifier · ' + (l.ref || '');
     $('#deleteBtn').hidden = isNew;
     $('#fRef').value = l.ref || '';
     $('#fCity').value = l.city || 'tel-aviv';
     $('#fType').value = l.type || 'appartement';
+    $('#fKind').value = l.kind || 'occasion';
+    $('#fDeal').value = l.deal || 'sale';
     $('#fNeighborhood').value = l.neighborhood || '';
     $('#fTitleMain').value = l.title_main || '';
     $('#fTitleAccent').value = l.title_accent || '';
@@ -302,6 +304,8 @@
     return {
       slug, ref: $('#fRef').value.trim() || null,
       city: $('#fCity').value, type: $('#fType').value,
+      kind: $('#fKind').value || 'occasion',
+      deal: $('#fDeal').value || 'sale',
       neighborhood: $('#fNeighborhood').value.trim() || null,
       title_main: $('#fTitleMain').value.trim(),
       title_accent: $('#fTitleAccent').value.trim() || null,
