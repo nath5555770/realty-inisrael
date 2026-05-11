@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
 <meta name="theme-color" content="#0e2722">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=20260511-multi-feat">
+<link rel="stylesheet" href="admin.css?v=20260511-shekel">
 </head>
 <body>
 
@@ -301,7 +301,7 @@
       <fieldset class="field-group">
         <legend>Prix</legend>
         <div class="grid-3">
-          <label class="field"><span class="field-label">Prix de référence ($ interne)</span><input type="number" id="fPriceUsd" placeholder="14800000" step="50000"><span class="field-hint">Stocké en USD pour le tri. Affiché en ₪ sur le site (× 3.7).</span></label>
+          <label class="field"><span class="field-label">Prix (₪)</span><input type="number" id="fPriceUsd" placeholder="54800000" step="100000"><span class="field-hint">Montant entier en shekels, sans formatage. Ex : 54800000 pour 54.8 M ₪.</span></label>
           <input type="hidden" id="fPriceDisplay" value="">
           <input type="hidden" id="fPriceEur" value="">
           <input type="hidden" id="fPriceIls" value="">
@@ -563,6 +563,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.3/dist/umd/supabase.js"
         integrity="sha384-wUhGjm8yom7j8IkWM5ZzIdOO/62dez3WNulthrcTYBqGaTi9lWhKKCnVtcxT2CEI"
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="admin.js?v=20260511-multi-feat"></script>
+<script src="admin.js?v=20260511-shekel"></script>
 </body>
 </html>

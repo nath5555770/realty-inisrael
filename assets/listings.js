@@ -62,13 +62,12 @@
     if (s == null) return '';
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
-  // Prices are stored in USD in the database (legacy convention) but always
-  // displayed in shekels. Conversion rate is approximate and centralized here.
-  const USD_TO_ILS = 3.7;
+  // Prices are stored and displayed in shekels everywhere. The DB column is
+  // still named price_usd for legacy reasons (renaming requires a Postgres
+  // migration with reference updates), but the value is treated as ILS.
   function priceLabel(l) {
     if (typeof l.price_usd === 'number' && l.price_usd > 0) {
-      const ils = l.price_usd * USD_TO_ILS;
-      const m = ils / 1_000_000;
+      const m = l.price_usd / 1_000_000;
       return (m >= 100 ? m.toFixed(0) : m % 1 === 0 ? m.toFixed(1) : m.toFixed(1)) + ' M ₪';
     }
     return '';
@@ -96,17 +95,15 @@
     const m = String(text).match(/(\d+(?:[.,]\d+)?)/);
     return m ? parseFloat(m[1].replace(',', '.')) : 0;
   }
-  // Filter values (min_p, max_p) are stored as USD-thresholds for historical
-  // continuity, but the filter UI now uses shekel labels. This helper formats
-  // a raw USD value back into a shekel label for chips and dropdown options.
+  // Filter values (min_p, max_p) are raw shekel numbers. Helper formats them
+  // for chips and custom dropdown labels.
   function fmtUSD(n) {
     if (!n) return '';
-    const ils = n * USD_TO_ILS;
-    if (ils >= 1_000_000) {
-      const m = ils / 1_000_000;
+    if (n >= 1_000_000) {
+      const m = n / 1_000_000;
       return (m >= 100 ? m.toFixed(0) : m % 1 === 0 ? m.toFixed(0) : m.toFixed(1)) + ' M ₪';
     }
-    return Math.round(ils).toLocaleString('fr-FR') + ' ₪';
+    return Math.round(n).toLocaleString('fr-FR') + ' ₪';
   }
 
   // ------------------------------------------------------------------
