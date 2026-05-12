@@ -1359,3 +1359,67 @@ body {
 /* Pinned / duo badges */
 .badge-pinned { background: var(--teal); color: var(--gold); font-weight: 600; }
 .badge-duo    { background: var(--gold); color: var(--teal); font-weight: 500; }
+
+/* Tighter 3-column placement grid (was 4) */
+.placement-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.placement-grid-3 .placement-option {
+  /* Slightly taller cards now that there are only 3 — more breathing room */
+  min-height: 240px;
+}
+.placement-grid-3 .placement-preview {
+  aspect-ratio: 60/30;
+}
+.placement-grid-3 .placement-text {
+  padding: 1rem 1.2rem 1.4rem;
+}
+.placement-grid-3 .placement-text strong {
+  font-size: 15px;
+  margin-bottom: 0.35rem;
+}
+.placement-grid-3 .placement-text small {
+  line-height: 1.55;
+}
+
+.placement-advanced {
+  margin-top: 1.4rem;
+  padding: 1rem 1.2rem;
+  background: var(--paper-light);
+  border: 1px dashed var(--line-gold);
+  border-radius: 2px;
+}
+.placement-advanced > summary {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.placement-advanced > summary::before {
+  content: '+';
+  display: inline-block;
+  width: 18px; height: 18px;
+  background: var(--gold);
+  color: var(--teal);
+  border-radius: 50%;
+  text-align: center;
+  line-height: 18px;
+  font-weight: 600;
+  font-size: 13px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0;
+  transition: transform 0.25s;
+}
+.placement-advanced[open] > summary::before {
+  content: '−';
+}
+.placement-advanced > summary::-webkit-details-marker { display: none; }
+.placement-advanced .field { margin-top: 0.75rem; }
