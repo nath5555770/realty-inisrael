@@ -432,9 +432,7 @@
       const badges = [];
       if (a.published) badges.push('<span class="badge badge-featured">Publié</span>');
       else badges.push('<span class="badge badge-hidden">Brouillon</span>');
-      if (a.placement === 'featured') badges.push('<span class="badge badge-pinned">★ Très grand</span>');
-      else if (a.placement === 'duo') badges.push('<span class="badge badge-duo">● Grand</span>');
-      else if (a.placement === 'hidden') badges.push('<span class="badge badge-off">⊘ Masqué</span>');
+      if (a.placement === 'featured') badges.push('<span class="badge badge-pinned">★ En avant</span>');
       if (a.category) badges.push('<span class="badge badge-off">' + escapeHtml(a.category) + '</span>');
       return '<div class="listing-row" data-i="' + i + '">' +
         '<div class="thumb" style="background-image:url(\'' + escapeHtml(imageUrl(BUCKET_ARTICLES, a.cover_image)) + '\')"></div>' +
@@ -471,9 +469,10 @@
     $('#artFImage').value = a.cover_image || '';
     $('#artPublished').checked = !!a.published;
     $('#artPublishDate').value = (a.publish_date || '').slice(0, 10) || new Date().toISOString().slice(0,10);
-    // Placement
+    // Mise en avant (placement model is kept in DB for back-compat)
     const placement = a.placement || 'grid';
-    document.querySelectorAll('input[name="artPlacement"]').forEach(r => r.checked = r.value === placement);
+    $('#artFeatured').checked = (placement === 'featured');
+    $('#artPlacement').value = placement;            // hidden, written by save
     $('#artDisplayOrder').value = a.display_order || 0;
     setArticlePreview(imageUrl(BUCKET_ARTICLES, a.cover_image));
     $('#artUploadProgress').hidden = true;
@@ -494,7 +493,18 @@
 
   function readArticleForm(base) {
     const slug = (base && base.slug) || slugify($('#artTitle').value || 'article');
-    const placementEl = document.querySelector('input[name="artPlacement"]:checked');
+    // The "Mettre en avant" toggle is the only knob in the UI now.
+    // ON  → placement = featured
+    // OFF → keep whatever non-featured value the article had ("duo", "grid",
+    //       "hidden") so we don't silently demote legacy entries on save.
+    const isFeatured = $('#artFeatured').checked;
+    let placement;
+    if (isFeatured) {
+      placement = 'featured';
+    } else {
+      const prev = $('#artPlacement').value || 'grid';
+      placement = (prev === 'featured') ? 'grid' : prev;
+    }
     return {
       slug,
       title: $('#artTitle').value.trim(),
@@ -506,7 +516,7 @@
       cover_image: $('#artFImage').value.trim() || null,
       published: $('#artPublished').checked,
       publish_date: $('#artPublishDate').value || null,
-      placement: placementEl ? placementEl.value : 'grid',
+      placement,
       display_order: parseInt($('#artDisplayOrder').value || '0', 10) || 0
     };
   }

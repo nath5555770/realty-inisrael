@@ -542,86 +542,35 @@
       </fieldset>
 
       <fieldset class="field-group">
-        <legend>Taille de cet article sur la page Journal</legend>
-        <p class="field-hint" style="margin: 0 0 1.2rem">Clique sur la maquette qui montre où tu veux que cet article apparaisse. Plus il est grand, plus il est mis en avant.</p>
-        <div class="placement-grid placement-grid-3">
-
-          <label class="placement-option">
-            <input type="radio" name="artPlacement" value="featured">
-            <div class="placement-mock">
-              <div class="placement-mock-label">VOTRE ARTICLE</div>
-              <div class="mock-page">
-                <div class="mock-block mock-featured is-highlight">
-                  <span class="mock-arrow">←</span>
-                </div>
-                <div class="mock-row">
-                  <div class="mock-block mock-duo"></div>
-                  <div class="mock-block mock-duo"></div>
-                </div>
-                <div class="mock-row">
-                  <div class="mock-block mock-grid"></div>
-                  <div class="mock-block mock-grid"></div>
-                  <div class="mock-block mock-grid"></div>
-                </div>
+        <legend>Mise en avant</legend>
+        <div class="feature-card">
+          <label class="feature-toggle">
+            <input type="checkbox" id="artFeatured">
+            <span class="feature-track"></span>
+          </label>
+          <div class="feature-body">
+            <div class="feature-title"><span class="feature-star">★</span> Mettre cet article en avant</div>
+            <p class="feature-desc">Quand activé, cet article devient l'<strong>article phare</strong> tout en haut de la page Journal — le plus grand bloc, celui qu'on remarque en premier.</p>
+            <p class="feature-note">Un seul article peut être en avant à la fois. Si tu actives ce toggle, l'article phare précédent retournera automatiquement dans la grille.</p>
+          </div>
+          <div class="feature-mock">
+            <div class="mock-page">
+              <div class="mock-block mock-featured is-highlight"></div>
+              <div class="mock-row">
+                <div class="mock-block mock-duo"></div>
+                <div class="mock-block mock-duo"></div>
+              </div>
+              <div class="mock-row">
+                <div class="mock-block mock-grid"></div>
+                <div class="mock-block mock-grid"></div>
+                <div class="mock-block mock-grid"></div>
               </div>
             </div>
-            <div class="placement-text">
-              <strong>Très grand</strong>
-              <small>L'article occupe la grande bannière tout en haut de la page Journal.</small>
-            </div>
-          </label>
-
-          <label class="placement-option">
-            <input type="radio" name="artPlacement" value="duo">
-            <div class="placement-mock">
-              <div class="placement-mock-label">VOTRE ARTICLE</div>
-              <div class="mock-page">
-                <div class="mock-block mock-featured"></div>
-                <div class="mock-row">
-                  <div class="mock-block mock-duo is-highlight">
-                    <span class="mock-arrow">←</span>
-                  </div>
-                  <div class="mock-block mock-duo"></div>
-                </div>
-                <div class="mock-row">
-                  <div class="mock-block mock-grid"></div>
-                  <div class="mock-block mock-grid"></div>
-                  <div class="mock-block mock-grid"></div>
-                </div>
-              </div>
-            </div>
-            <div class="placement-text">
-              <strong>Grand</strong>
-              <small>L'article s'affiche en grande carte, juste en dessous de la bannière du haut.</small>
-            </div>
-          </label>
-
-          <label class="placement-option">
-            <input type="radio" name="artPlacement" value="grid" checked>
-            <div class="placement-mock">
-              <div class="placement-mock-label">VOTRE ARTICLE</div>
-              <div class="mock-page">
-                <div class="mock-block mock-featured"></div>
-                <div class="mock-row">
-                  <div class="mock-block mock-duo"></div>
-                  <div class="mock-block mock-duo"></div>
-                </div>
-                <div class="mock-row">
-                  <div class="mock-block mock-grid is-highlight">
-                    <span class="mock-arrow">←</span>
-                  </div>
-                  <div class="mock-block mock-grid"></div>
-                  <div class="mock-block mock-grid"></div>
-                </div>
-              </div>
-            </div>
-            <div class="placement-text">
-              <strong>Normal</strong>
-              <small>L'article rejoint la grille des autres articles. C'est le réglage par défaut.</small>
-            </div>
-          </label>
-
+            <div class="feature-mock-caption">L'emplacement réservé à l'article phare</div>
+          </div>
         </div>
+        <!-- Hidden fields keep the original placement model in DB for backward-compat -->
+        <input type="hidden" id="artPlacement" value="grid">
         <input type="hidden" id="artDisplayOrder" value="0">
       </fieldset>
 
