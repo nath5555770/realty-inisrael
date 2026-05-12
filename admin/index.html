@@ -542,72 +542,87 @@
       </fieldset>
 
       <fieldset class="field-group">
-        <legend>Où l'afficher sur la page Journal ?</legend>
-        <p class="field-hint" style="margin: 0 0 1.2rem">Choisis l'importance de cet article. Pour le retirer du site sans le supprimer, décoche simplement <em>Publié</em> en haut.</p>
+        <legend>Taille de cet article sur la page Journal</legend>
+        <p class="field-hint" style="margin: 0 0 1.2rem">Clique sur la maquette qui montre où tu veux que cet article apparaisse. Plus il est grand, plus il est mis en avant.</p>
         <div class="placement-grid placement-grid-3">
+
           <label class="placement-option">
             <input type="radio" name="artPlacement" value="featured">
-            <div class="placement-preview">
-              <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect x="0" y="0" width="60" height="18" rx="1" fill="currentColor" opacity="0.95"/>
-                <rect x="0" y="20" width="28" height="8" rx="1" fill="currentColor" opacity="0.3"/>
-                <rect x="32" y="20" width="28" height="8" rx="1" fill="currentColor" opacity="0.3"/>
-                <rect x="0" y="30" width="18" height="6" rx="1" fill="currentColor" opacity="0.18"/>
-                <rect x="21" y="30" width="18" height="6" rx="1" fill="currentColor" opacity="0.18"/>
-                <rect x="42" y="30" width="18" height="6" rx="1" fill="currentColor" opacity="0.18"/>
-              </svg>
+            <div class="placement-mock">
+              <div class="placement-mock-label">VOTRE ARTICLE</div>
+              <div class="mock-page">
+                <div class="mock-block mock-featured is-highlight">
+                  <span class="mock-arrow">←</span>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-block mock-duo"></div>
+                  <div class="mock-block mock-duo"></div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-block mock-grid"></div>
+                  <div class="mock-block mock-grid"></div>
+                  <div class="mock-block mock-grid"></div>
+                </div>
+              </div>
             </div>
             <div class="placement-text">
-              <strong>★ Article phare</strong>
-              <small>Le plus grand bloc, tout en haut.<br>Un seul article à la fois &mdash; les autres seront automatiquement décalés.</small>
+              <strong>Très grand</strong>
+              <small>L'article occupe la grande bannière tout en haut de la page Journal.</small>
             </div>
           </label>
 
           <label class="placement-option">
             <input type="radio" name="artPlacement" value="duo">
-            <div class="placement-preview">
-              <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect x="0" y="0" width="60" height="14" rx="1" fill="currentColor" opacity="0.3"/>
-                <rect x="0" y="16" width="28" height="10" rx="1" fill="currentColor" opacity="0.95"/>
-                <rect x="32" y="16" width="28" height="10" rx="1" fill="currentColor" opacity="0.95"/>
-                <rect x="0" y="28" width="18" height="8" rx="1" fill="currentColor" opacity="0.22"/>
-                <rect x="21" y="28" width="18" height="8" rx="1" fill="currentColor" opacity="0.22"/>
-                <rect x="42" y="28" width="18" height="8" rx="1" fill="currentColor" opacity="0.22"/>
-              </svg>
+            <div class="placement-mock">
+              <div class="placement-mock-label">VOTRE ARTICLE</div>
+              <div class="mock-page">
+                <div class="mock-block mock-featured"></div>
+                <div class="mock-row">
+                  <div class="mock-block mock-duo is-highlight">
+                    <span class="mock-arrow">←</span>
+                  </div>
+                  <div class="mock-block mock-duo"></div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-block mock-grid"></div>
+                  <div class="mock-block mock-grid"></div>
+                  <div class="mock-block mock-grid"></div>
+                </div>
+              </div>
             </div>
             <div class="placement-text">
-              <strong>● Article important</strong>
-              <small>Rangée de 2 grosses cartes, juste sous l'article phare.<br>Max 2 articles à la fois.</small>
+              <strong>Grand</strong>
+              <small>L'article s'affiche en grande carte, juste en dessous de la bannière du haut.</small>
             </div>
           </label>
 
           <label class="placement-option">
             <input type="radio" name="artPlacement" value="grid" checked>
-            <div class="placement-preview">
-              <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect x="0" y="0" width="60" height="14" rx="1" fill="currentColor" opacity="0.25"/>
-                <rect x="0" y="16" width="28" height="10" rx="1" fill="currentColor" opacity="0.25"/>
-                <rect x="32" y="16" width="28" height="10" rx="1" fill="currentColor" opacity="0.25"/>
-                <rect x="0" y="28" width="18" height="8" rx="1" fill="currentColor" opacity="0.95"/>
-                <rect x="21" y="28" width="18" height="8" rx="1" fill="currentColor" opacity="0.95"/>
-                <rect x="42" y="28" width="18" height="8" rx="1" fill="currentColor" opacity="0.95"/>
-              </svg>
+            <div class="placement-mock">
+              <div class="placement-mock-label">VOTRE ARTICLE</div>
+              <div class="mock-page">
+                <div class="mock-block mock-featured"></div>
+                <div class="mock-row">
+                  <div class="mock-block mock-duo"></div>
+                  <div class="mock-block mock-duo"></div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-block mock-grid is-highlight">
+                    <span class="mock-arrow">←</span>
+                  </div>
+                  <div class="mock-block mock-grid"></div>
+                  <div class="mock-block mock-grid"></div>
+                </div>
+              </div>
             </div>
             <div class="placement-text">
-              <strong>▢ Article standard</strong>
-              <small>Dans la grille principale, comme tous les autres.<br>Classé par date de publication.</small>
+              <strong>Normal</strong>
+              <small>L'article rejoint la grille des autres articles. C'est le réglage par défaut.</small>
             </div>
           </label>
-        </div>
 
-        <details class="placement-advanced">
-          <summary>Options avancées</summary>
-          <label class="field" style="margin-top: 0.8rem">
-            <span class="field-label">Priorité dans la zone (optionnel)</span>
-            <input type="number" id="artDisplayOrder" placeholder="0" min="0" step="1">
-            <small class="field-hint">Laisse à 0 pour un classement par date. Mets un chiffre plus grand pour faire passer cet article devant les autres dans sa zone (par exemple : 10 dans la grille = il apparaît en premier).</small>
-          </label>
-        </details>
+        </div>
+        <input type="hidden" id="artDisplayOrder" value="0">
       </fieldset>
 
       <fieldset class="field-group">

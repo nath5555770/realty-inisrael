@@ -432,8 +432,8 @@
       const badges = [];
       if (a.published) badges.push('<span class="badge badge-featured">Publié</span>');
       else badges.push('<span class="badge badge-hidden">Brouillon</span>');
-      if (a.placement === 'featured') badges.push('<span class="badge badge-pinned">★ Article phare</span>');
-      else if (a.placement === 'duo') badges.push('<span class="badge badge-duo">● Important</span>');
+      if (a.placement === 'featured') badges.push('<span class="badge badge-pinned">★ Très grand</span>');
+      else if (a.placement === 'duo') badges.push('<span class="badge badge-duo">● Grand</span>');
       else if (a.placement === 'hidden') badges.push('<span class="badge badge-off">⊘ Masqué</span>');
       if (a.category) badges.push('<span class="badge badge-off">' + escapeHtml(a.category) + '</span>');
       return '<div class="listing-row" data-i="' + i + '">' +
