@@ -1,21 +1,35 @@
 {
   "name": "SHAHAR LEVI Real Estate",
   "short_name": "SHAHAR LEVI",
+  "description": "Maison de courtage immobilier en Israël — clientèle francophone. Annonces privées à Tel Aviv, Herzliya, Caesarea, Netanya, Jérusalem.",
+  "lang": "fr",
   "icons": [
-    {
-      "src": "favicon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "favicon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
+    { "src": "favicon-192.png", "type": "image/png", "sizes": "192x192", "purpose": "any" },
+    { "src": "favicon-192.png", "type": "image/png", "sizes": "192x192", "purpose": "maskable" },
+    { "src": "favicon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "any" },
+    { "src": "favicon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
   ],
   "theme_color": "#0e2722",
   "background_color": "#f4ede0",
   "display": "standalone",
-  "start_url": "/",
-  "scope": "/"
+  "orientation": "portrait",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "categories": ["business", "lifestyle", "shopping"],
+  "shortcuts": [
+    {
+      "name": "Portefeuille",
+      "short_name": "Portfolio",
+      "description": "Voir les annonces disponibles",
+      "url": "/portefeuille.html?source=pwa-shortcut",
+      "icons": [{ "src": "favicon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "description": "Solliciter un rendez-vous",
+      "url": "/contact.html?source=pwa-shortcut",
+      "icons": [{ "src": "favicon-192.png", "sizes": "192x192" }]
+    }
+  ]
 }
