@@ -48,8 +48,6 @@
       'Voir nos projets': 'See our projects',
       'Nous contacter': 'Contact us',
       'défiler': 'scroll',
-      '— MAISON DEPUIS MMXIV · TEL AVIV · PARIS': '— ESTABLISHED MMXIV · TEL AVIV · PARIS',
-      '— TEL AVIV · HERZLIYA · CAESAREA · NETANYA · JÉRUSALEM': '— TEL AVIV · HERZLIYA · CAESAREA · NETANYA · JERUSALEM',
 
       // Trust band
       '— EXPÉRIENCE': '— EXPERIENCE',
@@ -556,8 +554,6 @@
       'Voir nos projets': 'הצגת הפרויקטים שלנו',
       'Nous contacter': 'צור קשר',
       'défiler': 'גלילה',
-      '— MAISON DEPUIS MMXIV · TEL AVIV · PARIS': '— מאז MMXIV · תל אביב · פריז',
-      '— TEL AVIV · HERZLIYA · CAESAREA · NETANYA · JÉRUSALEM': '— תל אביב · הרצליה · קיסריה · נתניה · ירושלים',
 
       // Trust band
       '— EXPÉRIENCE': '— ניסיון',
@@ -1061,8 +1057,6 @@
       'Voir nos projets': 'Наши проекты',
       'Nous contacter': 'Связаться с нами',
       'défiler': 'листать',
-      '— MAISON DEPUIS MMXIV · TEL AVIV · PARIS': '— ДОМ С MMXIV · ТЕЛЬ-АВИВ · ПАРИЖ',
-      '— TEL AVIV · HERZLIYA · CAESAREA · NETANYA · JÉRUSALEM': '— ТЕЛЬ-АВИВ · ГЕРЦЛИЯ · КЕСАРИЯ · НЕТАНИЯ · ИЕРУСАЛИМ',
 
       // Trust band
       '— EXPÉRIENCE': '— ОПЫТ',
