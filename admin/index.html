@@ -54,6 +54,8 @@
   <nav class="topbar-nav">
     <button class="nav-btn active" data-tab="listings">Annonces</button>
     <button class="nav-btn" data-tab="journal">Journal</button>
+    <button class="nav-btn" data-tab="texts">Textes</button>
+    <button class="nav-btn" data-tab="settings">Réglages</button>
     <button class="nav-btn" data-tab="agency" data-admin-only>Agence</button>
     <button class="nav-btn" data-tab="team" data-admin-only>Équipe</button>
   </nav>
@@ -200,6 +202,127 @@
         <strong>Rôles :</strong> "Admin" peut tout gérer (annonces, articles, équipe). "Agent" peut gérer les annonces et les articles.
         <br><strong>Désactivation :</strong> un agent désactivé conserve son historique mais ne peut plus se connecter.
       </p>
+    </div>
+
+    <!-- Tab: Texts (edit site copy in FR / EN / HE / RU) -->
+    <div class="tab-pane" data-tab-pane="texts" hidden>
+      <div class="dash-head">
+        <div>
+          <div class="eyebrow">— TEXTES DU SITE</div>
+          <h2>Vos <em>mots.</em></h2>
+          <p class="dash-sub">Tous les textes éditables du site classés par page. Modifiez en français, anglais, hébreu ou russe. Publication immédiate.</p>
+        </div>
+        <div class="dash-actions">
+          <button class="btn-ghost" id="reloadTextsBtn">↻ Actualiser</button>
+          <button class="btn-primary" id="newTextBtn">＋ Nouveau texte</button>
+        </div>
+      </div>
+      <div class="toolbar">
+        <input type="search" id="textsSearchInput" placeholder="Rechercher un texte ou une clé…">
+        <select id="textsFilterCategory">
+          <option value="">Toutes les sections</option>
+          <option value="home">Accueil</option>
+          <option value="agence">Agence</option>
+          <option value="journal">Journal</option>
+          <option value="contact">Contact</option>
+          <option value="footer">Footer</option>
+          <option value="misc">Divers</option>
+        </select>
+        <select id="textsFilterLang">
+          <option value="fr">Édition : Français</option>
+          <option value="en">Édition : Anglais</option>
+          <option value="he">Édition : Hébreu</option>
+          <option value="ru">Édition : Russe</option>
+        </select>
+      </div>
+      <div class="texts-list" id="textsList">
+        <div class="loading">Chargement…</div>
+      </div>
+    </div>
+
+    <!-- Tab: Settings (layout & feature switches) -->
+    <div class="tab-pane" data-tab-pane="settings" hidden>
+      <div class="dash-head">
+        <div>
+          <div class="eyebrow">— RÉGLAGES</div>
+          <h2>Mise en <em>page.</em></h2>
+          <p class="dash-sub">Personnalisez l'apparence du site : disposition des articles du journal, options visuelles.</p>
+        </div>
+        <div class="dash-actions">
+          <button class="btn-ghost" id="reloadSettingsBtn">↻ Actualiser</button>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+
+        <div class="settings-card">
+          <h3 class="settings-card-title">Journal · Disposition</h3>
+          <p class="settings-card-desc">Choisissez le style général d'affichage des articles sur la page Journal.</p>
+          <div class="settings-options">
+            <label class="settings-option">
+              <input type="radio" name="journalLayout" value="magazine">
+              <div>
+                <strong>Magazine</strong>
+                <small>À la une grande + rangée de 2 articles + grille — le plus immersif (recommandé)</small>
+              </div>
+            </label>
+            <label class="settings-option">
+              <input type="radio" name="journalLayout" value="classic">
+              <div>
+                <strong>Classique</strong>
+                <small>À la une grande + grille simple en dessous, sans la rangée de 2</small>
+              </div>
+            </label>
+            <label class="settings-option">
+              <input type="radio" name="journalLayout" value="minimal">
+              <div>
+                <strong>Minimal</strong>
+                <small>Grille seule, tous les articles à la même taille — sobre, éditorial</small>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <h3 class="settings-card-title">Journal · Densité de la grille</h3>
+          <p class="settings-card-desc">Nombre de cartes par ligne sur grand écran. Sur mobile c'est toujours 1.</p>
+          <div class="settings-options">
+            <label class="settings-option">
+              <input type="radio" name="journalCardsPerRow" value="2">
+              <div><strong>2 colonnes</strong><small>Cartes plus larges, plus aéré</small></div>
+            </label>
+            <label class="settings-option">
+              <input type="radio" name="journalCardsPerRow" value="3">
+              <div><strong>3 colonnes</strong><small>Équilibré (recommandé)</small></div>
+            </label>
+            <label class="settings-option">
+              <input type="radio" name="journalCardsPerRow" value="4">
+              <div><strong>4 colonnes</strong><small>Plus dense, format magazine</small></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <h3 class="settings-card-title">Journal · Rangée intermédiaire</h3>
+          <p class="settings-card-desc">Affiche ou cache la rangée de 2 articles entre l'à-la-une et la grille (mise en page Magazine uniquement).</p>
+          <div class="settings-options">
+            <label class="settings-option">
+              <input type="radio" name="journalShowDuo" value="true">
+              <div><strong>Afficher</strong><small>Rangée de 2 articles mise en valeur (recommandé)</small></div>
+            </label>
+            <label class="settings-option">
+              <input type="radio" name="journalShowDuo" value="false">
+              <div><strong>Masquer</strong><small>Va directement vers la grille après l'à-la-une</small></div>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="settings-save-bar">
+        <span class="settings-status" id="settingsStatus"></span>
+        <button class="btn-primary" id="saveSettingsBtn">Enregistrer les réglages</button>
+      </div>
     </div>
 
   </main>

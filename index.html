@@ -293,13 +293,13 @@
 
   <div class="relative max-w-[1500px] mx-auto px-6 md:px-10 pb-20 md:pb-28 pt-32 w-full">
     <h1 class="text-[var(--paper)] mt-10 hero-text" style="font-size: clamp(1.4rem, 3.6vw, 3.2rem); line-height: 1.1">
-      <div class="reveal-mask"><span class="display" style="animation-delay: 0.3s">Votre projet immobilier en Israël,</span></div>
-      <div class="reveal-mask"><span class="display-i text-[var(--gold)]" style="animation-delay: 0.5s">en toute sérénité.</span></div>
+      <div class="reveal-mask"><span class="display" style="animation-delay: 0.3s" data-text="home.hero.title">Votre projet immobilier en Israël,</span></div>
+      <div class="reveal-mask"><span class="display-i text-[var(--gold)]" style="animation-delay: 0.5s" data-text="home.hero.subtitle">en toute sérénité.</span></div>
     </h1>
 
     <div class="mt-12 flex flex-wrap items-center gap-4 fade-up" style="animation-delay: 0.9s">
-      <a href="portefeuille.html" class="btn-gold">Voir nos projets</a>
-      <a href="contact.html" class="btn-line text-[var(--paper)] border-[var(--paper)] hover:!bg-[var(--paper)] hover:!text-[var(--ink)]">Nous contacter</a>
+      <a href="portefeuille.html" class="btn-gold" data-text="home.hero.cta_primary">Voir nos projets</a>
+      <a href="contact.html" class="btn-line text-[var(--paper)] border-[var(--paper)] hover:!bg-[var(--paper)] hover:!text-[var(--ink)]" data-text="home.hero.cta_secondary">Nous contacter</a>
     </div>
   </div>
 
@@ -311,8 +311,8 @@
 <!-- HERO SEARCH — quick filters that redirect to /portefeuille.html -->
 <section class="hero-search-section">
   <div class="hero-search-wrap">
-    <div class="hero-search-eyebrow">— TROUVER UN BIEN</div>
-    <h2 class="hero-search-title">Composez votre <em>recherche.</em></h2>
+    <div class="hero-search-eyebrow" data-text="home.search.eyebrow">— TROUVER UN BIEN</div>
+    <h2 class="hero-search-title" data-text="home.search.title">Composez votre <em>recherche.</em></h2>
     <form class="hero-search-form" id="heroSearchForm">
       <div class="hero-field">
         <span class="hero-lbl">— Ville</span>
@@ -518,7 +518,7 @@
 
     <div class="grid md:grid-cols-12 gap-10 mb-12">
       <div class="md:col-span-4">
-        <div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-3">— VOTRE EXPÉRIENCE, NOTRE RÉUSSITE</div>
+        <div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-3" data-text="footer.tagline">— VOTRE EXPÉRIENCE, NOTRE RÉUSSITE</div>
         <p class="text-base text-[var(--paper)]/75 max-w-md leading-relaxed font-light">
           Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014. Acquisitions et cessions privées sur invitation. Mossi'a #4218 · FNAIM partenaire · FIABCI.
         </p>
@@ -575,6 +575,7 @@
 
 <script src="assets/animations.js" defer></script>
 <script src="assets/i18n.js" defer></script>
+<script src="assets/site-cms.js" defer></script>
 <script src="assets/supabase-config.js" defer></script>
 <script src="assets/listings.js" defer></script>
 <script>

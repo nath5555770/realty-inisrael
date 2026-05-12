@@ -217,9 +217,9 @@
   <div class="max-w-[1500px] mx-auto">
     <div class="text-center mb-20">
       <h2 class="leading-[0.92]" style="font-size: clamp(2.75rem, 6vw, 5rem)">
-        <span class="display">Une agence</span><br><span class="display-i text-[var(--gold-deep)]">à taille humaine.</span>
+        <span class="display" data-text="agence.team.title_part1">Une agence</span><br><span class="display-i text-[var(--gold-deep)]" data-text="agence.team.title_part2">à taille humaine.</span>
       </h2>
-      <p class="mt-8 max-w-2xl mx-auto text-base leading-relaxed text-[var(--ink-soft)]">
+      <p class="mt-8 max-w-2xl mx-auto text-base leading-relaxed text-[var(--ink-soft)]" data-text="agence.team.intro">
         Une équipe aux parcours complémentaires, réunie par une même exigence : offrir un accompagnement clair, humain et irréprochable à chaque étape. Français, anglais, hébreu et russe — nos équipes accompagnent une clientèle internationale avec fluidité et précision. Profondément ancrés dans le marché immobilier israélien, nos agents suivent personnellement chaque projet, du premier échange jusqu'à la remise des clés, avec disponibilité, discrétion et engagement.
       </p>
     </div>
@@ -545,7 +545,7 @@
       </div>
     </div>
     <div class="grid md:grid-cols-12 gap-10 mb-12">
-      <div class="md:col-span-4"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-3">— VOTRE EXPÉRIENCE, NOTRE RÉUSSITE</div><p class="text-base text-[var(--paper)]/75 max-w-md leading-relaxed font-light">Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014. Mossi'a #4218.</p></div>
+      <div class="md:col-span-4"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-3" data-text="footer.tagline">— VOTRE EXPÉRIENCE, NOTRE RÉUSSITE</div><p class="text-base text-[var(--paper)]/75 max-w-md leading-relaxed font-light">Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014. Mossi'a #4218.</p></div>
       <div class="md:col-span-3"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4">PAGES</div><ul class="space-y-2 text-sm text-[var(--paper)]/80"><li><a href="index.html" class="hover:text-[var(--gold)]">Accueil</a></li><li><a href="portefeuille.html" class="hover:text-[var(--gold)]">Portefeuille</a></li><li><a href="agence.html" class="hover:text-[var(--gold)]">L'Agence</a></li><li><a href="aliyah.html" class="hover:text-[var(--gold)]">Aliyah</a></li><li><a href="journal.html" class="hover:text-[var(--gold)]">Journal</a></li><li><a href="contact.html" class="hover:text-[var(--gold)]">Contact</a></li></ul></div>
       <div class="md:col-span-5"><div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4">CONTACT</div><div class="text-sm text-[var(--paper)]/80 leading-relaxed">14 Rothschild Boulevard · Tel Aviv 6688314 · Israël<br>+972 54 783 11 52 · <span class="text-[var(--gold)]">nathalie@shaharlevi.co.il</span></div></div>
     </div>
@@ -568,6 +568,7 @@
 
 <script src="assets/animations.js" defer></script>
 <script src="assets/i18n.js" defer></script>
+<script src="assets/site-cms.js" defer></script>
 <script src="assets/supabase-config.js" defer></script>
 <script src="assets/agency.js" defer></script>
 <script>

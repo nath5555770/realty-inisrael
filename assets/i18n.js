@@ -1574,6 +1574,7 @@
 
     if (lang === 'fr') {
       updateSwitcher(lang);
+      fireLangChanged(lang);
       return;
     }
 
@@ -1616,6 +1617,14 @@
     });
 
     updateSwitcher(lang);
+    fireLangChanged(lang);
+  }
+
+  // ---- Notify external modules (e.g. site-cms.js) on language switch -----
+  function fireLangChanged(lang) {
+    try {
+      document.dispatchEvent(new CustomEvent('sl-lang-changed', { detail: { lang: lang } }));
+    } catch (_) {}
   }
 
   // ---- Switcher UI --------------------------------------------------------

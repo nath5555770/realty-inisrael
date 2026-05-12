@@ -311,6 +311,69 @@
     els.forEach(el => io.observe(el));
   }
 
+  // ---------- Layout selection from CMS settings ----------
+  function currentLayout() {
+    if (window.SLCMS && window.SLCMS.settings) {
+      return window.SLCMS.settings['journal.layout'] || 'magazine';
+    }
+    return 'magazine';
+  }
+  function cardsPerRow() {
+    if (window.SLCMS && window.SLCMS.settings) {
+      return window.SLCMS.settings['journal.cards_per_row'] || 3;
+    }
+    return 3;
+  }
+  function showDuo() {
+    if (window.SLCMS && window.SLCMS.settings) {
+      return window.SLCMS.settings['journal.show_duo'] !== false;
+    }
+    return true;
+  }
+
+  function renderLayout(rows) {
+    const featured = document.getElementById('journal-featured');
+    const grid = document.getElementById('journal-grid');
+    const duoMount = document.getElementById('journal-duo');
+    if (!rows.length) return;
+
+    const layout = currentLayout();
+    const perRow = Math.max(2, Math.min(4, cardsPerRow()));
+
+    // Tune grid class based on cards_per_row
+    if (grid) {
+      grid.className = 'grid gap-6 md:gap-8 ' + (
+        perRow === 2 ? 'md:grid-cols-2' :
+        perRow === 4 ? 'md:grid-cols-2 lg:grid-cols-4' :
+        'md:grid-cols-3'
+      );
+    }
+
+    if (layout === 'minimal') {
+      // No featured, no duo — straight grid of all articles
+      if (featured) featured.innerHTML = '';
+      if (duoMount) duoMount.innerHTML = '';
+      if (grid) grid.innerHTML = rows.map(cardHTML).join('');
+    } else if (layout === 'classic') {
+      // Featured + grid (no duo)
+      const top = rows[0];
+      const others = rows.slice(1);
+      if (featured) featured.innerHTML = featuredHTML(top);
+      if (duoMount) duoMount.innerHTML = '';
+      if (grid) grid.innerHTML = others.map(cardHTML).join('');
+    } else {
+      // 'magazine' default: featured + (duo if enabled) + grid
+      const useDuo = showDuo();
+      const top = rows[0];
+      const duo = useDuo ? rows.slice(1, 3) : [];
+      const others = useDuo ? rows.slice(3) : rows.slice(1);
+
+      if (featured) featured.innerHTML = featuredHTML(top);
+      if (duoMount) duoMount.innerHTML = duo.length ? duo.map(duoHTML).join('') : '';
+      if (grid) grid.innerHTML = others.map(cardHTML).join('');
+    }
+  }
+
   // ---------- Init ----------
   function init() {
     const featured = document.getElementById('journal-featured');
@@ -318,50 +381,58 @@
     const duoMount = document.getElementById('journal-duo');
     if (!featured && !grid) return;
 
-    load().then(rows => {
-      if (!rows.length) {
-        if (featured) featured.innerHTML = '<div class="text-center py-20 text-[var(--muted)] cinzel text-xs tracking-[0.3em]">Aucun article publié pour le moment.</div>';
-        if (grid) grid.innerHTML = '';
-        if (duoMount) duoMount.innerHTML = '';
+    // Wait for CMS settings to load before rendering (1s timeout fallback)
+    function start() {
+      load().then(rows => {
+        if (!rows.length) {
+          if (featured) featured.innerHTML = '<div class="text-center py-20 text-[var(--muted)] cinzel text-xs tracking-[0.3em]">Aucun article publié pour le moment.</div>';
+          if (grid) grid.innerHTML = '';
+          if (duoMount) duoMount.innerHTML = '';
+          if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
+          return;
+        }
+        renderLayout(rows);
+        wireAndReveal(rows);
+      }).catch(e => {
+        console.error('[journal]', e);
+        if (featured) featured.innerHTML = '<div class="text-center py-20 text-[var(--muted)]">Impossible de charger les articles.</div>';
         if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
-        return;
-      }
-      const top = rows[0];
-      const duo = rows.slice(1, 3);  // next two for the 2-up row
-      const others = rows.slice(3);   // remaining for the 3-col grid
-
-      if (featured) featured.innerHTML = featuredHTML(top);
-      if (duoMount && duo.length) duoMount.innerHTML = duo.map(duoHTML).join('');
-      if (grid) grid.innerHTML = others.map(cardHTML).join('');
-
-      const ctaWrap = document.getElementById('journal-cta-wrap');
-      if (ctaWrap) ctaWrap.hidden = false;
-
-      if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
-
-      // Wire all "Lire" / card links
-      const all = rows;
-      const bySlug = Object.fromEntries(all.map(a => [a.slug, a]));
-      document.querySelectorAll('[data-article]').forEach(el => {
-        el.addEventListener('click', e => {
-          e.preventDefault();
-          const a = bySlug[el.dataset.article];
-          if (a) openReader(a);
-        });
       });
+    }
 
-      setupReveal();
+    if (window.SLCMS && window.SLCMS.ready) start();
+    else {
+      let started = false;
+      document.addEventListener('sl-cms-ready', () => { if (!started) { started = true; start(); } }, { once: true });
+      setTimeout(() => { if (!started) { started = true; start(); } }, 1500);
+    }
+    return;
+  }
 
-      // Open from URL hash (deep-link)
-      if (location.hash.startsWith('#article-')) {
-        const slug = location.hash.slice('#article-'.length);
-        if (bySlug[slug]) setTimeout(() => openReader(bySlug[slug], true), 100);
-      }
-    }).catch(e => {
-      console.error('[journal]', e);
-      if (featured) featured.innerHTML = '<div class="text-center py-20 text-[var(--muted)]">Impossible de charger les articles.</div>';
-      if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
+  function wireAndReveal(rows) {
+    const ctaWrap = document.getElementById('journal-cta-wrap');
+    if (ctaWrap) ctaWrap.hidden = false;
+
+    if (window.SLI18n && typeof window.SLI18n.refresh === 'function') window.SLI18n.refresh();
+    if (window.SLCMS && typeof window.SLCMS.reapply === 'function') window.SLCMS.reapply();
+
+    // Wire all "Lire" / card links
+    const bySlug = Object.fromEntries(rows.map(a => [a.slug, a]));
+    document.querySelectorAll('[data-article]').forEach(el => {
+      el.addEventListener('click', e => {
+        e.preventDefault();
+        const a = bySlug[el.dataset.article];
+        if (a) openReader(a);
+      });
     });
+
+    setupReveal();
+
+    // Open from URL hash (deep-link)
+    if (location.hash.startsWith('#article-')) {
+      const slug = location.hash.slice('#article-'.length);
+      if (bySlug[slug]) setTimeout(() => openReader(bySlug[slug], true), 100);
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

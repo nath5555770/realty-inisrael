@@ -1033,8 +1033,254 @@
     } catch (e) { console.error(e); }
   }
 
+  // ==========================================================================
+  // CMS: Site texts editor
+  // ==========================================================================
+  STATE.texts = [];           // raw rows from site_texts
+  STATE.textsEditingLang = 'fr';
+  STATE.textsLoaded = false;
+
+  async function loadTexts() {
+    const { data, error } = await sb.from('site_texts').select('*').order('category').order('key');
+    if (error) throw error;
+    STATE.texts = data || [];
+    STATE.textsLoaded = true;
+  }
+
+  function bustCMSCache() {
+    // Make sure the public site refetches on next nav
+    try { sessionStorage.removeItem('sl-cms-texts-v1'); sessionStorage.removeItem('sl-cms-settings-v1'); } catch (_) {}
+  }
+
+  function renderTextsList() {
+    const list = $('#textsList');
+    if (!list) return;
+    const q = ($('#textsSearchInput').value || '').toLowerCase().trim();
+    const cat = $('#textsFilterCategory').value;
+    const lang = $('#textsFilterLang').value || 'fr';
+    STATE.textsEditingLang = lang;
+
+    let rows = STATE.texts;
+    if (cat) rows = rows.filter(r => r.category === cat);
+    if (q) rows = rows.filter(r => {
+      const blob = (r.key + ' ' + (r.fr || '') + ' ' + (r.en || '') + ' ' + (r.he || '') + ' ' + (r.ru || '') + ' ' + (r.notes || '')).toLowerCase();
+      return blob.includes(q);
+    });
+
+    if (!rows.length) {
+      list.innerHTML = '<div class="loading">Aucun texte ne correspond à votre recherche.</div>';
+      return;
+    }
+
+    list.innerHTML = rows.map(r => textRowHTML(r)).join('');
+
+    // Wire toggles
+    list.querySelectorAll('.text-row-head').forEach(head => {
+      head.addEventListener('click', () => head.closest('.text-row').classList.toggle('is-open'));
+    });
+    list.querySelectorAll('.text-save-btn').forEach(btn => {
+      btn.addEventListener('click', () => saveOneText(btn.dataset.key, btn));
+    });
+  }
+
+  function textRowHTML(r) {
+    const preview = (r[STATE.textsEditingLang] || r.fr || '(vide)');
+    const categories = { home: 'ACCUEIL', agence: 'AGENCE', journal: 'JOURNAL', contact: 'CONTACT', footer: 'FOOTER', misc: 'DIVERS' };
+    return (
+      '<div class="text-row" data-key="' + escapeHtml(r.key) + '">' +
+        '<div class="text-row-head">' +
+          '<div>' +
+            '<div class="text-row-key">' + escapeHtml(r.key) + '</div>' +
+            '<div class="text-row-preview">' + escapeHtml(preview) + '</div>' +
+          '</div>' +
+          '<span class="text-row-cat">' + (categories[r.category] || (r.category || 'DIVERS').toUpperCase()) + '</span>' +
+          '<button class="text-row-toggle" type="button" aria-label="Développer">▾</button>' +
+        '</div>' +
+        '<div class="text-row-body">' +
+          '<div class="text-row-langs">' +
+            '<div class="text-lang-field"><label>FR — Français</label><textarea data-lang="fr">' + escapeHtml(r.fr || '') + '</textarea></div>' +
+            '<div class="text-lang-field"><label>EN — Anglais</label><textarea data-lang="en">' + escapeHtml(r.en || '') + '</textarea></div>' +
+            '<div class="text-lang-field"><label>HE — Hébreu</label><textarea data-lang="he" dir="rtl">' + escapeHtml(r.he || '') + '</textarea></div>' +
+            '<div class="text-lang-field"><label>RU — Russe</label><textarea data-lang="ru">' + escapeHtml(r.ru || '') + '</textarea></div>' +
+          '</div>' +
+          (r.notes ? '<div class="text-row-notes">' + escapeHtml(r.notes) + '</div>' : '') +
+          '<div class="text-row-foot">' +
+            '<span class="save-status" data-status></span>' +
+            '<button class="btn-primary text-save-btn" type="button" data-key="' + escapeHtml(r.key) + '">Enregistrer</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  async function saveOneText(key, btn) {
+    const row = btn.closest('.text-row');
+    const status = row.querySelector('[data-status]');
+    const fields = ['fr', 'en', 'he', 'ru'];
+    const update = { updated_at: new Date().toISOString(), updated_by: STATE.user?.id || null };
+    fields.forEach(l => {
+      const ta = row.querySelector('textarea[data-lang="' + l + '"]');
+      if (ta) update[l] = ta.value;
+    });
+    const old = btn.textContent;
+    btn.disabled = true; btn.textContent = '…';
+    status.textContent = '';
+    status.className = 'save-status';
+    const { error } = await sb.from('site_texts').update(update).eq('key', key);
+    btn.disabled = false; btn.textContent = old;
+    if (error) {
+      status.textContent = '✕ ' + error.message;
+      status.className = 'save-status is-err';
+      return;
+    }
+    // Update local cache
+    const r = STATE.texts.find(t => t.key === key);
+    if (r) Object.assign(r, update);
+    status.textContent = '✓ Enregistré';
+    status.className = 'save-status is-ok';
+    bustCMSCache();
+    toast('Texte enregistré.', 'success');
+  }
+
+  async function createNewText() {
+    const key = prompt('Clé du texte (ex: home.feature.title) :');
+    if (!key) return;
+    if (STATE.texts.some(t => t.key === key)) { alert('Cette clé existe déjà.'); return; }
+    const category = prompt('Catégorie (home / agence / journal / contact / footer / misc) :', 'misc') || 'misc';
+    const fr = prompt('Texte en français :') || '';
+    const { error } = await sb.from('site_texts').insert({ key, category, fr, updated_by: STATE.user?.id || null });
+    if (error) { alert('Erreur : ' + error.message); return; }
+    await loadTexts();
+    renderTextsList();
+    bustCMSCache();
+    toast('Texte créé. Pensez à traduire en EN/HE/RU.', 'success');
+  }
+
+  // ==========================================================================
+  // CMS: Settings (journal layout etc.)
+  // ==========================================================================
+  STATE.settings = {};
+  STATE.settingsLoaded = false;
+
+  async function loadSettings() {
+    const { data, error } = await sb.from('site_settings').select('*');
+    if (error) throw error;
+    const map = {};
+    (data || []).forEach(r => { map[r.key] = r.value; });
+    STATE.settings = map;
+    STATE.settingsLoaded = true;
+  }
+
+  function renderSettingsForm() {
+    const layout = STATE.settings['journal.layout'] || 'magazine';
+    const perRow = STATE.settings['journal.cards_per_row'] || 3;
+    const showDuo = STATE.settings['journal.show_duo'] !== false;
+
+    document.querySelectorAll('input[name="journalLayout"]').forEach(r => r.checked = r.value === layout);
+    document.querySelectorAll('input[name="journalCardsPerRow"]').forEach(r => r.checked = parseInt(r.value, 10) === parseInt(perRow, 10));
+    document.querySelectorAll('input[name="journalShowDuo"]').forEach(r => r.checked = (r.value === String(showDuo)));
+  }
+
+  async function saveSettings() {
+    const get = (name) => {
+      const el = document.querySelector('input[name="' + name + '"]:checked');
+      return el ? el.value : null;
+    };
+    const layout = get('journalLayout') || 'magazine';
+    const perRow = parseInt(get('journalCardsPerRow') || '3', 10);
+    const showDuo = get('journalShowDuo') !== 'false';
+
+    const updates = [
+      { key: 'journal.layout', value: layout },
+      { key: 'journal.cards_per_row', value: perRow },
+      { key: 'journal.show_duo', value: showDuo }
+    ];
+
+    const status = $('#settingsStatus');
+    const btn = $('#saveSettingsBtn');
+    const old = btn.textContent;
+    btn.disabled = true; btn.textContent = '…';
+    status.textContent = '';
+
+    for (const u of updates) {
+      const { error } = await sb.from('site_settings').upsert({
+        key: u.key,
+        value: u.value,
+        updated_at: new Date().toISOString(),
+        updated_by: STATE.user?.id || null
+      });
+      if (error) {
+        btn.disabled = false; btn.textContent = old;
+        status.textContent = '✕ ' + error.message;
+        toast('Erreur : ' + error.message, 'error');
+        return;
+      }
+      STATE.settings[u.key] = u.value;
+    }
+
+    btn.disabled = false; btn.textContent = old;
+    status.textContent = '✓ Réglages enregistrés';
+    bustCMSCache();
+    toast('Réglages enregistrés. Le site sera à jour au prochain chargement.', 'success');
+  }
+
+  // Lazy-load on first activation
+  async function ensureTextsLoaded() {
+    if (STATE.textsLoaded) return;
+    try {
+      await loadTexts();
+      renderTextsList();
+    } catch (e) {
+      $('#textsList').innerHTML = '<div class="loading">Impossible de charger les textes : ' + escapeHtml(e.message || '') + '. Vérifiez que la migration site_texts a été exécutée.</div>';
+    }
+  }
+  async function ensureSettingsLoaded() {
+    if (STATE.settingsLoaded) return;
+    try {
+      await loadSettings();
+      renderSettingsForm();
+    } catch (e) {
+      toast('Impossible de charger les réglages: ' + (e.message || ''), 'error');
+    }
+  }
+
+  // Wire tab activation + buttons (called after dashboard is shown)
+  function wireCMSTabs() {
+    // Texts
+    const textsSearch = $('#textsSearchInput');
+    if (textsSearch && !textsSearch.dataset.wired) {
+      textsSearch.dataset.wired = '1';
+      textsSearch.addEventListener('input', renderTextsList);
+      $('#textsFilterCategory').addEventListener('change', renderTextsList);
+      $('#textsFilterLang').addEventListener('change', renderTextsList);
+      $('#reloadTextsBtn').addEventListener('click', async () => {
+        try { await loadTexts(); renderTextsList(); bustCMSCache(); toast('Textes rechargés.', 'success'); } catch (e) { toast(e.message, 'error'); }
+      });
+      $('#newTextBtn').addEventListener('click', createNewText);
+    }
+    // Settings
+    const saveBtn = $('#saveSettingsBtn');
+    if (saveBtn && !saveBtn.dataset.wired) {
+      saveBtn.dataset.wired = '1';
+      saveBtn.addEventListener('click', saveSettings);
+      $('#reloadSettingsBtn').addEventListener('click', async () => {
+        try { await loadSettings(); renderSettingsForm(); bustCMSCache(); toast('Réglages rechargés.', 'success'); } catch (e) { toast(e.message, 'error'); }
+      });
+    }
+    // Hook into tab switching to lazy-load
+    $$('.nav-btn').forEach(btn => {
+      if (btn.dataset.cmsWired) return;
+      btn.dataset.cmsWired = '1';
+      btn.addEventListener('click', () => {
+        if (btn.dataset.tab === 'texts') ensureTextsLoaded();
+        if (btn.dataset.tab === 'settings') ensureSettingsLoaded();
+      });
+    });
+  }
+
   async function boot() {
     bindEvents();
+    wireCMSTabs();
     const { data: { session } } = await sb.auth.getSession();
     if (session) await enterDashboard();
     else { showView('login'); $('#loginEmail').focus(); }
