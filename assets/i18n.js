@@ -296,7 +296,7 @@
       "Chaque bien du portefeuille porte une référence, une provenance et l'accord explicite des propriétaires. La majorité ne sera jamais publiée publiquement — réservée à notre clientèle qualifiée.": "Every property in the portfolio carries a reference, a provenance and the explicit agreement of the owners. The majority will never be publicly published — reserved for our qualified clientele.",
       // Portefeuille — listing cards & filters
       // Hero search (homepage)
-      '— TROUVER UNE PIÈCE': '— FIND A PROPERTY',
+      '— TROUVER UN BIEN': '— FIND A PROPERTY',
       '— Ville': '— City',
       '— Type': '— Type',
       '— Pièces minimum': '— Minimum rooms',
@@ -802,7 +802,7 @@
       "Chaque bien du portefeuille porte une référence, une provenance et l'accord explicite des propriétaires. La majorité ne sera jamais publiée publiquement — réservée à notre clientèle qualifiée.": 'כל נכס בתיק נושא הפניה, מקור והסכמה מפורשת של הבעלים. הרוב לעולם לא יפורסם בפומבי — שמור ללקוחותינו המוסמכים.',
       // Portefeuille — listing cards & filters
       // Hero search (homepage)
-      '— TROUVER UNE PIÈCE': '— מצא נכס',
+      '— TROUVER UN BIEN': '— מצא נכס',
       '— Ville': '— עיר',
       '— Type': '— סוג',
       '— Pièces minimum': '— חדרים מינימום',
@@ -1286,7 +1286,7 @@
       "Chaque bien du portefeuille porte une référence, une provenance et l'accord explicite des propriétaires. La majorité ne sera jamais publiée publiquement — réservée à notre clientèle qualifiée.": 'Каждый объект в портфолио имеет референс, происхождение и явное согласие собственников. Большинство никогда не будет опубликовано публично — зарезервировано для нашей квалифицированной клиентуры.',
       // Portefeuille — listing cards & filters
       // Hero search (homepage)
-      '— TROUVER UNE PIÈCE': '— НАЙТИ ОБЪЕКТ',
+      '— TROUVER UN BIEN': '— НАЙТИ ОБЪЕКТ',
       '— Ville': '— Город',
       '— Type': '— Тип',
       '— Pièces minimum': '— Минимум комнат',
