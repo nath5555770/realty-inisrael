@@ -83,9 +83,9 @@
     document.querySelectorAll('[data-text]').forEach(el => {
       const key = el.getAttribute('data-text');
       const row = texts[key];
-      if (!row) return;
+      if (!row) { el.classList.add('cms-applied'); return; }
       const value = row[lang] || row.fr;
-      if (value == null) return;
+      if (value == null) { el.classList.add('cms-applied'); return; }
       // Preserve children if the element only contains a single text node
       const hasOnlyText = el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE;
       if (hasOnlyText || el.children.length === 0) {
@@ -98,6 +98,7 @@
           }
         });
       }
+      el.classList.add('cms-applied');
     });
   }
 

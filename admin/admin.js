@@ -1142,18 +1142,67 @@
     toast('Texte enregistré.', 'success');
   }
 
-  async function createNewText() {
-    const key = prompt('Clé du texte (ex: home.feature.title) :');
-    if (!key) return;
-    if (STATE.texts.some(t => t.key === key)) { alert('Cette clé existe déjà.'); return; }
-    const category = prompt('Catégorie (home / agence / journal / contact / footer / misc) :', 'misc') || 'misc';
-    const fr = prompt('Texte en français :') || '';
-    const { error } = await sb.from('site_texts').insert({ key, category, fr, updated_by: STATE.user?.id || null });
-    if (error) { alert('Erreur : ' + error.message); return; }
+  function openNewTextModal() {
+    const m = $('#newTextModal');
+    $('#newTextKey').value = '';
+    $('#newTextCategory').value = 'misc';
+    $('#newTextFr').value = '';
+    $('#newTextNotes').value = '';
+    m.hidden = false;
+    setTimeout(() => $('#newTextKey').focus(), 50);
+  }
+  function closeNewTextModal() { $('#newTextModal').hidden = true; }
+
+  async function submitNewText() {
+    const key = ($('#newTextKey').value || '').trim();
+    const category = $('#newTextCategory').value || 'misc';
+    const fr = ($('#newTextFr').value || '').trim();
+    const notes = ($('#newTextNotes').value || '').trim();
+    if (!key) { toast('La clé est obligatoire.', 'error'); return; }
+    if (!/^[a-z0-9._-]+$/.test(key)) { toast('Clé invalide : minuscules, chiffres, points/tirets uniquement.', 'error'); return; }
+    if (STATE.texts.some(t => t.key === key)) { toast('Cette clé existe déjà.', 'error'); return; }
+    const btn = $('#newTextOk');
+    const old = btn.textContent;
+    btn.disabled = true; btn.textContent = '…';
+    const payload = { key, category, fr, updated_by: STATE.user?.id || null };
+    if (notes) payload.notes = notes;
+    const { error } = await sb.from('site_texts').insert(payload);
+    btn.disabled = false; btn.textContent = old;
+    if (error) { toast('Erreur : ' + error.message, 'error'); return; }
+    closeNewTextModal();
     await loadTexts();
     renderTextsList();
     bustCMSCache();
     toast('Texte créé. Pensez à traduire en EN/HE/RU.', 'success');
+  }
+
+  function showCMSSetupModal() {
+    $('#cmsSetupModal').hidden = false;
+  }
+  function closeCMSSetupModal() {
+    $('#cmsSetupModal').hidden = true;
+  }
+  async function recheckCMSSetup() {
+    closeCMSSetupModal();
+    try {
+      await loadTexts();
+      await loadSettings();
+      renderTextsList();
+      renderSettingsForm();
+      toast('CMS activé ! Tu peux maintenant éditer les textes et les réglages.', 'success');
+    } catch (e) {
+      // Still not set up
+      showCMSSetupModal();
+      toast('Les tables ne sont toujours pas créées. Vérifie que le script s\'est bien exécuté.', 'error');
+    }
+  }
+
+  function isMissingTableError(err) {
+    if (!err) return false;
+    const m = (err.message || err.code || '') + '';
+    return m.includes('relation') && m.includes('does not exist')
+        || m.includes('404')
+        || (err.code === 'PGRST205' || err.code === '42P01');
   }
 
   // ==========================================================================
@@ -1224,14 +1273,20 @@
     toast('Réglages enregistrés. Le site sera à jour au prochain chargement.', 'success');
   }
 
-  // Lazy-load on first activation
+  // Lazy-load on first activation; if the CMS tables don't exist yet, show the
+  // guided setup modal instead of a raw error.
   async function ensureTextsLoaded() {
     if (STATE.textsLoaded) return;
     try {
       await loadTexts();
       renderTextsList();
     } catch (e) {
-      $('#textsList').innerHTML = '<div class="loading">Impossible de charger les textes : ' + escapeHtml(e.message || '') + '. Vérifiez que la migration site_texts a été exécutée.</div>';
+      if (isMissingTableError(e)) {
+        showCMSSetupModal();
+        $('#textsList').innerHTML = '<div class="loading">CMS pas encore activé. Exécutez la migration SQL puis cliquez sur ↻ Actualiser.</div>';
+      } else {
+        $('#textsList').innerHTML = '<div class="loading">Impossible de charger les textes : ' + escapeHtml(e.message || '') + '</div>';
+      }
     }
   }
   async function ensureSettingsLoaded() {
@@ -1240,7 +1295,8 @@
       await loadSettings();
       renderSettingsForm();
     } catch (e) {
-      toast('Impossible de charger les réglages: ' + (e.message || ''), 'error');
+      if (isMissingTableError(e)) showCMSSetupModal();
+      else toast('Impossible de charger les réglages: ' + (e.message || ''), 'error');
     }
   }
 
@@ -1254,9 +1310,17 @@
       $('#textsFilterCategory').addEventListener('change', renderTextsList);
       $('#textsFilterLang').addEventListener('change', renderTextsList);
       $('#reloadTextsBtn').addEventListener('click', async () => {
-        try { await loadTexts(); renderTextsList(); bustCMSCache(); toast('Textes rechargés.', 'success'); } catch (e) { toast(e.message, 'error'); }
+        try { await loadTexts(); renderTextsList(); bustCMSCache(); toast('Textes rechargés.', 'success'); }
+        catch (e) { if (isMissingTableError(e)) showCMSSetupModal(); else toast(e.message, 'error'); }
       });
-      $('#newTextBtn').addEventListener('click', createNewText);
+      $('#newTextBtn').addEventListener('click', openNewTextModal);
+      // New-text modal wiring
+      $('#newTextCancel').addEventListener('click', closeNewTextModal);
+      $('#newTextOk').addEventListener('click', submitNewText);
+      $('#newTextModal').addEventListener('click', e => { if (e.target.id === 'newTextModal') closeNewTextModal(); });
+      // CMS setup modal wiring
+      $('#cmsSetupSkip').addEventListener('click', closeCMSSetupModal);
+      $('#cmsSetupDone').addEventListener('click', recheckCMSSetup);
     }
     // Settings
     const saveBtn = $('#saveSettingsBtn');

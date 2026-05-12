@@ -255,64 +255,120 @@
 
       <div class="settings-grid">
 
-        <div class="settings-card">
-          <h3 class="settings-card-title">Journal · Disposition</h3>
-          <p class="settings-card-desc">Choisissez le style général d'affichage des articles sur la page Journal.</p>
-          <div class="settings-options">
-            <label class="settings-option">
+        <div class="settings-card settings-card-wide">
+          <h3 class="settings-card-title">Disposition du Journal</h3>
+          <p class="settings-card-desc">Choisissez le style général d'affichage des articles. Les aperçus ci-dessous montrent comment les cartes seront disposées sur grand écran.</p>
+          <div class="settings-layout-grid">
+            <label class="settings-layout">
               <input type="radio" name="journalLayout" value="magazine">
-              <div>
-                <strong>Magazine</strong>
-                <small>À la une grande + rangée de 2 articles + grille — le plus immersif (recommandé)</small>
+              <div class="settings-layout-preview">
+                <svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="0" y="0" width="100" height="28" rx="1" fill="currentColor" opacity="0.85"/>
+                  <rect x="0" y="32" width="48" height="16" rx="1" fill="currentColor" opacity="0.6"/>
+                  <rect x="52" y="32" width="48" height="16" rx="1" fill="currentColor" opacity="0.6"/>
+                  <rect x="0" y="52" width="30" height="16" rx="1" fill="currentColor" opacity="0.35"/>
+                  <rect x="35" y="52" width="30" height="16" rx="1" fill="currentColor" opacity="0.35"/>
+                  <rect x="70" y="52" width="30" height="16" rx="1" fill="currentColor" opacity="0.35"/>
+                </svg>
+              </div>
+              <div class="settings-layout-text">
+                <strong>Magazine <em class="settings-badge">recommandé</em></strong>
+                <small>À la une grande, rangée de 2 articles mis en valeur, puis grille — le plus immersif</small>
               </div>
             </label>
-            <label class="settings-option">
+
+            <label class="settings-layout">
               <input type="radio" name="journalLayout" value="classic">
-              <div>
+              <div class="settings-layout-preview">
+                <svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="0" y="0" width="100" height="32" rx="1" fill="currentColor" opacity="0.85"/>
+                  <rect x="0" y="36" width="30" height="16" rx="1" fill="currentColor" opacity="0.55"/>
+                  <rect x="35" y="36" width="30" height="16" rx="1" fill="currentColor" opacity="0.55"/>
+                  <rect x="70" y="36" width="30" height="16" rx="1" fill="currentColor" opacity="0.55"/>
+                  <rect x="0" y="55" width="30" height="13" rx="1" fill="currentColor" opacity="0.35"/>
+                  <rect x="35" y="55" width="30" height="13" rx="1" fill="currentColor" opacity="0.35"/>
+                  <rect x="70" y="55" width="30" height="13" rx="1" fill="currentColor" opacity="0.35"/>
+                </svg>
+              </div>
+              <div class="settings-layout-text">
                 <strong>Classique</strong>
-                <small>À la une grande + grille simple en dessous, sans la rangée de 2</small>
+                <small>À la une grande puis grille simple, sans la rangée intermédiaire</small>
               </div>
             </label>
-            <label class="settings-option">
+
+            <label class="settings-layout">
               <input type="radio" name="journalLayout" value="minimal">
-              <div>
+              <div class="settings-layout-preview">
+                <svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="0" y="2" width="30" height="20" rx="1" fill="currentColor" opacity="0.55"/>
+                  <rect x="35" y="2" width="30" height="20" rx="1" fill="currentColor" opacity="0.55"/>
+                  <rect x="70" y="2" width="30" height="20" rx="1" fill="currentColor" opacity="0.55"/>
+                  <rect x="0" y="26" width="30" height="20" rx="1" fill="currentColor" opacity="0.55"/>
+                  <rect x="35" y="26" width="30" height="20" rx="1" fill="currentColor" opacity="0.55"/>
+                  <rect x="70" y="26" width="30" height="20" rx="1" fill="currentColor" opacity="0.55"/>
+                  <rect x="0" y="50" width="30" height="18" rx="1" fill="currentColor" opacity="0.35"/>
+                  <rect x="35" y="50" width="30" height="18" rx="1" fill="currentColor" opacity="0.35"/>
+                  <rect x="70" y="50" width="30" height="18" rx="1" fill="currentColor" opacity="0.35"/>
+                </svg>
+              </div>
+              <div class="settings-layout-text">
                 <strong>Minimal</strong>
-                <small>Grille seule, tous les articles à la même taille — sobre, éditorial</small>
+                <small>Grille uniforme, tous les articles à la même taille — sobre, éditorial</small>
               </div>
             </label>
           </div>
         </div>
 
         <div class="settings-card">
-          <h3 class="settings-card-title">Journal · Densité de la grille</h3>
+          <h3 class="settings-card-title">Densité de la grille</h3>
           <p class="settings-card-desc">Nombre de cartes par ligne sur grand écran. Sur mobile c'est toujours 1.</p>
-          <div class="settings-options">
-            <label class="settings-option">
+          <div class="settings-density-grid">
+            <label class="settings-density">
               <input type="radio" name="journalCardsPerRow" value="2">
-              <div><strong>2 colonnes</strong><small>Cartes plus larges, plus aéré</small></div>
+              <div class="settings-density-preview">
+                <span></span><span></span>
+              </div>
+              <div class="settings-density-text"><strong>2 colonnes</strong><small>Cartes larges, aéré</small></div>
             </label>
-            <label class="settings-option">
+            <label class="settings-density">
               <input type="radio" name="journalCardsPerRow" value="3">
-              <div><strong>3 colonnes</strong><small>Équilibré (recommandé)</small></div>
+              <div class="settings-density-preview">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="settings-density-text"><strong>3 colonnes <em class="settings-badge">recommandé</em></strong><small>Équilibré</small></div>
             </label>
-            <label class="settings-option">
+            <label class="settings-density">
               <input type="radio" name="journalCardsPerRow" value="4">
-              <div><strong>4 colonnes</strong><small>Plus dense, format magazine</small></div>
+              <div class="settings-density-preview">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="settings-density-text"><strong>4 colonnes</strong><small>Dense, magazine</small></div>
             </label>
           </div>
         </div>
 
         <div class="settings-card">
-          <h3 class="settings-card-title">Journal · Rangée intermédiaire</h3>
-          <p class="settings-card-desc">Affiche ou cache la rangée de 2 articles entre l'à-la-une et la grille (mise en page Magazine uniquement).</p>
-          <div class="settings-options">
-            <label class="settings-option">
+          <h3 class="settings-card-title">Rangée intermédiaire</h3>
+          <p class="settings-card-desc">Affiche ou cache la rangée de 2 articles entre l'à-la-une et la grille. Uniquement pour la disposition <strong>Magazine</strong>.</p>
+          <div class="settings-toggle-row">
+            <label class="settings-toggle">
               <input type="radio" name="journalShowDuo" value="true">
-              <div><strong>Afficher</strong><small>Rangée de 2 articles mise en valeur (recommandé)</small></div>
+              <div class="settings-toggle-preview">
+                <svg viewBox="0 0 60 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="0" y="0" width="29" height="32" rx="1" fill="currentColor" opacity="0.7"/>
+                  <rect x="31" y="0" width="29" height="32" rx="1" fill="currentColor" opacity="0.7"/>
+                </svg>
+              </div>
+              <div><strong>Afficher</strong><small>2 articles mis en valeur</small></div>
             </label>
-            <label class="settings-option">
+            <label class="settings-toggle">
               <input type="radio" name="journalShowDuo" value="false">
-              <div><strong>Masquer</strong><small>Va directement vers la grille après l'à-la-une</small></div>
+              <div class="settings-toggle-preview">
+                <svg viewBox="0 0 60 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="0" y="0" width="60" height="32" rx="1" fill="currentColor" opacity="0.2" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2,2"/>
+                </svg>
+              </div>
+              <div><strong>Masquer</strong><small>Direct vers la grille</small></div>
             </label>
           </div>
         </div>
@@ -681,6 +737,70 @@
     <div class="modal-actions">
       <button class="btn-ghost" id="confirmCancel">Annuler</button>
       <button class="btn-danger" id="confirmOk">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NEW TEXT MODAL (CMS) ===== -->
+<div class="modal" id="newTextModal" hidden>
+  <div class="modal-box modal-box-lg">
+    <div class="modal-title">Nouveau texte</div>
+    <div class="modal-body">
+      <p class="modal-help">Créez une clé pour un texte du site. Cette clé devra ensuite être ajoutée comme attribut <code>data-text="..."</code> sur l'élément HTML correspondant.</p>
+      <label class="modal-field">
+        <span>— CLÉ TECHNIQUE</span>
+        <input type="text" id="newTextKey" placeholder="ex: home.feature.title" autocomplete="off">
+        <small>Format : <code>section.zone.role</code>. Pas d'espaces ni de caractères spéciaux. En minuscules.</small>
+      </label>
+      <label class="modal-field">
+        <span>— SECTION</span>
+        <select id="newTextCategory">
+          <option value="home">Accueil</option>
+          <option value="agence">Agence</option>
+          <option value="journal">Journal</option>
+          <option value="contact">Contact</option>
+          <option value="footer">Footer</option>
+          <option value="misc">Divers</option>
+        </select>
+      </label>
+      <label class="modal-field">
+        <span>— TEXTE EN FRANÇAIS</span>
+        <textarea id="newTextFr" placeholder="Tapez le texte original ici…" rows="3"></textarea>
+        <small>Les traductions EN/HE/RU pourront être saisies juste après dans la liste.</small>
+      </label>
+      <label class="modal-field">
+        <span>— NOTE INTERNE <em>(facultatif)</em></span>
+        <input type="text" id="newTextNotes" placeholder="ex: Surtitre de la section recherche">
+      </label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="newTextCancel">Annuler</button>
+      <button class="btn-primary" id="newTextOk">Créer le texte</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SQL MIGRATION GUIDE MODAL (CMS) ===== -->
+<div class="modal" id="cmsSetupModal" hidden>
+  <div class="modal-box modal-box-lg">
+    <div class="modal-title">⚙ Activation du CMS — 1 étape requise</div>
+    <div class="modal-body">
+      <p class="modal-help">Les nouvelles fonctionnalités <strong>Textes</strong> et <strong>Réglages</strong> nécessitent deux tables Supabase qui n'ont pas encore été créées sur ton projet.</p>
+      <ol class="modal-steps">
+        <li>Ouvre l'éditeur SQL de Supabase : <a href="https://supabase.com/dashboard/project/_/sql" target="_blank" rel="noopener">supabase.com/dashboard/project/_/sql</a></li>
+        <li>Vérifie que tu es bien connectée au projet <strong>realty-inisrael</strong></li>
+        <li>Copie le contenu du fichier de migration ci-dessous puis colle-le dans l'éditeur SQL</li>
+        <li>Clique sur <strong>"Run"</strong> en bas à droite</li>
+        <li>Reviens ici et clique sur "J'ai exécuté le script"</li>
+      </ol>
+      <div class="modal-file">
+        <span class="modal-file-path">supabase/migrations/20260512_site_texts_and_settings.sql</span>
+        <small>Sur ton ordi : <code>C:\Users\pixad\Desktop\nath\deploy\supabase\migrations\20260512_site_texts_and_settings.sql</code></small>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cmsSetupSkip">Plus tard</button>
+      <button class="btn-primary" id="cmsSetupDone">J'ai exécuté le script ↻</button>
     </div>
   </div>
 </div>

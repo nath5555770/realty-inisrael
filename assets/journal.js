@@ -147,6 +147,7 @@
     m.innerHTML =
       '<div class="article-reader-overlay" data-close></div>' +
       '<article class="article-reader-box">' +
+        '<div class="article-reader-progress"><div class="article-reader-progress-bar"></div></div>' +
         '<button class="article-reader-back" data-close type="button" aria-label="Retour">' +
           '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>' +
           '<span>Retour</span>' +
@@ -165,6 +166,16 @@
         '</div>' +
       '</article>';
     document.body.appendChild(m);
+
+    // Scroll-driven progress bar
+    const bar = m.querySelector('.article-reader-progress-bar');
+    m.addEventListener('scroll', () => {
+      const box = m.querySelector('.article-reader-box');
+      if (!box || !bar) return;
+      const total = box.scrollHeight - m.clientHeight;
+      const pct = total > 0 ? Math.max(0, Math.min(100, (m.scrollTop / total) * 100)) : 0;
+      bar.style.width = pct + '%';
+    }, { passive: true });
 
     // Click anywhere with data-close attribute → close
     m.addEventListener('click', e => {
@@ -228,7 +239,18 @@
         '.article-reader-content ul, .article-reader-content ol { margin: 1em 0 1.25em 1.4em; }' +
         '.article-reader-content li { margin: 0.4em 0; }' +
         '.article-reader-foot { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line-gold); text-align: center; }' +
+        /* Reading progress bar */
+        '.article-reader-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: rgba(196,168,119,0.18); z-index: 5; }' +
+        '.article-reader-progress-bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), var(--gold-deep)); transition: width 0.12s linear; }' +
         'body.modal-open { overflow: hidden; }' +
+        /* Skeleton loading state */
+        '.jc-skeleton { background: var(--surface); border: 1px solid var(--line); overflow: hidden; }' +
+        '.jc-skeleton-img { aspect-ratio: 16/10; background: linear-gradient(110deg, var(--paper-deep) 25%, var(--paper-light) 50%, var(--paper-deep) 75%); background-size: 200% 100%; animation: skel-shimmer 1.6s infinite; }' +
+        '.jc-skeleton-body { padding: 1.5rem; }' +
+        '.jc-skeleton-bar { height: 14px; background: linear-gradient(110deg, var(--paper-deep) 25%, var(--paper-light) 50%, var(--paper-deep) 75%); background-size: 200% 100%; animation: skel-shimmer 1.6s infinite; margin-bottom: 12px; }' +
+        '.jc-skeleton-bar.short { width: 30%; }' +
+        '.jc-skeleton-bar.tall { height: 24px; }' +
+        '@keyframes skel-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }' +
         /* Featured ribbon + duo overlay (used in layout) */
         '.jc-featured { position: relative; overflow: hidden; }' +
         '.jc-featured-ribbon { position: absolute; top: 18px; left: 18px; background: var(--gold); color: var(--teal); padding: 8px 14px; font-family: \'Cinzel\', serif; font-size: 10px; letter-spacing: 0.35em; font-weight: 500; z-index: 2; }' +
@@ -374,12 +396,42 @@
     }
   }
 
+  // ---------- Skeleton placeholders ----------
+  function skeletonCard() {
+    return '<div class="jc-skeleton"><div class="jc-skeleton-img"></div><div class="jc-skeleton-body"><div class="jc-skeleton-bar short"></div><div class="jc-skeleton-bar tall"></div><div class="jc-skeleton-bar"></div><div class="jc-skeleton-bar short"></div></div></div>';
+  }
+  function skeletonFeatured() {
+    return (
+      '<div class="jc-skeleton">' +
+        '<div class="grid md:grid-cols-12 gap-0 items-stretch">' +
+          '<div class="md:col-span-7 jc-skeleton-img"></div>' +
+          '<div class="md:col-span-5 p-8 md:p-14">' +
+            '<div class="jc-skeleton-bar short"></div>' +
+            '<div class="jc-skeleton-bar tall" style="height: 36px"></div>' +
+            '<div class="jc-skeleton-bar tall" style="height: 36px; width: 70%"></div>' +
+            '<div class="jc-skeleton-bar" style="margin-top: 1.4rem"></div>' +
+            '<div class="jc-skeleton-bar"></div>' +
+            '<div class="jc-skeleton-bar short"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
   // ---------- Init ----------
   function init() {
     const featured = document.getElementById('journal-featured');
     const grid = document.getElementById('journal-grid');
     const duoMount = document.getElementById('journal-duo');
     if (!featured && !grid) return;
+
+    // Inject base reader styles immediately so the skeleton CSS rules exist
+    buildReader();
+
+    // Show skeleton placeholders while we fetch
+    if (featured) featured.innerHTML = skeletonFeatured();
+    if (duoMount) duoMount.innerHTML = skeletonCard() + skeletonCard();
+    if (grid) grid.innerHTML = skeletonCard() + skeletonCard() + skeletonCard() + skeletonCard() + skeletonCard() + skeletonCard();
 
     // Wait for CMS settings to load before rendering (1s timeout fallback)
     function start() {
