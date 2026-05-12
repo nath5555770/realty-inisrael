@@ -371,28 +371,58 @@
       );
     }
 
+    // Apply placement-based partitioning. If a row has no `placement`
+    // column (legacy data before the migration), treat it as 'grid'.
+    function placementOf(a) { return a.placement || 'grid'; }
+
+    const visibleRows = rows.filter(a => placementOf(a) !== 'hidden');
+
+    // Sort within each bucket: higher display_order first, then newest first
+    function bySortOrder(a, b) {
+      const oa = a.display_order || 0, ob = b.display_order || 0;
+      if (oa !== ob) return ob - oa;
+      const da = new Date(a.publish_date || a.created_at || 0).getTime();
+      const db = new Date(b.publish_date || b.created_at || 0).getTime();
+      return db - da;
+    }
+
+    const explicitFeatured = visibleRows.filter(a => placementOf(a) === 'featured').sort(bySortOrder);
+    const explicitDuo      = visibleRows.filter(a => placementOf(a) === 'duo').sort(bySortOrder).slice(0, 2);
+    const explicitGrid     = visibleRows.filter(a => placementOf(a) === 'grid').sort(bySortOrder);
+    const others           = visibleRows.filter(a => !['featured','duo'].includes(placementOf(a)) || a.placement === undefined).sort(bySortOrder);
+
     if (layout === 'minimal') {
-      // No featured, no duo — straight grid of all articles
+      // No featured, no duo — straight grid of all visible (sorted)
       if (featured) featured.innerHTML = '';
       if (duoMount) duoMount.innerHTML = '';
-      if (grid) grid.innerHTML = rows.map(cardHTML).join('');
+      const all = visibleRows.slice().sort(bySortOrder);
+      if (grid) grid.innerHTML = all.map(cardHTML).join('');
     } else if (layout === 'classic') {
-      // Featured + grid (no duo)
-      const top = rows[0];
-      const others = rows.slice(1);
-      if (featured) featured.innerHTML = featuredHTML(top);
+      // Featured + grid (no duo). Pick explicit featured first, otherwise most recent.
+      const top = explicitFeatured[0] || others[0];
+      const rest = visibleRows.filter(a => a !== top).sort(bySortOrder);
+      if (featured) featured.innerHTML = top ? featuredHTML(top) : '';
       if (duoMount) duoMount.innerHTML = '';
-      if (grid) grid.innerHTML = others.map(cardHTML).join('');
+      if (grid) grid.innerHTML = rest.map(cardHTML).join('');
     } else {
       // 'magazine' default: featured + (duo if enabled) + grid
       const useDuo = showDuo();
-      const top = rows[0];
-      const duo = useDuo ? rows.slice(1, 3) : [];
-      const others = useDuo ? rows.slice(3) : rows.slice(1);
+      const top = explicitFeatured[0] || (others[0] && placementOf(others[0]) === 'grid' ? others[0] : null) || others[0];
 
-      if (featured) featured.innerHTML = featuredHTML(top);
-      if (duoMount) duoMount.innerHTML = duo.length ? duo.map(duoHTML).join('') : '';
-      if (grid) grid.innerHTML = others.map(cardHTML).join('');
+      let duoList = useDuo ? explicitDuo.slice() : [];
+      // Backfill duo with most recent grid items if explicit duo is short
+      if (useDuo && duoList.length < 2) {
+        const need = 2 - duoList.length;
+        const fill = explicitGrid.filter(a => a !== top).slice(0, need);
+        duoList = duoList.concat(fill);
+      }
+
+      const used = new Set([top].concat(duoList).filter(Boolean).map(a => a.id || a.slug));
+      const gridList = visibleRows.filter(a => !used.has(a.id || a.slug)).sort(bySortOrder);
+
+      if (featured) featured.innerHTML = top ? featuredHTML(top) : '';
+      if (duoMount) duoMount.innerHTML = duoList.length ? duoList.map(duoHTML).join('') : '';
+      if (grid) grid.innerHTML = gridList.map(cardHTML).join('');
     }
   }
 

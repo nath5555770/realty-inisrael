@@ -432,6 +432,9 @@
       const badges = [];
       if (a.published) badges.push('<span class="badge badge-featured">Publié</span>');
       else badges.push('<span class="badge badge-hidden">Brouillon</span>');
+      if (a.placement === 'featured') badges.push('<span class="badge badge-pinned">★ À la une</span>');
+      else if (a.placement === 'duo') badges.push('<span class="badge badge-duo">● Mis en valeur</span>');
+      else if (a.placement === 'hidden') badges.push('<span class="badge badge-off">⊘ Masqué</span>');
       if (a.category) badges.push('<span class="badge badge-off">' + escapeHtml(a.category) + '</span>');
       return '<div class="listing-row" data-i="' + i + '">' +
         '<div class="thumb" style="background-image:url(\'' + escapeHtml(imageUrl(BUCKET_ARTICLES, a.cover_image)) + '\')"></div>' +
@@ -455,7 +458,7 @@
     STATE.pendingArticleFile = null;
     const isNew = idx === 'new';
     const a = isNew
-      ? { category: 'marche', published: false, publish_date: new Date().toISOString().slice(0,10) }
+      ? { category: 'marche', published: false, publish_date: new Date().toISOString().slice(0,10), placement: 'grid', display_order: 0 }
       : STATE.articles[idx];
     $('#artEditorTitle').textContent = isNew ? 'Nouvel article' : 'Modifier · ' + (a.title || '');
     $('#artDeleteBtn').hidden = isNew;
@@ -468,6 +471,10 @@
     $('#artFImage').value = a.cover_image || '';
     $('#artPublished').checked = !!a.published;
     $('#artPublishDate').value = (a.publish_date || '').slice(0, 10) || new Date().toISOString().slice(0,10);
+    // Placement
+    const placement = a.placement || 'grid';
+    document.querySelectorAll('input[name="artPlacement"]').forEach(r => r.checked = r.value === placement);
+    $('#artDisplayOrder').value = a.display_order || 0;
     setArticlePreview(imageUrl(BUCKET_ARTICLES, a.cover_image));
     $('#artUploadProgress').hidden = true;
     if (!isNew) {
@@ -487,6 +494,7 @@
 
   function readArticleForm(base) {
     const slug = (base && base.slug) || slugify($('#artTitle').value || 'article');
+    const placementEl = document.querySelector('input[name="artPlacement"]:checked');
     return {
       slug,
       title: $('#artTitle').value.trim(),
@@ -497,7 +505,9 @@
       read_minutes: $('#artReadMinutes').value ? parseInt($('#artReadMinutes').value, 10) : null,
       cover_image: $('#artFImage').value.trim() || null,
       published: $('#artPublished').checked,
-      publish_date: $('#artPublishDate').value || null
+      publish_date: $('#artPublishDate').value || null,
+      placement: placementEl ? placementEl.value : 'grid',
+      display_order: parseInt($('#artDisplayOrder').value || '0', 10) || 0
     };
   }
 
