@@ -77,7 +77,7 @@
       'front de mer.': 'oceanfront.',
 
       // Manifesto
-      '— La maison': '— The house',
+      '— Votre expérience, notre réussite': '— Your experience, our success',
       'd\'exception': 'exceptional',
       'rencontres improbables.': 'improbable encounters.',
       'Découvrir l\'agence →': 'Discover the agency →',
@@ -323,7 +323,7 @@
       'Préfère ne pas dire': 'Prefer not to say',
       '< 7 M ₪': '< 7 M ₪',
       // Footer (homepage)
-      '— LA MAISON': '— THE HOUSE',
+      '— VOTRE EXPÉRIENCE, NOTRE RÉUSSITE': '— YOUR EXPERIENCE, OUR SUCCESS',
       'Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014. Acquisitions et cessions privées sur invitation. Mossi\'a #4218 · FNAIM partenaire · FIABCI.': 'Independent real-estate brokerage, founded in Tel Aviv in 2014. Private acquisitions and disposals by invitation. Mossi\'a #4218 · FNAIM partner · FIABCI.',
       'PAGES': 'PAGES',
       'VILLES': 'CITIES',
@@ -583,7 +583,7 @@
       'front de mer.': 'על קו החוף.',
 
       // Manifesto
-      '— La maison': '— הבית',
+      '— Votre expérience, notre réussite': '— החוויה שלך, ההצלחה שלנו',
       "d'exception": 'יוצא דופן',
       'rencontres improbables.': 'מפגשים בלתי צפויים.',
       "Découvrir l'agence →": '← גלו את הסוכנות',
@@ -824,7 +824,7 @@
       "Jusqu'à 11 M ₪": 'עד 11 M ₪',
       'Au-delà de 65 M ₪': 'מעל 65 M ₪',
       // Footer (homepage)
-      '— LA MAISON': '— הבית',
+      '— VOTRE EXPÉRIENCE, NOTRE RÉUSSITE': '— החוויה שלך, ההצלחה שלנו',
       'Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014. Acquisitions et cessions privées sur invitation. Mossi\'a #4218 · FNAIM partenaire · FIABCI.': 'סוכנות תיווך נדל"ן עצמאית, נוסדה בתל אביב ב-2014. רכישות ומכירות פרטיות לפי הזמנה. רישיון #4218 · שותף FNAIM · FIABCI.',
       'PAGES': 'דפים',
       'VILLES': 'ערים',
@@ -1086,7 +1086,7 @@
       'front de mer.': 'на берегу моря.',
 
       // Manifesto
-      '— La maison': '— Дом',
+      '— Votre expérience, notre réussite': '— Ваш опыт, наш успех',
       "d'exception": 'исключительная',
       'rencontres improbables.': 'невероятные встречи.',
       "Découvrir l'agence →": 'Открыть агентство →',
@@ -1306,7 +1306,7 @@
       "Jusqu'à 11 M ₪": 'До 11 M ₪',
       'Au-delà de 65 M ₪': 'Свыше 65 M ₪',
       // Footer (homepage)
-      '— LA MAISON': '— ДОМ',
+      '— VOTRE EXPÉRIENCE, NOTRE RÉUSSITE': '— ВАШ ОПЫТ, НАШ УСПЕХ',
       'Maison indépendante de courtage immobilier, fondée à Tel Aviv en 2014. Acquisitions et cessions privées sur invitation. Mossi\'a #4218 · FNAIM partenaire · FIABCI.': 'Независимое агентство недвижимости, основано в Тель-Авиве в 2014 году. Частные приобретения и продажи по приглашению. Лицензия #4218 · партнёр FNAIM · FIABCI.',
       'PAGES': 'СТРАНИЦЫ',
       'VILLES': 'ГОРОДА',
