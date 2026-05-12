@@ -30,8 +30,8 @@
   font-family: 'Cinzel', serif;
   font-weight: 500;
   letter-spacing: 0.18em;
-  font-size: clamp(1.5rem, 4vw, 3rem);
-  line-height: 1;
+  font-size: clamp(1.05rem, 3vw, 2.2rem);
+  line-height: 1.15;
 }
 .page-loader-logo .ll-desc {
   font-family: 'Cinzel', serif;
