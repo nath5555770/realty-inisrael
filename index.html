@@ -192,6 +192,11 @@
   .hero-search-eyebrow { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); text-align: center; }
   .hero-search-title { font-family: 'Playfair Display', serif; font-weight: 400; font-size: clamp(2rem, 4vw, 3rem); color: var(--paper); text-align: center; margin: 0.85rem 0 2.5rem; line-height: 1.1; }
   .hero-search-title em { font-style: italic; color: var(--gold); }
+  /* Deal tabs (Tout / À vendre / À louer) — sit between the title and the 4-field form */
+  .hero-deal-tabs { display: flex; justify-content: center; gap: 0.55rem; margin: -1rem 0 1.6rem; flex-wrap: wrap; }
+  .hero-deal-tab { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; padding: 0.65rem 1.4rem; border: 1px solid var(--gold-deep); background: transparent; color: var(--paper); cursor: pointer; transition: all 0.35s; }
+  .hero-deal-tab:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-deal-tab.is-active { background: var(--gold); color: var(--teal); border-color: var(--gold); }
   .hero-search-form { display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 0; background: var(--paper); border: 1px solid var(--gold-deep); align-items: stretch; box-shadow: 0 6px 32px rgba(0,0,0,0.18); }
   .hero-field { display: flex; flex-direction: column; padding: 1rem 1.2rem; border-right: 1px solid var(--line); }
   .hero-field:last-of-type { border-right: 1px solid var(--line); }
@@ -320,7 +325,15 @@
   <div class="hero-search-wrap">
     <div class="hero-search-eyebrow" data-text="home.search.eyebrow">TROUVER UN BIEN</div>
     <h2 class="hero-search-title" data-text="home.search.title">Composez votre <em>recherche.</em></h2>
+
+    <div class="hero-deal-tabs">
+      <button type="button" class="hero-deal-tab is-active" data-deal="">Tout</button>
+      <button type="button" class="hero-deal-tab" data-deal="sale">À vendre</button>
+      <button type="button" class="hero-deal-tab" data-deal="rent">À louer</button>
+    </div>
+
     <form class="hero-search-form" id="heroSearchForm">
+      <input type="hidden" name="deal" id="heroDealHidden" value="">
       <div class="hero-field">
         <span class="hero-lbl">Ville</span>
         <select name="city">
@@ -590,6 +603,17 @@ window.addEventListener('scroll', function() {
   var scrolled = (winScroll / height) * 100;
   document.getElementById('scrollProgress').style.width = scrolled + '%';
 }, { passive: true });
+
+// Hero search: deal tabs (Tout / À vendre / À louer) write into the form's hidden "deal" input
+(function () {
+  const dealHidden = document.getElementById('heroDealHidden');
+  document.querySelectorAll('.hero-deal-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.hero-deal-tab').forEach(t => t.classList.toggle('is-active', t === tab));
+      if (dealHidden) dealHidden.value = tab.dataset.deal || '';
+    });
+  });
+})();
 </script>
 
 <!-- SL_FLOATING_WA_START -->
