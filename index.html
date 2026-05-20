@@ -188,27 +188,52 @@
   /* === Hero search (homepage) === */
   .hero-search-section { background: var(--teal); padding: 4rem 1.5rem 4.5rem; position: relative; }
   .hero-search-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 20%, rgba(196,168,119,0.06) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(196,168,119,0.04) 0%, transparent 50%); pointer-events: none; }
-  .hero-search-wrap { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero-search-wrap { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
   .hero-search-eyebrow { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); text-align: center; }
-  .hero-search-title { font-family: 'Playfair Display', serif; font-weight: 400; font-size: clamp(2rem, 4vw, 3rem); color: var(--paper); text-align: center; margin: 0.85rem 0 2.5rem; line-height: 1.1; }
+  .hero-search-title { font-family: 'Playfair Display', serif; font-weight: 400; font-size: clamp(2rem, 4vw, 3rem); color: var(--paper); text-align: center; margin: 0.85rem 0 2rem; line-height: 1.1; }
   .hero-search-title em { font-style: italic; color: var(--gold); }
-  .hero-search-form { display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 0; background: var(--paper); border: 1px solid var(--gold-deep); align-items: stretch; box-shadow: 0 6px 32px rgba(0,0,0,0.18); }
-  .hero-field { display: flex; flex-direction: column; padding: 1rem 1.2rem; border-right: 1px solid var(--line); }
-  .hero-field:last-of-type { border-right: 1px solid var(--line); }
-  .hero-lbl { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 0.4rem; }
-  .hero-field select { border: 0; outline: 0; background: transparent; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--ink); padding: 0; cursor: pointer; appearance: none; -webkit-appearance: none; padding-right: 1.4rem; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a78c5c' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 0 center; }
-  .hero-search-btn { background: var(--teal); color: var(--gold); border: 0; padding: 0 2.4rem; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; cursor: pointer; transition: all 0.45s; }
-  .hero-search-btn:hover { background: var(--teal-deep); letter-spacing: 0.42em; }
-  @media (max-width: 900px) {
-    .hero-search-form { grid-template-columns: 1fr 1fr; }
-    .hero-field { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-    .hero-field:nth-child(2n) { border-right: none; }
-    .hero-search-btn { grid-column: 1 / -1; padding: 1.2rem; }
+
+  /* Deal tabs */
+  .hero-deal-tabs { display: flex; justify-content: center; gap: 0.6rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
+  .hero-deal-tab { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; padding: 0.7rem 1.4rem; border: 1px solid var(--gold-deep); background: transparent; color: var(--paper); cursor: pointer; transition: all 0.35s; }
+  .hero-deal-tab:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-deal-tab.is-active { background: var(--gold); color: var(--teal); border-color: var(--gold); }
+
+  /* Search panel (mimics portefeuille style on paper bg) */
+  .hero-search-row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: stretch; background: var(--paper); padding: 0.9rem; border: 1px solid var(--gold-deep); box-shadow: 0 6px 32px rgba(0,0,0,0.18); }
+  .hero-search-input-wrap { display: flex; align-items: center; gap: 0.55rem; flex: 1 1 280px; min-width: 220px; padding: 0.65rem 0.95rem; background: var(--surface); border: 1px solid var(--line); transition: border-color 0.25s; }
+  .hero-search-input-wrap:focus-within { border-color: var(--gold); }
+  .hero-search-input-wrap svg { color: var(--gold-deep); flex-shrink: 0; }
+  .hero-search-input-wrap input { flex: 1; border: 0; outline: 0; background: transparent; font: inherit; color: var(--ink); font-size: 14px; }
+  .hero-search-input-wrap input::placeholder { color: var(--muted); }
+  .hero-search-select { padding: 0.65rem 2rem 0.65rem 0.95rem; background: var(--surface); border: 1px solid var(--line); font: inherit; font-size: 13px; color: var(--ink); cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a78c5c' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 0.7rem center; min-width: 150px; transition: border-color 0.25s; }
+  .hero-search-select:focus { outline: 0; border-color: var(--gold); }
+  .hero-more-btn { padding: 0.65rem 1.25rem; background: transparent; border: 1px dashed var(--gold-deep); font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-deep); cursor: pointer; transition: all 0.3s; }
+  .hero-more-btn:hover { background: rgba(196,168,119,0.1); border-style: solid; }
+  .hero-more-btn[aria-expanded="true"] { background: var(--gold); color: var(--teal); border-color: var(--gold); border-style: solid; }
+
+  /* Expanded filters */
+  .hero-more-filters { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; align-items: center; padding: 1rem 1.4rem; background: var(--paper-light); border: 1px solid var(--line); border-top: 0; }
+  .hero-micro-field { display: flex; align-items: center; gap: 0.6rem; font-size: 13px; color: var(--ink); }
+  .hero-micro-field span { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-deep); }
+  .hero-micro-field input[type="number"] { width: 80px; padding: 0.4rem 0.6rem; border: 1px solid var(--line); background: var(--surface); font: inherit; font-size: 13px; color: var(--ink); }
+  .hero-micro-field input:focus { outline: 0; border-color: var(--gold); }
+  .hero-micro-toggle { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.35rem 0.8rem; background: var(--surface); border: 1px solid var(--line); cursor: pointer; font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-deep); transition: all 0.25s; }
+  .hero-micro-toggle:has(input:checked) { background: var(--teal); color: var(--gold); border-color: var(--teal); }
+  .hero-micro-toggle input { accent-color: var(--gold); }
+
+  /* Submit button */
+  .hero-search-btn { display: block; margin: 1.4rem auto 0; background: var(--gold); color: var(--teal); border: 0; padding: 1.1rem 3rem; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; cursor: pointer; transition: all 0.45s; }
+  .hero-search-btn:hover { background: var(--paper); letter-spacing: 0.42em; }
+
+  @media (max-width: 768px) {
+    .hero-search-row { gap: 0.5rem; padding: 0.7rem; }
+    .hero-search-input-wrap, .hero-search-select, .hero-more-btn { width: 100%; min-width: 0; flex-basis: auto; }
+    .hero-more-filters { gap: 0.5rem 0.9rem; }
   }
   @media (max-width: 560px) {
-    .hero-search-form { grid-template-columns: 1fr; }
-    .hero-field { border-right: none; }
     .hero-search-section { padding: 3rem 1rem; }
+    .hero-deal-tab { padding: 0.55rem 1rem; font-size: 10px; }
   }
 
   .hero-text { text-shadow: 0 2px 12px rgba(0,0,0,0.55), 0 4px 30px rgba(0,0,0,0.35); }
@@ -315,15 +340,28 @@
   </div>
 </section>
 
-<!-- HERO SEARCH — quick filters that redirect to /portefeuille.html -->
+<!-- HERO SEARCH — full search engine that redirects to /portefeuille.html -->
 <section class="hero-search-section">
   <div class="hero-search-wrap">
     <div class="hero-search-eyebrow" data-text="home.search.eyebrow">TROUVER UN BIEN</div>
     <h2 class="hero-search-title" data-text="home.search.title">Composez votre <em>recherche.</em></h2>
-    <form class="hero-search-form" id="heroSearchForm">
-      <div class="hero-field">
-        <span class="hero-lbl">Ville</span>
-        <select name="city">
+
+    <!-- Deal tabs -->
+    <div class="hero-deal-tabs">
+      <button type="button" class="hero-deal-tab is-active" data-deal="">Tout</button>
+      <button type="button" class="hero-deal-tab" data-deal="sale">À vendre</button>
+      <button type="button" class="hero-deal-tab" data-deal="rent">À louer</button>
+    </div>
+
+    <form id="heroSearchForm" onsubmit="event.preventDefault()">
+      <input type="hidden" name="deal" id="heroDealHidden" value="">
+
+      <div class="hero-search-row">
+        <div class="hero-search-input-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+          <input type="search" name="q" placeholder="Adresse, référence, quartier…" autocomplete="off">
+        </div>
+        <select name="city" class="hero-search-select" aria-label="Ville">
           <option value="">Toutes les villes</option>
           <option value="tel-aviv">Tel Aviv</option>
           <option value="herzliya">Herzliya</option>
@@ -331,34 +369,33 @@
           <option value="netanya">Netanya</option>
           <option value="jerusalem">Jérusalem</option>
         </select>
-      </div>
-      <div class="hero-field">
-        <span class="hero-lbl">Type</span>
-        <select name="type">
+        <select name="kind" class="hero-search-select" aria-label="Type de bien">
+          <option value="">Type de bien</option>
+          <option value="neuf">Neuf</option>
+          <option value="occasion">Occasion</option>
+          <option value="projet">Projet</option>
+          <option value="commercial">Local commercial</option>
+        </select>
+        <select name="type" class="hero-search-select" aria-label="Type">
           <option value="">Tous les types</option>
           <option value="appartement">Appartement</option>
           <option value="penthouse">Penthouse</option>
           <option value="villa">Villa</option>
           <option value="loft">Loft</option>
           <option value="maison">Maison</option>
-          <option value="commercial">Local commercial</option>
         </select>
-      </div>
-      <div class="hero-field">
-        <span class="hero-lbl">Pièces minimum</span>
-        <select name="min_r">
-          <option value="">Indifférent</option>
-          <option value="3">3+</option>
-          <option value="4">4+</option>
-          <option value="5">5+</option>
-          <option value="6">6+</option>
-          <option value="7">7+</option>
+        <select name="min_r" class="hero-search-select" aria-label="Pièces">
+          <option value="">Pièces</option>
+          <option value="2">2+ pièces</option>
+          <option value="3">3+ pièces</option>
+          <option value="4">4+ pièces</option>
+          <option value="5">5+ pièces</option>
+          <option value="6">6+ pièces</option>
+          <option value="7">7+ pièces</option>
+          <option value="8">8+ pièces</option>
         </select>
-      </div>
-      <div class="hero-field">
-        <span class="hero-lbl">Budget</span>
-        <select name="price">
-          <option value="">Tous budgets</option>
+        <select name="price" class="hero-search-select" aria-label="Budget">
+          <option value="">Budget</option>
           <option value="0-11000000">Jusqu'à 11 M ₪</option>
           <option value="11000000-18000000">11 — 18 M ₪</option>
           <option value="18000000-30000000">18 — 30 M ₪</option>
@@ -366,7 +403,17 @@
           <option value="45000000-65000000">45 — 65 M ₪</option>
           <option value="65000000-0">Au-delà de 65 M ₪</option>
         </select>
+        <button type="button" id="heroMoreBtn" class="hero-more-btn" aria-expanded="false">＋ Plus</button>
       </div>
+
+      <div id="heroMoreFilters" class="hero-more-filters" hidden>
+        <label class="hero-micro-field"><span>Surface min</span><input type="number" name="min_s" placeholder="m²" min="0" step="10"></label>
+        <label class="hero-micro-field"><span>Surface max</span><input type="number" name="max_s" placeholder="m²" min="0" step="10"></label>
+        <label class="hero-micro-toggle"><input type="checkbox" name="sig_only" value="1"><span>★ Pièces signature</span></label>
+        <label class="hero-micro-toggle"><input type="checkbox" name="fea_only" value="1"><span>À la une</span></label>
+        <label class="hero-micro-toggle"><input type="checkbox" name="elev_only" value="1"><span>⇡ Avec ascenseur</span></label>
+      </div>
+
       <button type="submit" class="hero-search-btn">Rechercher →</button>
     </form>
   </div>
@@ -590,6 +637,27 @@ window.addEventListener('scroll', function() {
   var scrolled = (winScroll / height) * 100;
   document.getElementById('scrollProgress').style.width = scrolled + '%';
 }, { passive: true });
+
+// Hero search: deal tabs + "+ Plus" toggle
+(function () {
+  const dealHidden = document.getElementById('heroDealHidden');
+  document.querySelectorAll('.hero-deal-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.hero-deal-tab').forEach(t => t.classList.toggle('is-active', t === tab));
+      if (dealHidden) dealHidden.value = tab.dataset.deal || '';
+    });
+  });
+  const moreBtn = document.getElementById('heroMoreBtn');
+  const moreFilters = document.getElementById('heroMoreFilters');
+  if (moreBtn && moreFilters) {
+    moreBtn.addEventListener('click', () => {
+      const isOpen = moreFilters.hidden === false;
+      moreFilters.hidden = isOpen;
+      moreBtn.setAttribute('aria-expanded', String(!isOpen));
+      moreBtn.textContent = isOpen ? '＋ Plus' : '− Moins';
+    });
+  }
+})();
 </script>
 
 <!-- SL_FLOATING_WA_START -->
