@@ -4,7 +4,7 @@
    pour assets statiques (CSS/JS/images). Offline fallback sur la home.
    ========================================================================== */
 
-const CACHE_VERSION = 'sl-v4-2026-05-20-slider';
+const CACHE_VERSION = 'sl-v5-2026-05-20-mousedrag';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 

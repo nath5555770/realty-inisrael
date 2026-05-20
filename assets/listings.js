@@ -746,32 +746,61 @@
     m.querySelector('.listing-reader-prev').addEventListener('click', e => { e.stopPropagation(); showGalleryAt(galleryIndex - 1); });
     m.querySelector('.listing-reader-next').addEventListener('click', e => { e.stopPropagation(); showGalleryAt(galleryIndex + 1); });
 
-    // Live touch drag on the cover — track follows the finger, then snaps on release
+    // Unified pointer drag (mouse + touch + pen) — track follows the cursor live,
+    // then snaps on release. Mouse drag on desktop = touch swipe on mobile.
     const viewport = m.querySelector('.listing-reader-viewport');
     const track = m.querySelector('.listing-reader-track');
     let dragStartX = null;
+    let dragStartY = null;
     let dragWidth = 0;
-    viewport.addEventListener('touchstart', e => {
-      dragStartX = e.changedTouches[0].clientX;
+    let isHorizontalDrag = false;
+
+    viewport.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;   // left button only
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
       dragWidth = viewport.clientWidth || 1;
-      track.style.transition = 'none';   // disable while dragging for instant feedback
-    }, { passive: true });
-    viewport.addEventListener('touchmove', e => {
+      isHorizontalDrag = false;
+      track.style.transition = 'none';
+      viewport.style.cursor = 'grabbing';
+      try { viewport.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+
+    viewport.addEventListener('pointermove', e => {
       if (dragStartX == null || !galleryImages.length) return;
-      const dx = e.changedTouches[0].clientX - dragStartX;
+      const dx = e.clientX - dragStartX;
+      const dy = e.clientY - dragStartY;
+      // Lock direction: if vertical motion clearly wins, abort the drag so the
+      // page can scroll instead.
+      if (!isHorizontalDrag) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        if (Math.abs(dy) > Math.abs(dx)) {
+          dragStartX = null;
+          track.style.transition = '';
+          viewport.style.cursor = '';
+          return;
+        }
+        isHorizontalDrag = true;
+      }
       const basePct = -galleryIndex * 100;
       track.style.transform = 'translate3d(calc(' + basePct + '% + ' + dx + 'px), 0, 0)';
-    }, { passive: true });
-    viewport.addEventListener('touchend', e => {
+    });
+
+    function endDrag(e) {
       if (dragStartX == null) return;
-      const dx = e.changedTouches[0].clientX - dragStartX;
+      const dx = (e.clientX != null ? e.clientX : dragStartX) - dragStartX;
       dragStartX = null;
-      track.style.transition = '';        // re-enable spring
-      // snap: if drag past 18% of viewport, go next/prev; else snap back
+      track.style.transition = '';
+      viewport.style.cursor = '';
       const ratio = Math.abs(dx) / Math.max(dragWidth, 1);
-      if (ratio > 0.18) showGalleryAt(galleryIndex + (dx < 0 ? 1 : -1));
-      else showGalleryAt(galleryIndex);
-    }, { passive: true });
+      if (isHorizontalDrag && ratio > 0.18) showGalleryAt(galleryIndex + (dx < 0 ? 1 : -1));
+      else showGalleryAt(galleryIndex);   // snap back
+    }
+    viewport.addEventListener('pointerup', endDrag);
+    viewport.addEventListener('pointercancel', endDrag);
+    viewport.addEventListener('pointerleave', endDrag);
+    // Block native image drag (would otherwise hijack the cursor)
+    viewport.addEventListener('dragstart', e => e.preventDefault());
 
     if (!document.getElementById('listingReaderStyle')) {
       const s = document.createElement('style');
@@ -789,7 +818,8 @@
         '.listing-reader-close:hover { background: var(--teal); color: var(--gold); border-color: var(--teal); transform: rotate(90deg); }' +
         /* Cover wrapper hosts the slider + nav arrows + counter */
         '.listing-reader-cover-wrap { position: relative; background: var(--paper-deep); }' +
-        '.listing-reader-viewport { aspect-ratio: 16/9; overflow: hidden; touch-action: pan-y; }' +
+        '.listing-reader-viewport { aspect-ratio: 16/9; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }' +
+        '.listing-reader-viewport:active { cursor: grabbing; }' +
         '.listing-reader-track { display: flex; height: 100%; width: 100%; transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1); will-change: transform; }' +
         '.listing-reader-slide { flex: 0 0 100%; height: 100%; background-size: cover; background-position: center; background-color: var(--paper-deep); user-select: none; -webkit-user-drag: none; }' +
         '.listing-reader-cover-wrap::after { content: \'\'; position: absolute; left: 0; right: 0; bottom: 0; height: 35%; background: linear-gradient(180deg, rgba(14,39,34,0) 0%, rgba(244,237,224,1) 100%); pointer-events: none; z-index: 1; }' +
@@ -895,9 +925,13 @@
     m.querySelector('.listing-reader-prev').classList.toggle('is-hidden', total < 2);
     m.querySelector('.listing-reader-next').classList.toggle('is-hidden', total < 2);
 
-    // Active thumb
+    // Active thumb — toggle highlight + smooth-scroll the strip so it stays in view
     m.querySelectorAll('.listing-reader-thumb').forEach(t => {
-      t.classList.toggle('is-active', parseInt(t.dataset.i, 10) === galleryIndex);
+      const active = parseInt(t.dataset.i, 10) === galleryIndex;
+      t.classList.toggle('is-active', active);
+      if (active && typeof t.scrollIntoView === 'function') {
+        t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
     });
   }
 
