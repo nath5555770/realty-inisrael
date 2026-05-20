@@ -409,9 +409,25 @@
               Choisir une photo…
             </label>
             <input type="url" id="fImage" placeholder="ou coller une URL d'image" class="field-image-url">
-            <span class="field-hint">PNG, JPG ou WebP — max 5 MB.</span>
+            <span class="field-hint">PNG, JPG ou WebP — max 5 MB. C'est l'image affichée sur la grille.</span>
             <div class="upload-progress" id="uploadProgress" hidden></div>
           </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="field-group field-images">
+        <legend>Galerie de photos</legend>
+        <p class="field-hint" style="margin: 0 0 1rem">Ajoutez autant de photos que vous voulez. Elles s'afficheront dans une galerie quand un visiteur clique sur l'annonce. La photo principale ci-dessus reste la couverture sur les cartes.</p>
+        <div class="gallery-grid" id="galleryGrid">
+          <div class="gallery-empty">Aucune photo ajoutée pour le moment.</div>
+        </div>
+        <div class="gallery-actions">
+          <label class="btn-ghost">
+            <input type="file" id="galleryUpload" accept="image/*" multiple style="display:none">
+            ＋ Ajouter des photos
+          </label>
+          <span class="field-hint">Sélectionnez plusieurs fichiers d'un coup. Cliquez sur ✕ pour supprimer.</span>
+          <div class="upload-progress" id="galleryProgress" hidden></div>
         </div>
       </fieldset>
 

@@ -251,6 +251,7 @@
   function openListingEditor(idx) {
     STATE.currentListing = idx;
     STATE.pendingListingFile = null;
+    STATE.currentImages = [];
     const isNew = idx === 'new';
     const l = isNew
       ? { city: 'tel-aviv', type: 'appartement', kind: 'occasion', deal: 'sale', visible: true, featured: false, signature: false, off_market: false }
@@ -281,6 +282,9 @@
     $('#fHasElevator').checked = !!l.has_elevator;
     setListingPreview(imageUrl(BUCKET_LISTINGS, l.image));
     $('#uploadProgress').hidden = true;
+    // Load gallery
+    STATE.currentImages = Array.isArray(l.images) ? l.images.slice() : [];
+    renderGallery();
 
     if (!isNew) {
       $('#metaGroup').hidden = false;
@@ -297,6 +301,53 @@
     const p = $('#imagePreview');
     if (url) { p.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')"; p.innerHTML = ''; }
     else { p.style.backgroundImage = ''; p.innerHTML = '<div class="image-empty">Aucune photo</div>'; }
+  }
+
+  // ---- LISTING GALLERY (multi-photos) ----
+  function renderGallery() {
+    const grid = $('#galleryGrid');
+    if (!grid) return;
+    const imgs = STATE.currentImages || [];
+    if (!imgs.length) {
+      grid.innerHTML = '<div class="gallery-empty">Aucune photo ajoutée pour le moment.</div>';
+      return;
+    }
+    grid.innerHTML = imgs.map((path, i) =>
+      '<div class="gallery-tile" data-i="' + i + '" style="background-image:url(\'' + escapeHtml(imageUrl(BUCKET_LISTINGS, path)) + '\')">' +
+        '<button type="button" class="gallery-tile-x" data-i="' + i + '" title="Supprimer cette photo">×</button>' +
+      '</div>'
+    ).join('');
+    grid.querySelectorAll('.gallery-tile-x').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const i = parseInt(btn.dataset.i, 10);
+        STATE.currentImages.splice(i, 1);
+        renderGallery();
+      });
+    });
+  }
+
+  async function handleGalleryUpload(files) {
+    if (!files || !files.length) return;
+    const progress = $('#galleryProgress');
+    progress.hidden = false;
+    const slug = ($('#fSlug') && $('#fSlug').value) || slugify($('#fTitleMain').value || 'annonce');
+    const total = files.length;
+    let done = 0;
+    for (const file of files) {
+      try {
+        progress.textContent = 'Téléversement ' + (done + 1) + '/' + total + '…';
+        const path = await uploadImage(BUCKET_LISTINGS, slug, file, progress);
+        STATE.currentImages.push(path);
+        renderGallery();
+        done++;
+      } catch (e) {
+        console.error('[gallery upload]', e);
+        toast('Erreur sur "' + file.name + '" : ' + (e.message || ''), 'error');
+      }
+    }
+    progress.textContent = total + ' photo' + (total > 1 ? 's' : '') + ' ajoutée' + (total > 1 ? 's' : '') + ' ✓';
+    setTimeout(() => { progress.hidden = true; }, 1800);
   }
 
   function readListingForm(base) {
@@ -320,6 +371,7 @@
       price_eur_eq: $('#fPriceEur').value.trim() || null,
       price_ils_eq: $('#fPriceIls').value.trim() || null,
       image: $('#fImage').value.trim() || null,
+      images: Array.isArray(STATE.currentImages) ? STATE.currentImages : [],
       visible: $('#fVisible').checked, featured: $('#fFeatured').checked,
       signature: $('#fSignature').checked, off_market: $('#fOffMarket').checked,
       has_elevator: $('#fHasElevator').checked
@@ -975,6 +1027,14 @@
     $('#deleteBtn').addEventListener('click', deleteListing);
     $('#fileUpload').addEventListener('change', e => handleListingFile(e.target.files[0]));
     $('#fImage').addEventListener('change', () => { if ($('#fImage').value && !STATE.pendingListingFile && !$('#fImage').value.startsWith('(')) setListingPreview($('#fImage').value); });
+    // Gallery uploads (multi-file)
+    const galleryInput = $('#galleryUpload');
+    if (galleryInput) {
+      galleryInput.addEventListener('change', e => {
+        handleGalleryUpload(Array.from(e.target.files));
+        galleryInput.value = ''; // reset so re-selecting the same files works
+      });
+    }
     $('#fPriceUsd').addEventListener('blur', () => {
       const v = parseFloat($('#fPriceUsd').value);
       if (!v || $('#fPriceDisplay').value) return;

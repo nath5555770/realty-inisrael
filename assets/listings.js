@@ -759,6 +759,12 @@
         '.listing-reader-price-eq { font-family: \'JetBrains Mono\', monospace; font-size: 12px; color: var(--muted); margin-top: 0.4rem; }' +
         '.listing-reader-cta { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; background: var(--teal); color: var(--gold); font-family: \'Cinzel\', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; text-decoration: none; transition: all 0.4s; }' +
         '.listing-reader-cta:hover { background: var(--teal-deep); letter-spacing: 0.4em; }' +
+        /* Gallery thumbnail strip */
+        '.listing-reader-strip { display: flex; gap: 8px; padding: 14px 1.5rem 4px; overflow-x: auto; scrollbar-width: thin; }' +
+        '@media (min-width: 768px) { .listing-reader-strip { padding: 16px 3rem 6px; } }' +
+        '.listing-reader-thumb { flex: 0 0 auto; width: 90px; height: 64px; background-size: cover; background-position: center; background-color: var(--paper-deep); border: 2px solid transparent; cursor: pointer; transition: all 0.25s; padding: 0; }' +
+        '.listing-reader-thumb:hover { transform: translateY(-2px); border-color: var(--gold); }' +
+        '.listing-reader-thumb.is-active { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal); }' +
         'body.modal-open { overflow: hidden; }'
       );
       document.head.appendChild(s);
@@ -809,9 +815,34 @@
   function openListingReader(l) {
     buildListingReader();
     const m = document.getElementById('listingReader');
-    const img = imageUrl(l.image);
-    m.querySelector('.listing-reader-cover').style.backgroundImage = img ? "url('" + img.replace(/'/g, "\\'") + "')" : '';
-    m.querySelector('.listing-reader-body').innerHTML = listingReaderBody(l);
+    // Build the full gallery: cover first, then any extra `images` (deduped)
+    const allImages = [];
+    if (l.image) allImages.push(l.image);
+    if (Array.isArray(l.images)) {
+      l.images.forEach(p => { if (p && !allImages.includes(p)) allImages.push(p); });
+    }
+    const cover = m.querySelector('.listing-reader-cover');
+    const firstUrl = allImages.length ? imageUrl(allImages[0]) : '';
+    cover.style.backgroundImage = firstUrl ? "url('" + firstUrl.replace(/'/g, "\\'") + "')" : '';
+    // Thumbnail strip below the cover (only if there are at least 2 photos)
+    let stripHTML = '';
+    if (allImages.length > 1) {
+      stripHTML = '<div class="listing-reader-strip">' + allImages.map((p, i) =>
+        '<button type="button" class="listing-reader-thumb' + (i === 0 ? ' is-active' : '') + '" data-i="' + i + '" style="background-image:url(\'' + imageUrl(p).replace(/'/g, "\\'") + '\')" aria-label="Photo ' + (i + 1) + '"></button>'
+      ).join('') + '</div>';
+    }
+    const body = m.querySelector('.listing-reader-body');
+    body.innerHTML = stripHTML + listingReaderBody(l);
+
+    // Thumb click → swap the cover
+    body.querySelectorAll('.listing-reader-thumb').forEach(t => {
+      t.addEventListener('click', () => {
+        body.querySelectorAll('.listing-reader-thumb').forEach(x => x.classList.toggle('is-active', x === t));
+        const url = imageUrl(allImages[parseInt(t.dataset.i, 10)]);
+        cover.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
+      });
+    });
+
     m.scrollTop = 0;
     m.hidden = false;
     document.body.classList.add('modal-open');
