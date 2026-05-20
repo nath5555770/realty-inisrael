@@ -713,7 +713,9 @@
         '</button>' +
         '<button class="listing-reader-close" data-close type="button" aria-label="Fermer">×</button>' +
         '<div class="listing-reader-cover-wrap">' +
-          '<div class="listing-reader-cover"></div>' +
+          '<div class="listing-reader-viewport">' +
+            '<div class="listing-reader-track"></div>' +
+          '</div>' +
           '<button class="listing-reader-arrow listing-reader-prev" type="button" aria-label="Photo précédente">' +
             '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
           '</button>' +
@@ -744,15 +746,31 @@
     m.querySelector('.listing-reader-prev').addEventListener('click', e => { e.stopPropagation(); showGalleryAt(galleryIndex - 1); });
     m.querySelector('.listing-reader-next').addEventListener('click', e => { e.stopPropagation(); showGalleryAt(galleryIndex + 1); });
 
-    // Touch swipe on the cover
-    const cover = m.querySelector('.listing-reader-cover-wrap');
-    cover.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
-    cover.addEventListener('touchend', e => {
-      if (touchStartX == null) return;
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      touchStartX = null;
-      if (Math.abs(dx) < 40) return;             // ignore taps / micro-drags
-      showGalleryAt(galleryIndex + (dx < 0 ? 1 : -1));
+    // Live touch drag on the cover — track follows the finger, then snaps on release
+    const viewport = m.querySelector('.listing-reader-viewport');
+    const track = m.querySelector('.listing-reader-track');
+    let dragStartX = null;
+    let dragWidth = 0;
+    viewport.addEventListener('touchstart', e => {
+      dragStartX = e.changedTouches[0].clientX;
+      dragWidth = viewport.clientWidth || 1;
+      track.style.transition = 'none';   // disable while dragging for instant feedback
+    }, { passive: true });
+    viewport.addEventListener('touchmove', e => {
+      if (dragStartX == null || !galleryImages.length) return;
+      const dx = e.changedTouches[0].clientX - dragStartX;
+      const basePct = -galleryIndex * 100;
+      track.style.transform = 'translate3d(calc(' + basePct + '% + ' + dx + 'px), 0, 0)';
+    }, { passive: true });
+    viewport.addEventListener('touchend', e => {
+      if (dragStartX == null) return;
+      const dx = e.changedTouches[0].clientX - dragStartX;
+      dragStartX = null;
+      track.style.transition = '';        // re-enable spring
+      // snap: if drag past 18% of viewport, go next/prev; else snap back
+      const ratio = Math.abs(dx) / Math.max(dragWidth, 1);
+      if (ratio > 0.18) showGalleryAt(galleryIndex + (dx < 0 ? 1 : -1));
+      else showGalleryAt(galleryIndex);
     }, { passive: true });
 
     if (!document.getElementById('listingReaderStyle')) {
@@ -769,11 +787,12 @@
         '.listing-reader-back:hover { background: var(--teal); color: var(--gold); border-color: var(--teal); letter-spacing: 0.4em; }' +
         '.listing-reader-close { position: fixed; top: 18px; right: 18px; z-index: 4; width: 42px; height: 42px; border: 1px solid var(--gold); background: var(--paper); border-radius: 50%; cursor: pointer; font-size: 24px; line-height: 1; color: var(--teal); transition: all 0.3s; }' +
         '.listing-reader-close:hover { background: var(--teal); color: var(--gold); border-color: var(--teal); transform: rotate(90deg); }' +
-        /* Cover wrapper hosts the photo + nav arrows + counter */
-        '.listing-reader-cover-wrap { position: relative; }' +
-        '.listing-reader-cover { aspect-ratio: 16/9; background-size: cover; background-position: center; background-color: var(--paper-deep); position: relative; transition: opacity 0.28s ease; }' +
-        '.listing-reader-cover.is-fading { opacity: 0.35; }' +
-        '.listing-reader-cover::after { content: \'\'; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,39,34,0) 60%, rgba(244,237,224,1) 100%); pointer-events: none; }' +
+        /* Cover wrapper hosts the slider + nav arrows + counter */
+        '.listing-reader-cover-wrap { position: relative; background: var(--paper-deep); }' +
+        '.listing-reader-viewport { aspect-ratio: 16/9; overflow: hidden; touch-action: pan-y; }' +
+        '.listing-reader-track { display: flex; height: 100%; width: 100%; transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1); will-change: transform; }' +
+        '.listing-reader-slide { flex: 0 0 100%; height: 100%; background-size: cover; background-position: center; background-color: var(--paper-deep); user-select: none; -webkit-user-drag: none; }' +
+        '.listing-reader-cover-wrap::after { content: \'\'; position: absolute; left: 0; right: 0; bottom: 0; height: 35%; background: linear-gradient(180deg, rgba(14,39,34,0) 0%, rgba(244,237,224,1) 100%); pointer-events: none; z-index: 1; }' +
         /* Navigation arrows on the cover */
         '.listing-reader-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; width: 52px; height: 52px; border-radius: 50%; border: 0; background: rgba(244,237,224,0.85); color: var(--teal); cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 18px rgba(14,39,34,0.25); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: all 0.3s cubic-bezier(0.2,0.85,0.2,1); opacity: 0.85; }' +
         '.listing-reader-arrow:hover { background: var(--teal); color: var(--gold); opacity: 1; transform: translateY(-50%) scale(1.08); box-shadow: 0 6px 24px rgba(14,39,34,0.45); }' +
@@ -856,21 +875,15 @@
     );
   }
 
-  // Display the photo at `i` in galleryImages (wraps around)
+  // Display the photo at `i` in galleryImages (wraps around) — slides the GPU track
   function showGalleryAt(i) {
     const m = document.getElementById('listingReader');
     if (!m || !galleryImages.length) return;
     const total = galleryImages.length;
     galleryIndex = ((i % total) + total) % total;   // safe wrap-around
 
-    const cover = m.querySelector('.listing-reader-cover');
-    const url = imageUrl(galleryImages[galleryIndex]);
-    // Fade out → swap image → fade in
-    cover.classList.add('is-fading');
-    setTimeout(() => {
-      cover.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
-      cover.classList.remove('is-fading');
-    }, 140);
+    const track = m.querySelector('.listing-reader-track');
+    track.style.transform = 'translate3d(' + (-galleryIndex * 100) + '%, 0, 0)';
 
     // Counter
     const counter = m.querySelector('.listing-reader-counter');
@@ -913,19 +926,24 @@
       t.addEventListener('click', () => showGalleryAt(parseInt(t.dataset.i, 10)));
     });
 
-    // Reset to first photo and render (sets counter, arrows, image)
+    // Build the slide track — one full-bleed image per slide, side by side
+    const track = m.querySelector('.listing-reader-track');
+    track.style.transition = 'none';      // suppress animation on initial layout
+    track.innerHTML = galleryImages.map(p =>
+      '<div class="listing-reader-slide" style="background-image:url(\'' + imageUrl(p).replace(/'/g, "\\'") + '\')"></div>'
+    ).join('');
+    // Force layout flush, then restore the spring so subsequent slides animate
+    void track.offsetWidth;
+    track.style.transition = '';
+
     galleryIndex = 0;
-    // Render the first photo synchronously (no fade) for a clean open
-    const cover = m.querySelector('.listing-reader-cover');
-    const firstUrl = galleryImages.length ? imageUrl(galleryImages[0]) : '';
-    cover.style.backgroundImage = firstUrl ? "url('" + firstUrl.replace(/'/g, "\\'") + "')" : '';
+    track.style.transform = 'translate3d(0%, 0, 0)';
     const counter = m.querySelector('.listing-reader-counter');
     counter.querySelector('.cur').textContent = galleryImages.length ? 1 : 0;
     counter.querySelector('.tot').textContent = galleryImages.length;
     counter.classList.toggle('is-hidden', galleryImages.length < 2);
     m.querySelector('.listing-reader-prev').classList.toggle('is-hidden', galleryImages.length < 2);
     m.querySelector('.listing-reader-next').classList.toggle('is-hidden', galleryImages.length < 2);
-    // Mark first thumb as active
     const firstThumb = body.querySelector('.listing-reader-thumb[data-i="0"]');
     if (firstThumb) firstThumb.classList.add('is-active');
 
