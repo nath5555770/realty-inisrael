@@ -462,7 +462,7 @@
   function featuredCardHTML(l) {
     const img = imageUrl(l.image);
     return [
-      '<article class="estate featured-card">',
+      '<article class="estate featured-card" data-ref="', escapeHtml(l.ref || ''), '">',
       '  <div class="frame aspect-[4/5] mb-5">',
       '    <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
       '    <div class="ref-tag">', (l.signature ? '★ ' : ''), escapeHtml(l.ref || ''), '</div>',
@@ -690,6 +690,178 @@
   }
 
   // ------------------------------------------------------------------
+  // LISTING DETAIL READER — click any card to open a full-detail modal
+  // ------------------------------------------------------------------
+  let isListingOpen = false;
+  let suppressListingPop = false;
+
+  function buildListingReader() {
+    if (document.getElementById('listingReader')) return;
+    const m = document.createElement('div');
+    m.id = 'listingReader';
+    m.className = 'listing-reader';
+    m.hidden = true;
+    m.innerHTML =
+      '<div class="listing-reader-overlay" data-close></div>' +
+      '<article class="listing-reader-box">' +
+        '<button class="listing-reader-back" data-close type="button" aria-label="Retour">' +
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>' +
+          '<span>Retour</span>' +
+        '</button>' +
+        '<button class="listing-reader-close" data-close type="button" aria-label="Fermer">×</button>' +
+        '<div class="listing-reader-cover"></div>' +
+        '<div class="listing-reader-body"></div>' +
+      '</article>';
+    document.body.appendChild(m);
+
+    m.addEventListener('click', e => {
+      if (e.target.closest('[data-close]')) { e.preventDefault(); closeListingReader(); }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && isListingOpen) closeListingReader();
+    });
+    window.addEventListener('popstate', () => {
+      if (suppressListingPop) { suppressListingPop = false; return; }
+      if (isListingOpen) closeListingReader(true);
+    });
+
+    if (!document.getElementById('listingReaderStyle')) {
+      const s = document.createElement('style');
+      s.id = 'listingReaderStyle';
+      s.textContent = (
+        '.listing-reader { position: fixed; inset: 0; z-index: 200; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; opacity: 0; transition: opacity 0.35s ease-out; }' +
+        '.listing-reader.is-visible { opacity: 1; }' +
+        '.listing-reader[hidden] { display: none; }' +
+        '.listing-reader-overlay { position: fixed; inset: 0; background: rgba(14,39,34,0.92); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }' +
+        '.listing-reader-box { position: relative; background: var(--paper); max-width: 1100px; width: 100%; min-height: 100vh; box-shadow: 0 0 80px rgba(0,0,0,0.55); transform: translateY(20px); transition: transform 0.5s cubic-bezier(0.2,0.85,0.2,1); }' +
+        '.listing-reader.is-visible .listing-reader-box { transform: translateY(0); }' +
+        '.listing-reader-back { position: fixed; top: 18px; left: 18px; z-index: 4; display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px 10px 14px; border: 1px solid var(--gold); background: var(--paper); color: var(--teal); font-family: \'Cinzel\', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; transition: all 0.4s; border-radius: 999px; }' +
+        '.listing-reader-back:hover { background: var(--teal); color: var(--gold); border-color: var(--teal); letter-spacing: 0.4em; }' +
+        '.listing-reader-close { position: fixed; top: 18px; right: 18px; z-index: 4; width: 42px; height: 42px; border: 1px solid var(--gold); background: var(--paper); border-radius: 50%; cursor: pointer; font-size: 24px; line-height: 1; color: var(--teal); transition: all 0.3s; }' +
+        '.listing-reader-close:hover { background: var(--teal); color: var(--gold); border-color: var(--teal); transform: rotate(90deg); }' +
+        '.listing-reader-cover { aspect-ratio: 16/9; background-size: cover; background-position: center; background-color: var(--paper-deep); position: relative; }' +
+        '.listing-reader-cover::after { content: \'\'; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,39,34,0) 60%, rgba(244,237,224,1) 100%); pointer-events: none; }' +
+        '.listing-reader-body { padding: 2rem 1.5rem 5rem; max-width: 880px; margin: 0 auto; position: relative; z-index: 1; }' +
+        '@media (min-width: 768px) { .listing-reader-body { padding: 2.5rem 3rem 6rem; } .listing-reader-cover { aspect-ratio: 16/8.5; } }' +
+        '.listing-reader-meta { font-family: \'Cinzel\', serif; font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 1rem; }' +
+        '.listing-reader-title { font-family: \'Playfair Display\', serif; font-weight: 400; line-height: 1.05; font-size: clamp(2rem, 5vw, 3.4rem); color: var(--teal); margin: 0 0 0.6rem; letter-spacing: -0.01em; }' +
+        '.listing-reader-title em { font-style: italic; color: var(--gold-deep); }' +
+        '.listing-reader-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0 2rem; }' +
+        '.listing-reader-tag { display: inline-flex; align-items: center; padding: 0.4rem 0.9rem; background: var(--paper-deep); border-radius: 999px; font-family: \'Cinzel\', serif; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-deep); }' +
+        '.listing-reader-tag.is-gold { background: var(--gold); color: var(--teal); }' +
+        '.listing-reader-desc { font-family: \'Plus Jakarta Sans\', sans-serif; font-size: 16.5px; line-height: 1.75; color: var(--ink); margin-bottom: 2.5rem; }' +
+        '.listing-reader-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.4rem; padding: 1.5rem 0; border-top: 1px solid var(--line-gold); border-bottom: 1px solid var(--line-gold); margin-bottom: 2.5rem; }' +
+        '.listing-reader-stat { text-align: center; }' +
+        '.listing-reader-stat .lbl { font-family: \'Cinzel\', serif; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold-deep); display: block; margin-bottom: 0.4rem; }' +
+        '.listing-reader-stat .val { font-family: \'Playfair Display\', serif; font-size: 1.4rem; color: var(--teal); }' +
+        '.listing-reader-price-row { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1.5rem; margin-bottom: 2.5rem; }' +
+        '.listing-reader-price { font-family: \'Playfair Display\', serif; font-size: clamp(2rem, 4vw, 2.8rem); color: var(--teal); line-height: 1; }' +
+        '.listing-reader-price-eq { font-family: \'JetBrains Mono\', monospace; font-size: 12px; color: var(--muted); margin-top: 0.4rem; }' +
+        '.listing-reader-cta { display: inline-flex; align-items: center; gap: 0.7rem; padding: 1.1rem 2rem; background: var(--teal); color: var(--gold); font-family: \'Cinzel\', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; text-decoration: none; transition: all 0.4s; }' +
+        '.listing-reader-cta:hover { background: var(--teal-deep); letter-spacing: 0.4em; }' +
+        'body.modal-open { overflow: hidden; }'
+      );
+      document.head.appendChild(s);
+    }
+  }
+
+  function listingDealLabel(deal) {
+    return ({ sale: 'À VENDRE', rent: 'À LOUER' })[deal] || '';
+  }
+  function listingKindLabel(kind) {
+    return ({ neuf: 'NEUF', occasion: 'OCCASION', projet: 'PROJET', commercial: 'LOCAL COMMERCIAL' })[kind] || '';
+  }
+
+  function listingReaderBody(l) {
+    const tags = [];
+    if (l.signature) tags.push('<span class="listing-reader-tag is-gold">★ PIÈCE SIGNATURE</span>');
+    if (l.featured)  tags.push('<span class="listing-reader-tag is-gold">À LA UNE</span>');
+    const d = listingDealLabel(l.deal); if (d) tags.push('<span class="listing-reader-tag">' + d + '</span>');
+    const k = listingKindLabel(l.kind); if (k) tags.push('<span class="listing-reader-tag">' + k + '</span>');
+    if (l.has_elevator) tags.push('<span class="listing-reader-tag">⇡ ASCENSEUR</span>');
+
+    const stats = [];
+    if (l.surface) stats.push(['SURFACE', escapeHtml(l.surface)]);
+    if (l.rooms) stats.push(['PIÈCES', escapeHtml(l.rooms)]);
+    if (l.neighborhood) stats.push(['QUARTIER', escapeHtml(l.neighborhood)]);
+    if (l.floor_label) stats.push(['ÉTAGE', escapeHtml(l.floor_label)]);
+    if (l.extra_label) stats.push(['DÉTAILS', escapeHtml(l.extra_label)]);
+
+    const eq = [l.price_eur_eq, l.price_ils_eq].filter(Boolean).join(' · ');
+
+    return (
+      '<div class="listing-reader-meta">RÉF. ' + escapeHtml(l.ref || '') + ' · ' + escapeHtml(cityLabel(l.city)) + (l.neighborhood ? ' · ' + escapeHtml(l.neighborhood) : '') + '</div>' +
+      '<h1 class="listing-reader-title">' + escapeHtml(l.title_main || '') + (l.title_accent ? ' <em>' + escapeHtml(l.title_accent) + '</em>' : '') + '</h1>' +
+      (tags.length ? '<div class="listing-reader-tags">' + tags.join('') + '</div>' : '') +
+      (l.description ? '<p class="listing-reader-desc">' + escapeHtml(l.description) + '</p>' : '') +
+      (stats.length ? '<div class="listing-reader-stats">' + stats.map(s => '<div class="listing-reader-stat"><span class="lbl">' + s[0] + '</span><span class="val">' + s[1] + '</span></div>').join('') + '</div>' : '') +
+      '<div class="listing-reader-price-row">' +
+        '<div>' +
+          '<div class="listing-reader-meta" style="margin:0 0 0.3rem">Prix</div>' +
+          '<div class="listing-reader-price">' + escapeHtml(priceLabel(l)) + '</div>' +
+          (eq ? '<div class="listing-reader-price-eq">' + escapeHtml(eq) + '</div>' : '') +
+        '</div>' +
+        '<a href="contact.html?ref=' + encodeURIComponent(l.ref || '') + '" class="listing-reader-cta">Demander une visite →</a>' +
+      '</div>'
+    );
+  }
+
+  function openListingReader(l) {
+    buildListingReader();
+    const m = document.getElementById('listingReader');
+    const img = imageUrl(l.image);
+    m.querySelector('.listing-reader-cover').style.backgroundImage = img ? "url('" + img.replace(/'/g, "\\'") + "')" : '';
+    m.querySelector('.listing-reader-body').innerHTML = listingReaderBody(l);
+    m.scrollTop = 0;
+    m.hidden = false;
+    document.body.classList.add('modal-open');
+    requestAnimationFrame(() => m.classList.add('is-visible'));
+    history.pushState({ listingReader: true, ref: l.ref }, '', '#listing-' + (l.ref || ''));
+    isListingOpen = true;
+  }
+
+  function closeListingReader(fromPopstate) {
+    const m = document.getElementById('listingReader');
+    if (!m) return;
+    m.classList.remove('is-visible');
+    setTimeout(() => { m.hidden = true; }, 350);
+    document.body.classList.remove('modal-open');
+    isListingOpen = false;
+    if (!fromPopstate && location.hash.startsWith('#listing-')) {
+      suppressListingPop = true;
+      history.back();
+    } else if (!fromPopstate && location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  }
+
+  function wireListingClicks() {
+    document.addEventListener('click', e => {
+      const card = e.target.closest('.estate, .featured-card');
+      if (!card) return;
+      // Don't intercept clicks on real links/buttons inside the card (heart, "Visiter →")
+      if (e.target.closest('a[href], button')) return;
+      const ref = card.dataset.ref;
+      if (!ref) return;
+      const l = (CACHE || []).find(x => x.ref === ref);
+      if (l) {
+        e.preventDefault();
+        openListingReader(l);
+      }
+    });
+
+    // Deep-link: if URL has #listing-<ref> on first load, open it once data is ready
+    if (location.hash.startsWith('#listing-')) {
+      const ref = location.hash.slice('#listing-'.length);
+      const tryOpen = () => {
+        const l = (CACHE || []).find(x => x.ref === ref);
+        if (l) openListingReader(l);
+      };
+      setTimeout(tryOpen, 600);
+    }
+  }
+
+  // ------------------------------------------------------------------
   // INIT
   // ------------------------------------------------------------------
   function init() {
@@ -713,6 +885,15 @@
     }
 
     wireHeroSearch();
+    wireListingClicks();
+
+    // Add cursor:pointer hint to all listing cards so they look clickable
+    if (!document.getElementById('listing-clickable-style')) {
+      const s = document.createElement('style');
+      s.id = 'listing-clickable-style';
+      s.textContent = '.estate, .featured-card { cursor: pointer; transition: transform 0.4s; } .estate:hover, .featured-card:hover { transform: translateY(-2px); }';
+      document.head.appendChild(s);
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
