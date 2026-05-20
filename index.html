@@ -186,54 +186,52 @@
   @media (max-width: 768px) { .num-tile { border-right: none; border-bottom: 1px solid var(--line); } .num-tile:last-child { border-bottom: none; } }
 
   /* === Hero search (homepage) === */
-  .hero-search-section { background: var(--teal); padding: 4rem 1.5rem 4.5rem; position: relative; }
-  .hero-search-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 20%, rgba(196,168,119,0.06) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(196,168,119,0.04) 0%, transparent 50%); pointer-events: none; }
-  .hero-search-wrap { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
-  .hero-search-eyebrow { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); text-align: center; }
-  .hero-search-title { font-family: 'Playfair Display', serif; font-weight: 400; font-size: clamp(2rem, 4vw, 3rem); color: var(--paper); text-align: center; margin: 0.85rem 0 2rem; line-height: 1.1; }
-  .hero-search-title em { font-style: italic; color: var(--gold); }
+  /* Hero search — mirrors the Portefeuille page visual style exactly */
+  .hero-search-section { background: var(--paper-light); padding: 3rem 1.5rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .hero-search-wrap { max-width: 1500px; margin: 0 auto; }
+  .hero-search-eyebrow { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-deep); text-align: center; }
+  .hero-search-title { font-family: 'Playfair Display', serif; font-weight: 400; font-size: clamp(1.7rem, 3vw, 2.4rem); color: var(--teal); text-align: center; margin: 0.7rem 0 2rem; line-height: 1.1; }
+  .hero-search-title em { font-style: italic; color: var(--gold-deep); }
 
-  /* Deal tabs */
-  .hero-deal-tabs { display: flex; justify-content: center; gap: 0.6rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
-  .hero-deal-tab { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; padding: 0.7rem 1.4rem; border: 1px solid var(--gold-deep); background: transparent; color: var(--paper); cursor: pointer; transition: all 0.35s; }
-  .hero-deal-tab:hover { border-color: var(--gold); color: var(--gold); }
-  .hero-deal-tab.is-active { background: var(--gold); color: var(--teal); border-color: var(--gold); }
+  /* Deal tabs — same as portefeuille .deal-tab */
+  .hero-deal-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
+  .deal-tab { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; padding: 0.7rem 1.4rem; border: 1px solid var(--line); background: transparent; color: var(--ink-soft); cursor: pointer; transition: all 0.35s; }
+  .deal-tab:hover { border-color: var(--gold); color: var(--teal); }
+  .deal-tab.is-active { background: var(--teal); color: var(--gold); border-color: var(--teal); }
 
-  /* Search panel (mimics portefeuille style on paper bg) */
-  .hero-search-row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: stretch; background: var(--paper); padding: 0.9rem; border: 1px solid var(--gold-deep); box-shadow: 0 6px 32px rgba(0,0,0,0.18); }
-  .hero-search-input-wrap { display: flex; align-items: center; gap: 0.55rem; flex: 1 1 280px; min-width: 220px; padding: 0.65rem 0.95rem; background: var(--surface); border: 1px solid var(--line); transition: border-color 0.25s; }
-  .hero-search-input-wrap:focus-within { border-color: var(--gold); }
-  .hero-search-input-wrap svg { color: var(--gold-deep); flex-shrink: 0; }
-  .hero-search-input-wrap input { flex: 1; border: 0; outline: 0; background: transparent; font: inherit; color: var(--ink); font-size: 14px; }
-  .hero-search-input-wrap input::placeholder { color: var(--muted); }
-  .hero-search-select { padding: 0.65rem 2rem 0.65rem 0.95rem; background: var(--surface); border: 1px solid var(--line); font: inherit; font-size: 13px; color: var(--ink); cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a78c5c' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 0.7rem center; min-width: 150px; transition: border-color 0.25s; }
-  .hero-search-select:focus { outline: 0; border-color: var(--gold); }
-  .hero-more-btn { padding: 0.65rem 1.25rem; background: transparent; border: 1px dashed var(--gold-deep); font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-deep); cursor: pointer; transition: all 0.3s; }
-  .hero-more-btn:hover { background: rgba(196,168,119,0.1); border-style: solid; }
-  .hero-more-btn[aria-expanded="true"] { background: var(--gold); color: var(--teal); border-color: var(--gold); border-style: solid; }
+  /* Search row + selects — same classes as portefeuille so the visual matches 1:1 */
+  .search-row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: stretch; }
+  .search-input-wrap { display: flex; align-items: center; gap: 0.55rem; flex: 1 1 280px; min-width: 240px; padding: 0.65rem 0.95rem; background: var(--surface); border: 1px solid var(--line); transition: border-color 0.25s; }
+  .search-input-wrap:focus-within { border-color: var(--gold); }
+  .search-input-wrap svg { color: var(--gold-deep); flex-shrink: 0; }
+  .search-input-wrap input { flex: 1; border: 0; outline: 0; background: transparent; font: inherit; color: var(--ink); font-size: 14px; }
+  .search-input-wrap input::placeholder { color: var(--muted); }
+  .search-select { padding: 0.65rem 2rem 0.65rem 0.95rem; background: var(--surface); border: 1px solid var(--line); font: inherit; font-size: 13px; color: var(--ink); cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a78c5c' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 0.7rem center; min-width: 150px; transition: border-color 0.25s; }
+  .search-select:focus { outline: 0; border-color: var(--gold); }
+  .more-btn { padding: 0.65rem 1.1rem; background: transparent; border: 1px solid var(--line); font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-deep); cursor: pointer; transition: all 0.25s; }
+  .more-btn:hover, .more-btn.is-open { border-color: var(--gold); color: var(--teal); }
+  .more-filters { display: flex; flex-wrap: wrap; gap: 0.7rem 1rem; padding-top: 0.9rem; margin-top: 0.9rem; border-top: 1px solid var(--line); align-items: end; }
+  .micro-field { display: flex; flex-direction: column; gap: 0.3rem; }
+  .micro-lbl { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); }
+  .micro-field input[type="number"] { padding: 0.55rem 0.8rem; background: var(--surface); border: 1px solid var(--line); font: inherit; font-size: 13px; color: var(--ink); width: 130px; }
+  .micro-field input[type="number"]:focus { outline: 0; border-color: var(--gold); }
+  .micro-toggle { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.85rem; background: var(--surface); border: 1px solid var(--line); cursor: pointer; font-size: 12px; font-family: 'Cinzel', serif; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft); transition: all 0.25s; }
+  .micro-toggle:hover { border-color: var(--gold); }
+  .micro-toggle input { accent-color: var(--gold); }
+  .micro-toggle:has(input:checked) { background: var(--teal); color: var(--gold); border-color: var(--teal); }
 
-  /* Expanded filters */
-  .hero-more-filters { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; align-items: center; padding: 1rem 1.4rem; background: var(--paper-light); border: 1px solid var(--line); border-top: 0; }
-  .hero-micro-field { display: flex; align-items: center; gap: 0.6rem; font-size: 13px; color: var(--ink); }
-  .hero-micro-field span { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-deep); }
-  .hero-micro-field input[type="number"] { width: 80px; padding: 0.4rem 0.6rem; border: 1px solid var(--line); background: var(--surface); font: inherit; font-size: 13px; color: var(--ink); }
-  .hero-micro-field input:focus { outline: 0; border-color: var(--gold); }
-  .hero-micro-toggle { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.35rem 0.8rem; background: var(--surface); border: 1px solid var(--line); cursor: pointer; font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-deep); transition: all 0.25s; }
-  .hero-micro-toggle:has(input:checked) { background: var(--teal); color: var(--gold); border-color: var(--teal); }
-  .hero-micro-toggle input { accent-color: var(--gold); }
-
-  /* Submit button */
-  .hero-search-btn { display: block; margin: 1.4rem auto 0; background: var(--gold); color: var(--teal); border: 0; padding: 1.1rem 3rem; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; cursor: pointer; transition: all 0.45s; }
-  .hero-search-btn:hover { background: var(--paper); letter-spacing: 0.42em; }
+  .hero-search-btn { display: block; margin: 1.6rem auto 0; background: var(--teal); color: var(--gold); border: 0; padding: 1rem 2.8rem; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; transition: all 0.4s; }
+  .hero-search-btn:hover { background: var(--teal-deep); letter-spacing: 0.4em; }
 
   @media (max-width: 768px) {
-    .hero-search-row { gap: 0.5rem; padding: 0.7rem; }
-    .hero-search-input-wrap, .hero-search-select, .hero-more-btn { width: 100%; min-width: 0; flex-basis: auto; }
-    .hero-more-filters { gap: 0.5rem 0.9rem; }
+    .search-row { gap: 0.5rem; }
+    .search-input-wrap, .search-select, .more-btn { width: 100%; min-width: 0; flex-basis: auto; }
+    .more-filters { gap: 0.6rem; }
+    .micro-field input[type="number"] { width: 100%; }
   }
   @media (max-width: 560px) {
-    .hero-search-section { padding: 3rem 1rem; }
-    .hero-deal-tab { padding: 0.55rem 1rem; font-size: 10px; }
+    .hero-search-section { padding: 2.2rem 1rem; }
+    .deal-tab { padding: 0.55rem 1rem; font-size: 10px; }
   }
 
   .hero-text { text-shadow: 0 2px 12px rgba(0,0,0,0.55), 0 4px 30px rgba(0,0,0,0.35); }
@@ -356,12 +354,12 @@
     <form id="heroSearchForm" onsubmit="event.preventDefault()">
       <input type="hidden" name="deal" id="heroDealHidden" value="">
 
-      <div class="hero-search-row">
-        <div class="hero-search-input-wrap">
+      <div class="search-row">
+        <div class="search-input-wrap">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
           <input type="search" name="q" placeholder="Adresse, référence, quartier…" autocomplete="off">
         </div>
-        <select name="city" class="hero-search-select" aria-label="Ville">
+        <select name="city" class="search-select" aria-label="Ville">
           <option value="">Toutes les villes</option>
           <option value="tel-aviv">Tel Aviv</option>
           <option value="herzliya">Herzliya</option>
@@ -369,14 +367,14 @@
           <option value="netanya">Netanya</option>
           <option value="jerusalem">Jérusalem</option>
         </select>
-        <select name="kind" class="hero-search-select" aria-label="Type de bien">
+        <select name="kind" class="search-select" aria-label="Type de bien">
           <option value="">Type de bien</option>
           <option value="neuf">Neuf</option>
           <option value="occasion">Occasion</option>
           <option value="projet">Projet</option>
           <option value="commercial">Local commercial</option>
         </select>
-        <select name="type" class="hero-search-select" aria-label="Type">
+        <select name="type" class="search-select" aria-label="Type">
           <option value="">Tous les types</option>
           <option value="appartement">Appartement</option>
           <option value="penthouse">Penthouse</option>
@@ -384,7 +382,7 @@
           <option value="loft">Loft</option>
           <option value="maison">Maison</option>
         </select>
-        <select name="min_r" class="hero-search-select" aria-label="Pièces">
+        <select name="min_r" class="search-select" aria-label="Pièces">
           <option value="">Pièces</option>
           <option value="2">2+ pièces</option>
           <option value="3">3+ pièces</option>
@@ -394,7 +392,7 @@
           <option value="7">7+ pièces</option>
           <option value="8">8+ pièces</option>
         </select>
-        <select name="price" class="hero-search-select" aria-label="Budget">
+        <select name="price" class="search-select" aria-label="Budget">
           <option value="">Budget</option>
           <option value="0-11000000">Jusqu'à 11 M ₪</option>
           <option value="11000000-18000000">11 — 18 M ₪</option>
@@ -403,15 +401,15 @@
           <option value="45000000-65000000">45 — 65 M ₪</option>
           <option value="65000000-0">Au-delà de 65 M ₪</option>
         </select>
-        <button type="button" id="heroMoreBtn" class="hero-more-btn" aria-expanded="false">＋ Plus</button>
+        <button type="button" id="heroMoreBtn" class="more-btn" aria-expanded="false">＋ Plus</button>
       </div>
 
-      <div id="heroMoreFilters" class="hero-more-filters" hidden>
-        <label class="hero-micro-field"><span>Surface min</span><input type="number" name="min_s" placeholder="m²" min="0" step="10"></label>
-        <label class="hero-micro-field"><span>Surface max</span><input type="number" name="max_s" placeholder="m²" min="0" step="10"></label>
-        <label class="hero-micro-toggle"><input type="checkbox" name="sig_only" value="1"><span>★ Pièces signature</span></label>
-        <label class="hero-micro-toggle"><input type="checkbox" name="fea_only" value="1"><span>À la une</span></label>
-        <label class="hero-micro-toggle"><input type="checkbox" name="elev_only" value="1"><span>⇡ Avec ascenseur</span></label>
+      <div id="heroMoreFilters" class="more-filters" hidden>
+        <label class="micro-field"><span class="micro-lbl">Surface min</span><input type="number" name="min_s" placeholder="m²" min="0" step="10"></label>
+        <label class="micro-field"><span class="micro-lbl">Surface max</span><input type="number" name="max_s" placeholder="m²" min="0" step="10"></label>
+        <label class="micro-toggle"><input type="checkbox" name="sig_only" value="1"><span>★ Pièces signature</span></label>
+        <label class="micro-toggle"><input type="checkbox" name="fea_only" value="1"><span>À la une</span></label>
+        <label class="micro-toggle"><input type="checkbox" name="elev_only" value="1"><span>⇡ Avec ascenseur</span></label>
       </div>
 
       <button type="submit" class="hero-search-btn">Rechercher →</button>
@@ -638,12 +636,12 @@ window.addEventListener('scroll', function() {
   document.getElementById('scrollProgress').style.width = scrolled + '%';
 }, { passive: true });
 
-// Hero search: deal tabs + "+ Plus" toggle
+// Hero search: deal tabs + "+ Plus" toggle (mirrors portefeuille behaviour)
 (function () {
   const dealHidden = document.getElementById('heroDealHidden');
-  document.querySelectorAll('.hero-deal-tab').forEach(tab => {
+  document.querySelectorAll('.hero-deal-tabs .deal-tab').forEach(tab => {
     tab.addEventListener('click', () => {
-      document.querySelectorAll('.hero-deal-tab').forEach(t => t.classList.toggle('is-active', t === tab));
+      document.querySelectorAll('.hero-deal-tabs .deal-tab').forEach(t => t.classList.toggle('is-active', t === tab));
       if (dealHidden) dealHidden.value = tab.dataset.deal || '';
     });
   });
@@ -654,6 +652,7 @@ window.addEventListener('scroll', function() {
       const isOpen = moreFilters.hidden === false;
       moreFilters.hidden = isOpen;
       moreBtn.setAttribute('aria-expanded', String(!isOpen));
+      moreBtn.classList.toggle('is-open', !isOpen);
       moreBtn.textContent = isOpen ? '＋ Plus' : '− Moins';
     });
   }
