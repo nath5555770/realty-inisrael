@@ -694,6 +694,9 @@
   // ------------------------------------------------------------------
   let isListingOpen = false;
   let suppressListingPop = false;
+  let galleryImages = [];      // full list of image paths for the open listing
+  let galleryIndex = 0;        // which photo is currently displayed
+  let touchStartX = null;      // for swipe gesture on mobile
 
   function buildListingReader() {
     if (document.getElementById('listingReader')) return;
@@ -709,7 +712,16 @@
           '<span>Retour</span>' +
         '</button>' +
         '<button class="listing-reader-close" data-close type="button" aria-label="Fermer">×</button>' +
-        '<div class="listing-reader-cover"></div>' +
+        '<div class="listing-reader-cover-wrap">' +
+          '<div class="listing-reader-cover"></div>' +
+          '<button class="listing-reader-arrow listing-reader-prev" type="button" aria-label="Photo précédente">' +
+            '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+          '</button>' +
+          '<button class="listing-reader-arrow listing-reader-next" type="button" aria-label="Photo suivante">' +
+            '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+          '</button>' +
+          '<div class="listing-reader-counter"><span class="cur">1</span> / <span class="tot">1</span></div>' +
+        '</div>' +
         '<div class="listing-reader-body"></div>' +
       '</article>';
     document.body.appendChild(m);
@@ -718,12 +730,30 @@
       if (e.target.closest('[data-close]')) { e.preventDefault(); closeListingReader(); }
     });
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && isListingOpen) closeListingReader();
+      if (!isListingOpen) return;
+      if (e.key === 'Escape') closeListingReader();
+      else if (e.key === 'ArrowLeft')  { e.preventDefault(); showGalleryAt(galleryIndex - 1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); showGalleryAt(galleryIndex + 1); }
     });
     window.addEventListener('popstate', () => {
       if (suppressListingPop) { suppressListingPop = false; return; }
       if (isListingOpen) closeListingReader(true);
     });
+
+    // Arrows
+    m.querySelector('.listing-reader-prev').addEventListener('click', e => { e.stopPropagation(); showGalleryAt(galleryIndex - 1); });
+    m.querySelector('.listing-reader-next').addEventListener('click', e => { e.stopPropagation(); showGalleryAt(galleryIndex + 1); });
+
+    // Touch swipe on the cover
+    const cover = m.querySelector('.listing-reader-cover-wrap');
+    cover.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+    cover.addEventListener('touchend', e => {
+      if (touchStartX == null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      touchStartX = null;
+      if (Math.abs(dx) < 40) return;             // ignore taps / micro-drags
+      showGalleryAt(galleryIndex + (dx < 0 ? 1 : -1));
+    }, { passive: true });
 
     if (!document.getElementById('listingReaderStyle')) {
       const s = document.createElement('style');
@@ -739,8 +769,22 @@
         '.listing-reader-back:hover { background: var(--teal); color: var(--gold); border-color: var(--teal); letter-spacing: 0.4em; }' +
         '.listing-reader-close { position: fixed; top: 18px; right: 18px; z-index: 4; width: 42px; height: 42px; border: 1px solid var(--gold); background: var(--paper); border-radius: 50%; cursor: pointer; font-size: 24px; line-height: 1; color: var(--teal); transition: all 0.3s; }' +
         '.listing-reader-close:hover { background: var(--teal); color: var(--gold); border-color: var(--teal); transform: rotate(90deg); }' +
-        '.listing-reader-cover { aspect-ratio: 16/9; background-size: cover; background-position: center; background-color: var(--paper-deep); position: relative; }' +
+        /* Cover wrapper hosts the photo + nav arrows + counter */
+        '.listing-reader-cover-wrap { position: relative; }' +
+        '.listing-reader-cover { aspect-ratio: 16/9; background-size: cover; background-position: center; background-color: var(--paper-deep); position: relative; transition: opacity 0.28s ease; }' +
+        '.listing-reader-cover.is-fading { opacity: 0.35; }' +
         '.listing-reader-cover::after { content: \'\'; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,39,34,0) 60%, rgba(244,237,224,1) 100%); pointer-events: none; }' +
+        /* Navigation arrows on the cover */
+        '.listing-reader-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; width: 52px; height: 52px; border-radius: 50%; border: 0; background: rgba(244,237,224,0.85); color: var(--teal); cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 18px rgba(14,39,34,0.25); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: all 0.3s cubic-bezier(0.2,0.85,0.2,1); opacity: 0.85; }' +
+        '.listing-reader-arrow:hover { background: var(--teal); color: var(--gold); opacity: 1; transform: translateY(-50%) scale(1.08); box-shadow: 0 6px 24px rgba(14,39,34,0.45); }' +
+        '.listing-reader-arrow:active { transform: translateY(-50%) scale(0.96); }' +
+        '.listing-reader-arrow.is-hidden { opacity: 0; pointer-events: none; }' +
+        '.listing-reader-prev { left: 16px; }' +
+        '.listing-reader-next { right: 16px; }' +
+        '@media (max-width: 560px) { .listing-reader-arrow { width: 44px; height: 44px; } .listing-reader-prev { left: 10px; } .listing-reader-next { right: 10px; } }' +
+        /* Counter pill, top-right of cover */
+        '.listing-reader-counter { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); z-index: 3; padding: 6px 14px; background: rgba(14,39,34,0.78); color: var(--gold); font-family: \'Cinzel\', serif; font-size: 11px; letter-spacing: 0.25em; border-radius: 999px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }' +
+        '.listing-reader-counter.is-hidden { display: none; }' +
         '.listing-reader-body { padding: 2rem 1.5rem 5rem; max-width: 880px; margin: 0 auto; position: relative; z-index: 1; }' +
         '@media (min-width: 768px) { .listing-reader-body { padding: 2.5rem 3rem 6rem; } .listing-reader-cover { aspect-ratio: 16/8.5; } }' +
         '.listing-reader-meta { font-family: \'Cinzel\', serif; font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 1rem; }' +
@@ -812,23 +856,53 @@
     );
   }
 
+  // Display the photo at `i` in galleryImages (wraps around)
+  function showGalleryAt(i) {
+    const m = document.getElementById('listingReader');
+    if (!m || !galleryImages.length) return;
+    const total = galleryImages.length;
+    galleryIndex = ((i % total) + total) % total;   // safe wrap-around
+
+    const cover = m.querySelector('.listing-reader-cover');
+    const url = imageUrl(galleryImages[galleryIndex]);
+    // Fade out → swap image → fade in
+    cover.classList.add('is-fading');
+    setTimeout(() => {
+      cover.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
+      cover.classList.remove('is-fading');
+    }, 140);
+
+    // Counter
+    const counter = m.querySelector('.listing-reader-counter');
+    counter.querySelector('.cur').textContent = galleryIndex + 1;
+    counter.querySelector('.tot').textContent = total;
+    counter.classList.toggle('is-hidden', total < 2);
+
+    // Hide arrows if only one photo
+    m.querySelector('.listing-reader-prev').classList.toggle('is-hidden', total < 2);
+    m.querySelector('.listing-reader-next').classList.toggle('is-hidden', total < 2);
+
+    // Active thumb
+    m.querySelectorAll('.listing-reader-thumb').forEach(t => {
+      t.classList.toggle('is-active', parseInt(t.dataset.i, 10) === galleryIndex);
+    });
+  }
+
   function openListingReader(l) {
     buildListingReader();
     const m = document.getElementById('listingReader');
     // Build the full gallery: cover first, then any extra `images` (deduped)
-    const allImages = [];
-    if (l.image) allImages.push(l.image);
+    galleryImages = [];
+    if (l.image) galleryImages.push(l.image);
     if (Array.isArray(l.images)) {
-      l.images.forEach(p => { if (p && !allImages.includes(p)) allImages.push(p); });
+      l.images.forEach(p => { if (p && !galleryImages.includes(p)) galleryImages.push(p); });
     }
-    const cover = m.querySelector('.listing-reader-cover');
-    const firstUrl = allImages.length ? imageUrl(allImages[0]) : '';
-    cover.style.backgroundImage = firstUrl ? "url('" + firstUrl.replace(/'/g, "\\'") + "')" : '';
-    // Thumbnail strip below the cover (only if there are at least 2 photos)
+
+    // Thumbnail strip (only when 2+ photos)
     let stripHTML = '';
-    if (allImages.length > 1) {
-      stripHTML = '<div class="listing-reader-strip">' + allImages.map((p, i) =>
-        '<button type="button" class="listing-reader-thumb' + (i === 0 ? ' is-active' : '') + '" data-i="' + i + '" style="background-image:url(\'' + imageUrl(p).replace(/'/g, "\\'") + '\')" aria-label="Photo ' + (i + 1) + '"></button>'
+    if (galleryImages.length > 1) {
+      stripHTML = '<div class="listing-reader-strip">' + galleryImages.map((p, i) =>
+        '<button type="button" class="listing-reader-thumb" data-i="' + i + '" style="background-image:url(\'' + imageUrl(p).replace(/'/g, "\\'") + '\')" aria-label="Photo ' + (i + 1) + '"></button>'
       ).join('') + '</div>';
     }
     const body = m.querySelector('.listing-reader-body');
@@ -836,12 +910,24 @@
 
     // Thumb click → swap the cover
     body.querySelectorAll('.listing-reader-thumb').forEach(t => {
-      t.addEventListener('click', () => {
-        body.querySelectorAll('.listing-reader-thumb').forEach(x => x.classList.toggle('is-active', x === t));
-        const url = imageUrl(allImages[parseInt(t.dataset.i, 10)]);
-        cover.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
-      });
+      t.addEventListener('click', () => showGalleryAt(parseInt(t.dataset.i, 10)));
     });
+
+    // Reset to first photo and render (sets counter, arrows, image)
+    galleryIndex = 0;
+    // Render the first photo synchronously (no fade) for a clean open
+    const cover = m.querySelector('.listing-reader-cover');
+    const firstUrl = galleryImages.length ? imageUrl(galleryImages[0]) : '';
+    cover.style.backgroundImage = firstUrl ? "url('" + firstUrl.replace(/'/g, "\\'") + "')" : '';
+    const counter = m.querySelector('.listing-reader-counter');
+    counter.querySelector('.cur').textContent = galleryImages.length ? 1 : 0;
+    counter.querySelector('.tot').textContent = galleryImages.length;
+    counter.classList.toggle('is-hidden', galleryImages.length < 2);
+    m.querySelector('.listing-reader-prev').classList.toggle('is-hidden', galleryImages.length < 2);
+    m.querySelector('.listing-reader-next').classList.toggle('is-hidden', galleryImages.length < 2);
+    // Mark first thumb as active
+    const firstThumb = body.querySelector('.listing-reader-thumb[data-i="0"]');
+    if (firstThumb) firstThumb.classList.add('is-active');
 
     m.scrollTop = 0;
     m.hidden = false;
