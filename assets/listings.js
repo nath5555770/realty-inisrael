@@ -960,6 +960,35 @@
       t.addEventListener('click', () => showGalleryAt(parseInt(t.dataset.i, 10)));
     });
 
+    // Swipe / drag THROUGH the thumbnail strip → the main photo follows the
+    // finger thumb-by-thumb (not just on click). Uses pointer-capture so the
+    // event keeps firing even if the user drifts off the strip.
+    const strip = body.querySelector('.listing-reader-strip');
+    if (strip) {
+      let stripDragging = false;
+      function thumbAtPoint(clientX, clientY) {
+        const el = document.elementFromPoint(clientX, clientY);
+        return el && el.closest ? el.closest('.listing-reader-thumb') : null;
+      }
+      strip.addEventListener('pointerdown', e => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        stripDragging = true;
+        try { strip.setPointerCapture(e.pointerId); } catch (_) {}
+      });
+      strip.addEventListener('pointermove', e => {
+        if (!stripDragging) return;
+        const t = thumbAtPoint(e.clientX, e.clientY);
+        if (t) {
+          const idx = parseInt(t.dataset.i, 10);
+          if (!Number.isNaN(idx) && idx !== galleryIndex) showGalleryAt(idx);
+        }
+      });
+      function endStripDrag() { stripDragging = false; }
+      strip.addEventListener('pointerup', endStripDrag);
+      strip.addEventListener('pointercancel', endStripDrag);
+      strip.addEventListener('pointerleave', endStripDrag);
+    }
+
     // Build the slide track — one full-bleed image per slide, side by side
     const track = m.querySelector('.listing-reader-track');
     track.style.transition = 'none';      // suppress animation on initial layout
