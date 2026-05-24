@@ -212,13 +212,8 @@
         '        <div><div class="label">PIÈCES</div><div class="display text-xl mt-1.5">', escapeHtml(l.rooms || ''), '</div></div>',
         '        <div><div class="label">ASCENSEUR</div><div class="display text-xl mt-1.5">', l.has_elevator ? 'Oui' : 'Non', '</div></div>',
         '      </div>',
-        '      <div class="mt-6 border-t border-[var(--line)] pt-5 flex items-end justify-between">',
-        '        <div>',
-        '          <div class="label">PRIX</div>',
-        '          <div class="display text-3xl mt-1.5 text-[var(--teal)]">', escapeHtml(priceLabel(l)), '</div>',
-        l.price_eur_eq || l.price_ils_eq ? '          <div class="mono text-xs text-[var(--muted)] mt-1">' + escapeHtml([l.price_eur_eq, l.price_ils_eq].filter(Boolean).join(' · ')) + '</div>' : '',
-        '        </div>',
-        '        <a href="contact.html" class="btn-line text-[var(--teal)]">Visiter →</a>',
+        '      <div class="mt-6 border-t border-[var(--line)] pt-5 flex items-end justify-end">',
+        '        <a href="#listing-' + escapeHtml(l.ref) + '" class="btn-line text-[var(--teal)]" data-listing-ref="' + escapeHtml(l.ref) + '">Voir l\'annonce →</a>',
         '      </div>',
         '    </div>',
         '  </div>',
@@ -240,7 +235,7 @@
       '    <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtml(l.description || ''), '</p>',
       '    <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">',
       '      <span class="label !tracking-[0.2em]">', escapeHtml(l.rooms || ''), l.extra_label ? ' · ' + escapeHtml(l.extra_label) : '', l.has_elevator ? ' · <span class="elev-tag" title="Ascenseur">⇡ ASC</span>' : '', '</span>',
-      '      <span class="display text-2xl text-[var(--teal)]">', escapeHtml(priceLabel(l)), '</span>',
+      '      <span class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">DÉTAILS →</span>',
       '    </div>',
       '  </div>',
       '</article>'
@@ -472,7 +467,7 @@
       '  <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtml(l.description || ''), '</p>',
       '  <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">',
       '    <span class="label !tracking-[0.2em]">', escapeHtml(l.rooms || ''), l.extra_label ? ' · ' + escapeHtml(l.extra_label) : '', '</span>',
-      '    <span class="display text-2xl text-[var(--teal)]">', escapeHtml(priceLabel(l)), '</span>',
+      '    <span class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">DÉTAILS →</span>',
       '  </div>',
       '</article>'
     ].join('');
