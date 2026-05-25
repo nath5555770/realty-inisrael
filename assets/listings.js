@@ -476,12 +476,17 @@
   function renderFeatured(container, count) {
     return load().then(rows => {
       count = count || 3;
-      const featured = rows.filter(l => l.featured === true);
+      // Anything flagged "Signature" (★) is auto-promoted to the home selection
+      // and listed BEFORE the "À la une" picks. Deduped if a listing is both.
+      const signatures = rows.filter(l => l.signature === true);
+      const sigIds = new Set(signatures.map(l => l.id || l.ref));
+      const others = rows.filter(l => l.featured === true && !sigIds.has(l.id || l.ref));
+      const featured = signatures.concat(others);
 
-      // No artificial padding: the section honestly reflects what's flagged À la une.
-      // 0 featured → hide the wrapping section so we don't ship empty chrome.
-      // 1–3 featured → static grid (1, 2 or 3 cards naturally).
-      // 4+ featured → luxury carousel kicks in.
+      // No artificial padding: the section honestly reflects what's flagged À la une or ★ Signature.
+      // 0 → hide the wrapping section so we don't ship empty chrome.
+      // 1–3 → static grid (1, 2 or 3 cards naturally).
+      // 4+ → luxury carousel kicks in.
       const wrapper = container.closest('section');
       if (!featured.length) {
         if (wrapper) wrapper.hidden = true;
