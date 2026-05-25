@@ -636,6 +636,127 @@
   }
 
   // ------------------------------------------------------------------
+  // RICH TEXT TOOLBAR (article editor)
+  // ------------------------------------------------------------------
+  function wireRteToolbar() {
+    const ta = $('#artContent');
+    if (!ta || ta.dataset.rteWired === '1') return;
+    ta.dataset.rteWired = '1';
+
+    const wrap = (open, close) => {
+      const start = ta.selectionStart;
+      const end   = ta.selectionEnd;
+      const sel   = ta.value.slice(start, end);
+      const before = ta.value.slice(0, start);
+      const after  = ta.value.slice(end);
+      const inner = sel || 'texte';
+      ta.value = before + open + inner + close + after;
+      ta.focus();
+      ta.selectionStart = start + open.length;
+      ta.selectionEnd   = start + open.length + inner.length;
+    };
+
+    const blockWrap = (tag) => {
+      const start = ta.selectionStart;
+      const end   = ta.selectionEnd;
+      const sel   = ta.value.slice(start, end);
+      const inner = sel || (tag === 'h2' ? 'Titre de section' : tag === 'h3' ? 'Sous-titre' : 'Citation');
+      const before = ta.value.slice(0, start);
+      const after  = ta.value.slice(end);
+      const prefix = before.endsWith('\n') || before === '' ? '' : '\n\n';
+      const suffix = after.startsWith('\n') ? '' : '\n\n';
+      const open  = '<' + tag + '>';
+      const close = '</' + tag + '>';
+      ta.value = before + prefix + open + inner + close + suffix + after;
+      ta.focus();
+      const pos = (before + prefix + open).length;
+      ta.selectionStart = pos;
+      ta.selectionEnd   = pos + inner.length;
+    };
+
+    const listWrap = (tag) => {
+      const start = ta.selectionStart;
+      const end   = ta.selectionEnd;
+      const sel   = ta.value.slice(start, end).trim();
+      const before = ta.value.slice(0, start);
+      const after  = ta.value.slice(end);
+      const items = (sel ? sel.split(/\n+/) : ['premier élément', 'second élément']);
+      const liHtml = items.map(it => '  <li>' + it + '</li>').join('\n');
+      const block = '<' + tag + '>\n' + liHtml + '\n</' + tag + '>';
+      const prefix = before.endsWith('\n') || before === '' ? '' : '\n\n';
+      const suffix = after.startsWith('\n') ? '' : '\n\n';
+      ta.value = before + prefix + block + suffix + after;
+      ta.focus();
+      const pos = (before + prefix + block).length;
+      ta.selectionStart = pos;
+      ta.selectionEnd   = pos;
+    };
+
+    const insertLink = () => {
+      const start = ta.selectionStart;
+      const end   = ta.selectionEnd;
+      const sel   = ta.value.slice(start, end);
+      const url = prompt('URL du lien (ex. https://…) :', 'https://');
+      if (!url || url === 'https://') return;
+      const text = sel || prompt('Texte du lien :', 'cliquer ici') || 'cliquer ici';
+      const before = ta.value.slice(0, start);
+      const after  = ta.value.slice(end);
+      const html = '<a href="' + url.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener">' + text + '</a>';
+      ta.value = before + html + after;
+      ta.focus();
+      ta.selectionStart = start + html.length;
+      ta.selectionEnd   = start + html.length;
+    };
+
+    const showHelp = () => {
+      alert(
+        'Balises HTML disponibles dans le corps d’article :\n\n' +
+        '<p>…</p>          paragraphe\n' +
+        '<strong>…</strong> gras\n' +
+        '<em>…</em>        italique\n' +
+        '<u>…</u>          souligné\n' +
+        '<h2>…</h2>        titre de section\n' +
+        '<h3>…</h3>        sous-titre\n' +
+        '<blockquote>…</blockquote>  citation\n' +
+        '<ul><li>…</li></ul>  liste à puces\n' +
+        '<ol><li>…</li></ol>  liste numérotée\n' +
+        '<a href="…">…</a>   lien\n' +
+        '<br>              saut de ligne\n\n' +
+        'Astuce : sélectionnez du texte avant de cliquer sur un bouton de la barre.'
+      );
+    };
+
+    document.querySelectorAll('.rte-toolbar [data-rte]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const op = btn.dataset.rte;
+        switch (op) {
+          case 'bold':      wrap('<strong>', '</strong>'); break;
+          case 'italic':    wrap('<em>', '</em>'); break;
+          case 'underline': wrap('<u>', '</u>'); break;
+          case 'h2':        blockWrap('h2'); break;
+          case 'h3':        blockWrap('h3'); break;
+          case 'quote':     blockWrap('blockquote'); break;
+          case 'p':         blockWrap('p'); break;
+          case 'ul':        listWrap('ul'); break;
+          case 'ol':        listWrap('ol'); break;
+          case 'link':      insertLink(); break;
+          case 'help':      showHelp(); break;
+        }
+      });
+    });
+
+    // Keyboard shortcuts (Ctrl/Cmd + B/I/U)
+    ta.addEventListener('keydown', e => {
+      if (!(e.ctrlKey || e.metaKey)) return;
+      const k = e.key.toLowerCase();
+      if (k === 'b') { e.preventDefault(); wrap('<strong>', '</strong>'); }
+      else if (k === 'i') { e.preventDefault(); wrap('<em>', '</em>'); }
+      else if (k === 'u') { e.preventDefault(); wrap('<u>', '</u>'); }
+    });
+  }
+
+  // ------------------------------------------------------------------
   // TEAM (admin only)
   // ------------------------------------------------------------------
   function renderTeamTable() {
@@ -1069,6 +1190,7 @@
     $('#artDeleteBtn').addEventListener('click', deleteArticle);
     $('#artFileUpload').addEventListener('change', e => handleArticleFile(e.target.files[0]));
     $('#artFImage').addEventListener('change', () => { if ($('#artFImage').value && !STATE.pendingArticleFile && !$('#artFImage').value.startsWith('(')) setArticlePreview($('#artFImage').value); });
+    wireRteToolbar();
 
     // Team tab
     $('#reloadTeamBtn').addEventListener('click', async () => { try { await loadAllProfiles(); renderTeamTable(); toast('Équipe rechargée.', 'success'); } catch (_) {} });

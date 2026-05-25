@@ -139,7 +139,6 @@
         <select id="artFilterCategory">
           <option value="">Toutes les catégories</option>
           <option value="marche">Marché</option>
-          <option value="aliyah">Aliyah</option>
           <option value="patrimoine">Patrimoine</option>
           <option value="decryptage">Décryptage</option>
         </select>
@@ -617,7 +616,6 @@
         <label class="field"><span class="field-label">Catégorie</span>
           <select id="artCategory">
             <option value="marche">Marché</option>
-            <option value="aliyah">Aliyah</option>
             <option value="patrimoine">Patrimoine</option>
             <option value="decryptage">Décryptage</option>
           </select>
@@ -625,7 +623,27 @@
         <label class="field"><span class="field-label">Titre</span><input type="text" id="artTitle" placeholder="Tel Aviv 2026 : ce que les chiffres disent…"></label>
         <label class="field"><span class="field-label">Sous-titre (optionnel)</span><input type="text" id="artSubtitle" placeholder="Sous-titre court"></label>
         <label class="field"><span class="field-label">Extrait</span><textarea id="artExcerpt" rows="2" placeholder="Une ou deux phrases d'accroche…"></textarea></label>
-        <label class="field"><span class="field-label">Article complet (HTML autorisé)</span><textarea id="artContent" rows="14" class="content-area" placeholder="Le corps de l'article, en paragraphes…"></textarea></label>
+        <label class="field">
+          <span class="field-label">Article complet</span>
+          <div class="rte-toolbar" role="toolbar" aria-label="Formatage du texte">
+            <button type="button" class="rte-btn" data-rte="bold" title="Gras (Ctrl+B)"><b>B</b></button>
+            <button type="button" class="rte-btn" data-rte="italic" title="Italique (Ctrl+I)"><i>I</i></button>
+            <button type="button" class="rte-btn" data-rte="underline" title="Souligné (Ctrl+U)"><u>U</u></button>
+            <span class="rte-sep"></span>
+            <button type="button" class="rte-btn" data-rte="h2" title="Titre de section">H2</button>
+            <button type="button" class="rte-btn" data-rte="h3" title="Sous-titre">H3</button>
+            <button type="button" class="rte-btn" data-rte="quote" title="Citation">&ldquo;&rdquo;</button>
+            <span class="rte-sep"></span>
+            <button type="button" class="rte-btn" data-rte="ul" title="Liste à puces">•</button>
+            <button type="button" class="rte-btn" data-rte="ol" title="Liste numérotée">1.</button>
+            <button type="button" class="rte-btn" data-rte="link" title="Lien hypertexte">🔗</button>
+            <span class="rte-sep"></span>
+            <button type="button" class="rte-btn" data-rte="p" title="Paragraphe">¶</button>
+            <span class="rte-spacer"></span>
+            <button type="button" class="rte-btn rte-btn-ghost" data-rte="help" title="Aide HTML">?</button>
+          </div>
+          <textarea id="artContent" rows="14" class="content-area" placeholder="Le corps de l'article — sélectionnez du texte puis cliquez sur les boutons ci-dessus pour le formater. HTML autorisé (&lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;h2&gt;, &lt;ul&gt;…)."></textarea>
+        </label>
         <div class="grid-2">
           <label class="field"><span class="field-label">Temps de lecture (min)</span><input type="number" id="artReadMinutes" min="1" placeholder="6"></label>
         </div>

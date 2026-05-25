@@ -466,6 +466,49 @@ body {
 }
 .icon-btn:hover { background: var(--paper-deep); border-color: var(--gold); }
 .icon-btn-danger:hover { background: #fee; border-color: #d44; color: #d44; }
+
+/* Rich text toolbar (article editor) */
+.rte-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  border-bottom: 0;
+}
+.rte-btn {
+  background: var(--paper-light);
+  border: 1px solid var(--line);
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  transition: all 0.15s;
+  border-radius: 2px;
+  padding: 0;
+}
+.rte-btn:hover { background: var(--gold-pale); border-color: var(--gold); color: var(--teal); }
+.rte-btn:active { background: var(--gold); color: var(--teal); }
+.rte-btn-ghost { background: transparent; color: var(--muted); }
+.rte-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--line);
+  margin: 0 0.3rem;
+}
+.rte-spacer { flex: 1; }
+.rte-toolbar + .content-area {
+  border-top: 0;
+  margin-top: 0;
+}
 .empty-state {
   padding: 5rem 2rem;
   text-align: center;
