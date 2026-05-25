@@ -4,7 +4,7 @@
    pour assets statiques (CSS/JS/images). Offline fallback sur la home.
    ========================================================================== */
 
-const CACHE_VERSION = 'sl-v11-2026-05-25-rte-noaliyah';
+const CACHE_VERSION = 'sl-v12-2026-05-25-noaliyah-nav';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -14,7 +14,6 @@ const STATIC_ASSETS = [
   '/index.html',
   '/portefeuille.html',
   '/agence.html',
-  '/aliyah.html',
   '/journal.html',
   '/contact.html',
   '/honoraires.html',

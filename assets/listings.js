@@ -88,7 +88,8 @@
   function typeHuman(slug) {
     return ({
       'appartement': 'Appartement', 'penthouse': 'Penthouse', 'villa': 'Villa',
-      'loft': 'Loft', 'maison': 'Maison'
+      'loft': 'Loft', 'maison': 'Maison',
+      'local-commercial': 'Local commercial', 'terrain': 'Terrain', 'immeuble': 'Immeuble'
     })[slug] || slug;
   }
   function parseFirstNumber(text) {
