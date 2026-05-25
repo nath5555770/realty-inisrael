@@ -195,7 +195,7 @@
 
     if (big) {
       return [
-        '<article class="estate mb-16" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-kind="', escapeHtml(l.kind || ''), '" data-deal="', escapeHtml(l.deal || ''), '" data-ref="', escapeHtml(l.ref), '">',
+        '<article class="estate mb-16" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-kind="', escapeHtml(l.kind || ''), '" data-deal="', escapeHtml(l.deal || ''), '" data-ref="', escapeHtml(l.ref || ''), '" data-slug="', escapeHtml(l.slug || ''), '" data-id="', escapeHtml(l.id || ''), '">',
         '  <div class="grid md:grid-cols-12 gap-10 items-center">',
         '    <div class="md:col-span-7 frame aspect-[16/10]">',
         '      <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
@@ -215,7 +215,7 @@
         '        <div><div class="label">ASCENSEUR</div><div class="display text-xl mt-1.5">', l.has_elevator ? 'Oui' : 'Non', '</div></div>',
         '      </div>',
         '      <div class="mt-6 border-t border-[var(--line)] pt-5 flex items-end justify-end">',
-        '        <a href="#listing-' + escapeHtml(l.ref) + '" class="btn-line text-[var(--teal)]" data-listing-ref="' + escapeHtml(l.ref) + '">Voir l\'annonce →</a>',
+        '        <a href="#listing-' + escapeHtml(l.slug || l.ref || l.id || '') + '" class="btn-line text-[var(--teal)]" data-listing-ref="' + escapeHtml(l.slug || l.ref || l.id || '') + '">Voir l\'annonce →</a>',
         '      </div>',
         '    </div>',
         '  </div>',
@@ -224,7 +224,7 @@
     }
 
     return [
-      '<article class="estate" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-kind="', escapeHtml(l.kind || ''), '" data-deal="', escapeHtml(l.deal || ''), '" data-ref="', escapeHtml(l.ref), '">',
+      '<article class="estate" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-kind="', escapeHtml(l.kind || ''), '" data-deal="', escapeHtml(l.deal || ''), '" data-ref="', escapeHtml(l.ref || ''), '" data-slug="', escapeHtml(l.slug || ''), '" data-id="', escapeHtml(l.id || ''), '">',
       '  <div class="frame aspect-[4/5] mb-5">',
       '    <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
       '    <div class="ref-tag">', escapeHtml(refTag), '</div>',
@@ -459,7 +459,7 @@
   function featuredCardHTML(l) {
     const img = imageUrl(l.image);
     return [
-      '<article class="estate featured-card" data-ref="', escapeHtml(l.ref || ''), '">',
+      '<article class="estate featured-card" data-ref="', escapeHtml(l.ref || ''), '" data-slug="', escapeHtml(l.slug || ''), '" data-id="', escapeHtml(l.id || ''), '">',
       '  <div class="frame aspect-[4/5] mb-5">',
       '    <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
       '    <div class="ref-tag">', (l.signature ? '★ ' : ''), escapeHtml(l.ref || ''), '</div>',
@@ -1016,7 +1016,8 @@
     m.hidden = false;
     document.body.classList.add('modal-open');
     requestAnimationFrame(() => m.classList.add('is-visible'));
-    history.pushState({ listingReader: true, ref: l.ref }, '', '#listing-' + (l.ref || ''));
+    const hashKey = l.slug || l.ref || l.id || '';
+    history.pushState({ listingReader: true, key: hashKey }, '', '#listing-' + hashKey);
     isListingOpen = true;
   }
 
@@ -1035,30 +1036,42 @@
     }
   }
 
+  function findListing(key) {
+    if (!key) return null;
+    const c = CACHE || [];
+    return c.find(x => x.id === key) || c.find(x => x.slug === key) || c.find(x => x.ref === key) || null;
+  }
+
   function wireListingClicks() {
     document.addEventListener('click', e => {
       const card = e.target.closest('.estate, .featured-card');
       if (!card) return;
       // Don't intercept clicks on real links/buttons inside the card (heart, "Visiter →")
       if (e.target.closest('a[href], button')) return;
-      const ref = card.dataset.ref;
-      if (!ref) return;
-      const l = (CACHE || []).find(x => x.ref === ref);
+      // Prefer id (UUID, always unique) → fall back to slug → ref
+      const key = card.dataset.id || card.dataset.slug || card.dataset.ref;
+      const l = findListing(key);
       if (l) {
         e.preventDefault();
         openListingReader(l);
       }
     });
 
-    // Deep-link: if URL has #listing-<ref> on first load, open it once data is ready
+    // Deep-link: open from URL hash on first load
     if (location.hash.startsWith('#listing-')) {
-      const ref = location.hash.slice('#listing-'.length);
-      const tryOpen = () => {
-        const l = (CACHE || []).find(x => x.ref === ref);
+      const key = location.hash.slice('#listing-'.length);
+      setTimeout(() => {
+        const l = findListing(key);
         if (l) openListingReader(l);
-      };
-      setTimeout(tryOpen, 600);
+      }, 600);
     }
+    // Re-open if hash changes later (e.g. clicking "Voir l'annonce →" link)
+    window.addEventListener('hashchange', () => {
+      if (!location.hash.startsWith('#listing-')) return;
+      const key = location.hash.slice('#listing-'.length);
+      const l = findListing(key);
+      if (l) openListingReader(l);
+    });
   }
 
   // ------------------------------------------------------------------
