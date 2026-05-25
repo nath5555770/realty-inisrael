@@ -170,6 +170,35 @@
   .fade-up { opacity: 0; animation: fade-up 1.4s cubic-bezier(0.2, 0.85, 0.2, 1) forwards; }
   @keyframes ken-burns { from { transform: scale(1) translate(0,0); } to { transform: scale(1.1) translate(-2%,-1%); } }
   .ken-burns { animation: ken-burns 28s ease-in-out infinite alternate; }
+
+  /* Hero slideshow — élégant crossfade entre plusieurs photos */
+  .hero-stage { position: absolute; inset: 0; overflow: hidden; }
+  .hero-stage .hero-slide {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: contrast(1) saturate(0.95) brightness(0.95);
+    opacity: 0;
+    transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
+  }
+  .hero-stage .hero-slide.is-active { opacity: 1; }
+  /* Discreet bottom progress bar — ultra fine, gold */
+  .hero-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: rgba(255,255,255,0.08); z-index: 2; pointer-events: none; }
+  .hero-progress-fill { display: block; width: 0; height: 100%; background: var(--gold); transform-origin: left center; }
+  .hero-dots { position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); display: flex; gap: 10px; z-index: 3; }
+  .hero-dot { width: 22px; height: 1px; background: rgba(255,255,255,0.35); border: 0; padding: 0; cursor: pointer; transition: all 0.6s ease; }
+  .hero-dot.is-active { background: var(--gold); width: 38px; }
+  .hero-dot:hover { background: rgba(255,255,255,0.7); }
+  @media (max-width: 720px) {
+    .hero-dots { bottom: 20px; }
+    .hero-dot { width: 16px; }
+    .hero-dot.is-active { width: 28px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-stage .hero-slide { transition: none; }
+    .ken-burns { animation: none; }
+  }
   @keyframes pulse-soft { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
   .pulse-soft { animation: pulse-soft 2.4s ease-in-out infinite; }
 
@@ -340,8 +369,8 @@
 
 <!-- HERO -->
 <section class="relative min-h-[92vh] md:min-h-screen flex items-end overflow-hidden">
-  <div class="absolute inset-0">
-    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=2400&q=92" data-image="home.hero.image_url" alt="Villa de luxe en Israël - SHAHAR LEVI &amp; NATHALIE HAIK Real Estate" class="w-full h-full object-cover ken-burns" style="filter: contrast(1) saturate(0.95) brightness(0.95)" width="2400" height="1600" fetchpriority="high" decoding="async">
+  <div class="hero-stage" id="heroStage" data-images="home.hero.images">
+    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=2400&q=92" data-image="home.hero.image_url" alt="Villa de luxe en Israël - SHAHAR LEVI &amp; NATHALIE HAIK Real Estate" class="hero-slide is-active ken-burns" width="2400" height="1600" fetchpriority="high" decoding="async">
   </div>
   <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.45) 0%, rgba(14,39,34,0.35) 30%, rgba(14,39,34,0.78) 65%, rgba(14,39,34,0.96) 100%)"></div>
 
@@ -361,6 +390,105 @@
     <span class="w-12 h-px bg-[var(--paper)]/65"></span><span>défiler</span>
   </div>
 </section>
+
+<!-- Hero slideshow controller — élégant crossfade entre plusieurs photos -->
+<script>
+(function () {
+  'use strict';
+  const SLIDE_DURATION = 7000;   // temps d'affichage par photo
+  const FADE_DURATION  = 1800;   // doit matcher le transition CSS
+
+  function buildSlideshow(images) {
+    const stage = document.getElementById('heroStage');
+    if (!stage || !images || images.length < 2) return;
+
+    // Le premier <img> existe déjà — on le remplace seulement par la première URL si fournie
+    const firstImg = stage.querySelector('.hero-slide');
+    if (firstImg && images[0]) firstImg.src = images[0];
+
+    // Crée les slides additionnels
+    const frag = document.createDocumentFragment();
+    for (let i = 1; i < images.length; i++) {
+      const img = document.createElement('img');
+      img.src = images[i];
+      img.alt = '';
+      img.className = 'hero-slide ken-burns';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.setAttribute('aria-hidden', 'true');
+      frag.appendChild(img);
+    }
+    stage.appendChild(frag);
+
+    // Indicateurs minimalistes (lignes fines en bas)
+    const dotsWrap = document.createElement('div');
+    dotsWrap.className = 'hero-dots';
+    dotsWrap.setAttribute('role', 'tablist');
+    dotsWrap.setAttribute('aria-label', 'Photos de la page d’accueil');
+    for (let i = 0; i < images.length; i++) {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'hero-dot' + (i === 0 ? ' is-active' : '');
+      dot.setAttribute('aria-label', 'Photo ' + (i + 1));
+      dot.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(dot);
+    }
+    stage.parentElement.appendChild(dotsWrap);
+
+    const slides = Array.from(stage.querySelectorAll('.hero-slide'));
+    const dots   = Array.from(dotsWrap.querySelectorAll('.hero-dot'));
+    let current = 0;
+    let timer = null;
+
+    function goTo(next) {
+      if (next === current || next < 0 || next >= slides.length) return;
+      slides[current].classList.remove('is-active');
+      slides[next].classList.add('is-active');
+      dots[current].classList.remove('is-active');
+      dots[next].classList.add('is-active');
+      current = next;
+      scheduleNext();
+    }
+    function tick() { goTo((current + 1) % slides.length); }
+    function scheduleNext() { clearTimeout(timer); timer = setTimeout(tick, SLIDE_DURATION); }
+
+    // Respect des préférences utilisateur
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Pause au survol (élégance UX)
+    stage.parentElement.addEventListener('mouseenter', () => clearTimeout(timer));
+    stage.parentElement.addEventListener('mouseleave', scheduleNext);
+
+    scheduleNext();
+  }
+
+  function normalizeImages(raw) {
+    if (!raw) return [];
+    if (Array.isArray(raw)) return raw.filter(u => typeof u === 'string' && u.trim());
+    if (typeof raw === 'string') {
+      const s = raw.trim();
+      if (s.startsWith('[')) { try { return normalizeImages(JSON.parse(s)); } catch (_) { /* fallthrough */ } }
+      return s ? [s] : [];
+    }
+    return [];
+  }
+
+  document.addEventListener('sl-cms-ready', () => {
+    const settings = (window.SLCMS && window.SLCMS.settings) || {};
+    let images = normalizeImages(settings['home.hero.images']);
+    if (images.length < 2) {
+      // Fallback : on combine avec home.hero.image_url et le src par défaut
+      const single = normalizeImages(settings['home.hero.image_url']);
+      const stage = document.getElementById('heroStage');
+      const defaultSrc = stage && stage.querySelector('.hero-slide') ? stage.querySelector('.hero-slide').src : '';
+      const base = single.length ? single[0] : defaultSrc;
+      if (images.length === 1 && images[0] === base) return;
+      if (!images.length) return;
+    }
+    buildSlideshow(images);
+  });
+})();
+</script>
 
 <!-- HERO SEARCH — quick filters that redirect to /portefeuille.html -->
 <section class="hero-search-section">
@@ -628,7 +756,7 @@
 <script src="assets/animations.js" defer></script>
 <script src="assets/supabase-config.js" defer></script>
 <script src="assets/i18n.js" defer></script>
-<script src="assets/site-cms.js?v=2026-05-25-images" defer></script>
+<script src="assets/site-cms.js?v=2026-05-25-slideshow" defer></script>
 <script src="assets/listings.js?v=20260521-signaturehome" defer></script>
 <script>
 window.addEventListener('scroll', function() {

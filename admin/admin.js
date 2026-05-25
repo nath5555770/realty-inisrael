@@ -1309,33 +1309,123 @@
     document.querySelectorAll('input[name="journalCardsPerRow"]').forEach(r => r.checked = parseInt(r.value, 10) === parseInt(perRow, 10));
     document.querySelectorAll('input[name="journalShowDuo"]').forEach(r => r.checked = (r.value === String(showDuo)));
 
-    // Hero photo
-    const heroUrl = STATE.settings['home.hero.image_url'] || '';
-    const urlInput = $('#heroPhotoUrl');
-    if (urlInput) urlInput.value = heroUrl;
-    setHeroPhotoPreview(heroUrl);
-    STATE.pendingHeroFile = null;
-  }
-
-  function setHeroPhotoPreview(url) {
-    const preview = $('#heroPhotoPreview');
-    if (!preview) return;
-    if (url && url.trim()) {
-      preview.style.backgroundImage = 'url("' + url.trim().replace(/"/g, '\\"') + '")';
-      preview.innerHTML = '';
-    } else {
-      preview.style.backgroundImage = '';
-      preview.innerHTML = '<div class="hero-photo-empty">Photo par défaut</div>';
+    // Hero gallery — normalize from settings into a working array
+    STATE.heroImages = normalizeHeroImages(STATE.settings['home.hero.images']);
+    // Back-compat: if no images[] but a single image_url exists, seed the list with it
+    if (!STATE.heroImages.length) {
+      const single = (STATE.settings['home.hero.image_url'] || '').trim();
+      if (single) STATE.heroImages = [single];
     }
+    STATE.pendingHeroFiles = {}; // index -> File (for new uploads not yet pushed)
+    renderHeroGallery();
   }
 
-  function handleHeroFile(file) {
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { toast('Photo trop lourde (max 5 MB).', 'error'); return; }
-    STATE.pendingHeroFile = file;
-    const reader = new FileReader();
-    reader.onload = e => setHeroPhotoPreview(e.target.result);
-    reader.readAsDataURL(file);
+  function normalizeHeroImages(raw) {
+    if (!raw) return [];
+    if (Array.isArray(raw)) return raw.filter(u => typeof u === 'string' && u.trim());
+    if (typeof raw === 'string') {
+      const s = raw.trim();
+      if (s.startsWith('[')) {
+        try { return normalizeHeroImages(JSON.parse(s)); } catch (_) { return s ? [s] : []; }
+      }
+      return s ? [s] : [];
+    }
+    return [];
+  }
+
+  function renderHeroGallery() {
+    const grid = $('#heroGalleryGrid');
+    if (!grid) return;
+    const items = STATE.heroImages || [];
+    if (!items.length) {
+      grid.innerHTML = '<div class="hero-gallery-empty">Aucune photo personnalisée — la photo par défaut sera affichée.</div>';
+      return;
+    }
+    grid.innerHTML = items.map((url, i) => {
+      const isPending = url.startsWith('blob:') || url.startsWith('data:');
+      const pendingCls = isPending ? ' is-pending' : '';
+      return '<div class="hero-gallery-tile' + pendingCls + '" data-i="' + i + '" draggable="true" style="background-image:url(\'' + (url + '').replace(/'/g, "\\'") + '\')">' +
+               '<span class="hero-gallery-tile-index">' + (i + 1) + '</span>' +
+               '<button type="button" class="hero-gallery-tile-x" data-i="' + i + '" title="Supprimer cette photo">×</button>' +
+             '</div>';
+    }).join('');
+
+    // Delete handlers
+    grid.querySelectorAll('.hero-gallery-tile-x').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const i = parseInt(btn.dataset.i, 10);
+        STATE.heroImages.splice(i, 1);
+        // Shift pending files indices
+        const newPending = {};
+        Object.keys(STATE.pendingHeroFiles).forEach(k => {
+          const idx = parseInt(k, 10);
+          if (idx < i) newPending[idx] = STATE.pendingHeroFiles[idx];
+          else if (idx > i) newPending[idx - 1] = STATE.pendingHeroFiles[idx];
+        });
+        STATE.pendingHeroFiles = newPending;
+        renderHeroGallery();
+      });
+    });
+
+    // Drag-to-reorder
+    let dragFrom = -1;
+    grid.querySelectorAll('.hero-gallery-tile').forEach(tile => {
+      tile.addEventListener('dragstart', e => {
+        dragFrom = parseInt(tile.dataset.i, 10);
+        tile.classList.add('is-dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      tile.addEventListener('dragend', () => tile.classList.remove('is-dragging'));
+      tile.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+      tile.addEventListener('drop', e => {
+        e.preventDefault();
+        const to = parseInt(tile.dataset.i, 10);
+        if (dragFrom < 0 || to === dragFrom) return;
+        const moved = STATE.heroImages.splice(dragFrom, 1)[0];
+        STATE.heroImages.splice(to, 0, moved);
+        // Reindex pending files alongside
+        const newPending = {};
+        const movedFile = STATE.pendingHeroFiles[dragFrom];
+        Object.keys(STATE.pendingHeroFiles).forEach(k => {
+          const idx = parseInt(k, 10);
+          if (idx === dragFrom) return;
+          let newIdx = idx;
+          if (dragFrom < to && idx > dragFrom && idx <= to) newIdx = idx - 1;
+          else if (dragFrom > to && idx >= to && idx < dragFrom) newIdx = idx + 1;
+          newPending[newIdx] = STATE.pendingHeroFiles[idx];
+        });
+        if (movedFile) newPending[to] = movedFile;
+        STATE.pendingHeroFiles = newPending;
+        dragFrom = -1;
+        renderHeroGallery();
+      });
+    });
+  }
+
+  function handleHeroFiles(files) {
+    if (!files || !files.length) return;
+    const max = 5 * 1024 * 1024;
+    const arr = Array.from(files);
+    for (const file of arr) {
+      if (file.size > max) { toast('"' + file.name + '" trop lourde (max 5 MB).', 'error'); continue; }
+      const blobUrl = URL.createObjectURL(file);
+      const newIndex = STATE.heroImages.length;
+      STATE.heroImages.push(blobUrl);
+      STATE.pendingHeroFiles[newIndex] = file;
+    }
+    renderHeroGallery();
+  }
+
+  function handleHeroAddUrl() {
+    const input = $('#heroGalleryUrl');
+    if (!input) return;
+    const url = (input.value || '').trim();
+    if (!url) return;
+    try { new URL(url); } catch (_) { toast('URL invalide.', 'error'); return; }
+    STATE.heroImages.push(url);
+    input.value = '';
+    renderHeroGallery();
   }
 
   async function saveSettings() {
@@ -1353,27 +1443,46 @@
     btn.disabled = true; btn.textContent = '…';
     status.textContent = '';
 
-    // Hero photo: if a file is pending, upload it; otherwise use whatever's in the URL input
-    let heroUrl = ($('#heroPhotoUrl')?.value || '').trim();
-    if (STATE.pendingHeroFile) {
-      try {
-        const path = await uploadImage(BUCKET_LISTINGS, '_site', STATE.pendingHeroFile, $('#heroPhotoProgress'));
-        heroUrl = window.SL_SUPABASE.url + '/storage/v1/object/public/' + BUCKET_LISTINGS + '/' + path;
-        STATE.pendingHeroFile = null;
-        if ($('#heroPhotoUrl')) $('#heroPhotoUrl').value = heroUrl;
-      } catch (e) {
-        btn.disabled = false; btn.textContent = old;
-        status.textContent = '✕ ' + e.message;
-        toast('Erreur upload hero : ' + e.message, 'error');
-        return;
+    // Hero gallery: upload pending files in place, then build the final URL array
+    const finalImages = (STATE.heroImages || []).slice();
+    const pending = STATE.pendingHeroFiles || {};
+    const pendingIndices = Object.keys(pending).map(k => parseInt(k, 10)).sort((a, b) => a - b);
+    if (pendingIndices.length) {
+      const progress = $('#heroGalleryProgress');
+      if (progress) progress.hidden = false;
+      let done = 0;
+      for (const i of pendingIndices) {
+        try {
+          if (progress) progress.textContent = 'Téléversement ' + (done + 1) + '/' + pendingIndices.length + '…';
+          const path = await uploadImage(BUCKET_LISTINGS, '_site', pending[i], progress);
+          finalImages[i] = window.SL_SUPABASE.url + '/storage/v1/object/public/' + BUCKET_LISTINGS + '/' + path;
+          done++;
+        } catch (e) {
+          btn.disabled = false; btn.textContent = old;
+          status.textContent = '✕ ' + e.message;
+          toast('Erreur upload : ' + e.message, 'error');
+          return;
+        }
       }
+      if (progress) {
+        progress.textContent = done + ' photo' + (done > 1 ? 's' : '') + ' téléversée' + (done > 1 ? 's' : '') + ' ✓';
+        setTimeout(() => { progress.hidden = true; }, 1800);
+      }
+      STATE.pendingHeroFiles = {};
+      STATE.heroImages = finalImages;
     }
+
+    // Strip any leftover blob:/data: URLs (would 404 publicly)
+    const cleanImages = finalImages.filter(u => u && !u.startsWith('blob:') && !u.startsWith('data:'));
 
     const updates = [
       { key: 'journal.layout', value: layout },
       { key: 'journal.cards_per_row', value: perRow },
       { key: 'journal.show_duo', value: showDuo },
-      { key: 'home.hero.image_url', value: heroUrl || null }
+      // Multi-photos array (slideshow)
+      { key: 'home.hero.images', value: cleanImages.length ? cleanImages : null },
+      // First image kept as image_url for back-compat (data-image attribute on single img)
+      { key: 'home.hero.image_url', value: cleanImages[0] || null }
     ];
 
     for (const u of updates) {
@@ -1455,12 +1564,17 @@
       $('#reloadSettingsBtn').addEventListener('click', async () => {
         try { await loadSettings(); renderSettingsForm(); bustCMSCache(); toast('Réglages rechargés.', 'success'); } catch (e) { toast(e.message, 'error'); }
       });
-      // Hero photo: file input + URL input
-      const heroFile = $('#heroPhotoFile');
-      if (heroFile) heroFile.addEventListener('change', e => { handleHeroFile(e.target.files[0]); e.target.value = ''; });
-      const heroUrlInput = $('#heroPhotoUrl');
-      if (heroUrlInput) heroUrlInput.addEventListener('input', () => {
-        if (!STATE.pendingHeroFile) setHeroPhotoPreview(heroUrlInput.value);
+      // Hero gallery: multi-file + URL add button
+      const heroFile = $('#heroGalleryFile');
+      if (heroFile) heroFile.addEventListener('change', e => {
+        handleHeroFiles(e.target.files);
+        e.target.value = ''; // allow re-picking the same files
+      });
+      const heroAddUrlBtn = $('#heroGalleryAddUrl');
+      if (heroAddUrlBtn) heroAddUrlBtn.addEventListener('click', handleHeroAddUrl);
+      const heroUrlInput = $('#heroGalleryUrl');
+      if (heroUrlInput) heroUrlInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); handleHeroAddUrl(); }
       });
     }
     // Hook into tab switching to lazy-load

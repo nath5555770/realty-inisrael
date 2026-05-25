@@ -256,21 +256,24 @@
       <div class="settings-grid">
 
         <div class="settings-card settings-card-wide">
-          <h3 class="settings-card-title">Photo de la page d'accueil</h3>
-          <p class="settings-card-desc">L'image en haut de la page d'accueil — le premier visuel que voit chaque visiteur. Téléverser un fichier ou coller une URL (Unsplash, Cloudinary, etc.). Format paysage recommandé, idéalement 2400 × 1600 px ou plus.</p>
-          <div class="hero-photo-zone">
-            <div class="hero-photo-preview" id="heroPhotoPreview">
-              <div class="hero-photo-empty">Aucune photo personnalisée</div>
+          <h3 class="settings-card-title">Photos de la page d'accueil</h3>
+          <p class="settings-card-desc">Les images en haut de la page d'accueil. <strong>Si plusieurs photos sont ajoutées, elles défilent automatiquement</strong> en fondu enchaîné (7 secondes par photo). Format paysage recommandé, idéalement 2400 × 1600 px ou plus. Glisser-déposer pour réordonner.</p>
+
+          <div class="hero-gallery-grid" id="heroGalleryGrid">
+            <div class="hero-gallery-empty">Aucune photo personnalisée — la photo par défaut sera affichée.</div>
+          </div>
+
+          <div class="hero-gallery-actions">
+            <label class="btn-ghost">
+              <input type="file" id="heroGalleryFile" accept="image/*" multiple style="display:none">
+              + Ajouter des photos…
+            </label>
+            <div class="hero-gallery-url-row">
+              <input type="url" id="heroGalleryUrl" placeholder="ou coller une URL d'image (Unsplash, etc.)" class="field-image-url">
+              <button type="button" class="btn-ghost" id="heroGalleryAddUrl">+ Ajouter URL</button>
             </div>
-            <div class="hero-photo-actions">
-              <label class="btn-ghost">
-                <input type="file" id="heroPhotoFile" accept="image/*" style="display:none">
-                Choisir une photo…
-              </label>
-              <input type="url" id="heroPhotoUrl" placeholder="ou coller une URL d'image" class="field-image-url">
-              <span class="field-hint">PNG, JPG ou WebP — max 5 MB. Laisser vide pour revenir à la photo par défaut.</span>
-              <div class="upload-progress" id="heroPhotoProgress" hidden></div>
-            </div>
+            <span class="field-hint">PNG, JPG ou WebP — max 5 MB par photo. Une seule photo = pas de défilement. Plusieurs = slideshow.</span>
+            <div class="upload-progress" id="heroGalleryProgress" hidden></div>
           </div>
         </div>
 
