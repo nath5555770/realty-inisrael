@@ -89,6 +89,7 @@
     return ({
       'appartement': 'Appartement', 'penthouse': 'Penthouse', 'villa': 'Villa',
       'loft': 'Loft', 'maison': 'Maison',
+      'bureaux': 'Bureaux',
       'local-commercial': 'Local commercial', 'terrain': 'Terrain', 'immeuble': 'Immeuble'
     })[slug] || slug;
   }

@@ -25,6 +25,7 @@ ALTER TABLE public.listings ADD CONSTRAINT listings_type_check
     'villa',
     'loft',
     'maison',
+    'bureaux',
     'local-commercial',
     'terrain',
     'immeuble'
