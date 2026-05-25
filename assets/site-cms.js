@@ -102,6 +102,18 @@
     });
   }
 
+  function applyImages(settings) {
+    document.querySelectorAll('[data-image]').forEach(el => {
+      const key = el.getAttribute('data-image');
+      const url = settings[key];
+      if (url && typeof url === 'string' && url.trim()) {
+        // <img> uses src; backgrounds use style.backgroundImage
+        if (el.tagName === 'IMG') el.src = url.trim();
+        else el.style.backgroundImage = 'url("' + url.trim().replace(/"/g, '\\"') + '")';
+      }
+    });
+  }
+
   // Public API
   const api = {
     texts: {},
@@ -126,6 +138,7 @@
     },
     reapply() {
       applyTexts(this.texts);
+      applyImages(this.settings);
     }
   };
   window.SLCMS = api;
@@ -136,6 +149,7 @@
       api.settings = settings;
       api.ready = true;
       applyTexts(texts);
+      applyImages(settings);
       // Notify other modules
       document.dispatchEvent(new CustomEvent('sl-cms-ready', { detail: { isRefresh: !!isRefresh } }));
     });

@@ -1308,6 +1308,34 @@
     document.querySelectorAll('input[name="journalLayout"]').forEach(r => r.checked = r.value === layout);
     document.querySelectorAll('input[name="journalCardsPerRow"]').forEach(r => r.checked = parseInt(r.value, 10) === parseInt(perRow, 10));
     document.querySelectorAll('input[name="journalShowDuo"]').forEach(r => r.checked = (r.value === String(showDuo)));
+
+    // Hero photo
+    const heroUrl = STATE.settings['home.hero.image_url'] || '';
+    const urlInput = $('#heroPhotoUrl');
+    if (urlInput) urlInput.value = heroUrl;
+    setHeroPhotoPreview(heroUrl);
+    STATE.pendingHeroFile = null;
+  }
+
+  function setHeroPhotoPreview(url) {
+    const preview = $('#heroPhotoPreview');
+    if (!preview) return;
+    if (url && url.trim()) {
+      preview.style.backgroundImage = 'url("' + url.trim().replace(/"/g, '\\"') + '")';
+      preview.innerHTML = '';
+    } else {
+      preview.style.backgroundImage = '';
+      preview.innerHTML = '<div class="hero-photo-empty">Photo par défaut</div>';
+    }
+  }
+
+  function handleHeroFile(file) {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast('Photo trop lourde (max 5 MB).', 'error'); return; }
+    STATE.pendingHeroFile = file;
+    const reader = new FileReader();
+    reader.onload = e => setHeroPhotoPreview(e.target.result);
+    reader.readAsDataURL(file);
   }
 
   async function saveSettings() {
@@ -1319,17 +1347,34 @@
     const perRow = parseInt(get('journalCardsPerRow') || '3', 10);
     const showDuo = get('journalShowDuo') !== 'false';
 
-    const updates = [
-      { key: 'journal.layout', value: layout },
-      { key: 'journal.cards_per_row', value: perRow },
-      { key: 'journal.show_duo', value: showDuo }
-    ];
-
     const status = $('#settingsStatus');
     const btn = $('#saveSettingsBtn');
     const old = btn.textContent;
     btn.disabled = true; btn.textContent = '…';
     status.textContent = '';
+
+    // Hero photo: if a file is pending, upload it; otherwise use whatever's in the URL input
+    let heroUrl = ($('#heroPhotoUrl')?.value || '').trim();
+    if (STATE.pendingHeroFile) {
+      try {
+        const path = await uploadImage(BUCKET_LISTINGS, '_site', STATE.pendingHeroFile, $('#heroPhotoProgress'));
+        heroUrl = window.SL_SUPABASE.url + '/storage/v1/object/public/' + BUCKET_LISTINGS + '/' + path;
+        STATE.pendingHeroFile = null;
+        if ($('#heroPhotoUrl')) $('#heroPhotoUrl').value = heroUrl;
+      } catch (e) {
+        btn.disabled = false; btn.textContent = old;
+        status.textContent = '✕ ' + e.message;
+        toast('Erreur upload hero : ' + e.message, 'error');
+        return;
+      }
+    }
+
+    const updates = [
+      { key: 'journal.layout', value: layout },
+      { key: 'journal.cards_per_row', value: perRow },
+      { key: 'journal.show_duo', value: showDuo },
+      { key: 'home.hero.image_url', value: heroUrl || null }
+    ];
 
     for (const u of updates) {
       const { error } = await sb.from('site_settings').upsert({
@@ -1409,6 +1454,13 @@
       saveBtn.addEventListener('click', saveSettings);
       $('#reloadSettingsBtn').addEventListener('click', async () => {
         try { await loadSettings(); renderSettingsForm(); bustCMSCache(); toast('Réglages rechargés.', 'success'); } catch (e) { toast(e.message, 'error'); }
+      });
+      // Hero photo: file input + URL input
+      const heroFile = $('#heroPhotoFile');
+      if (heroFile) heroFile.addEventListener('change', e => { handleHeroFile(e.target.files[0]); e.target.value = ''; });
+      const heroUrlInput = $('#heroPhotoUrl');
+      if (heroUrlInput) heroUrlInput.addEventListener('input', () => {
+        if (!STATE.pendingHeroFile) setHeroPhotoPreview(heroUrlInput.value);
       });
     }
     // Hook into tab switching to lazy-load

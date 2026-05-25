@@ -4,7 +4,7 @@
    pour assets statiques (CSS/JS/images). Offline fallback sur la home.
    ========================================================================== */
 
-const CACHE_VERSION = 'sl-v8-2026-05-21-signaturehome';
+const CACHE_VERSION = 'sl-v9-2026-05-25-seomax-herocms';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 

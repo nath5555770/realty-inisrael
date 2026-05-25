@@ -256,6 +256,25 @@
       <div class="settings-grid">
 
         <div class="settings-card settings-card-wide">
+          <h3 class="settings-card-title">Photo de la page d'accueil</h3>
+          <p class="settings-card-desc">L'image en haut de la page d'accueil — le premier visuel que voit chaque visiteur. Téléverser un fichier ou coller une URL (Unsplash, Cloudinary, etc.). Format paysage recommandé, idéalement 2400 × 1600 px ou plus.</p>
+          <div class="hero-photo-zone">
+            <div class="hero-photo-preview" id="heroPhotoPreview">
+              <div class="hero-photo-empty">Aucune photo personnalisée</div>
+            </div>
+            <div class="hero-photo-actions">
+              <label class="btn-ghost">
+                <input type="file" id="heroPhotoFile" accept="image/*" style="display:none">
+                Choisir une photo…
+              </label>
+              <input type="url" id="heroPhotoUrl" placeholder="ou coller une URL d'image" class="field-image-url">
+              <span class="field-hint">PNG, JPG ou WebP — max 5 MB. Laisser vide pour revenir à la photo par défaut.</span>
+              <div class="upload-progress" id="heroPhotoProgress" hidden></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-card settings-card-wide">
           <h3 class="settings-card-title">Disposition du Journal</h3>
           <p class="settings-card-desc">Choisissez le style général d'affichage des articles. Les aperçus ci-dessous montrent comment les cartes seront disposées sur grand écran.</p>
           <div class="settings-layout-grid">

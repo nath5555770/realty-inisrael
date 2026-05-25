@@ -632,6 +632,41 @@ body {
   font-family: 'JetBrains Mono', monospace;
 }
 
+/* Hero photo (landscape, in Settings tab) */
+.hero-photo-zone {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+.hero-photo-preview {
+  width: 360px;
+  aspect-ratio: 3 / 2;
+  background: var(--paper-deep);
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.hero-photo-empty {
+  color: var(--muted);
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0 1rem;
+}
+.hero-photo-actions { display: flex; flex-direction: column; gap: 0.75rem; }
+@media (max-width: 720px) {
+  .hero-photo-zone { grid-template-columns: 1fr; }
+  .hero-photo-preview { width: 100%; max-width: 360px; }
+}
+
 /* Toggles */
 .toggle {
   display: flex;
