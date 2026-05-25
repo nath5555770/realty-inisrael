@@ -465,6 +465,7 @@ body {
   border-radius: 2px;
 }
 .icon-btn:hover { background: var(--paper-deep); border-color: var(--gold); }
+.icon-btn-danger:hover { background: #fee; border-color: #d44; color: #d44; }
 .empty-state {
   padding: 5rem 2rem;
   text-align: center;

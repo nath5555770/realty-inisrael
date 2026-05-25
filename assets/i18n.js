@@ -1631,30 +1631,42 @@
   function updateSwitcher(lang) {
     document.querySelectorAll('[data-lang]').forEach((el) => {
       const isActive = el.dataset.lang === lang;
+      const isFlag = el.classList.contains('lang-flag');
       el.classList.toggle('opacity-100', isActive);
-      el.classList.toggle('underline', isActive);
       el.classList.toggle('opacity-50', !isActive);
-      el.classList.toggle('opacity-90', false);
       el.classList.toggle('hover:opacity-100', !isActive);
+      if (isFlag) {
+        // Active flag indicator = subtle gold underline + slight scale
+        el.classList.toggle('is-active-lang', isActive);
+      } else {
+        el.classList.toggle('underline', isActive);
+      }
     });
   }
 
   function wireSwitcher() {
-    // Find the FR / EN / HE links by text content and attach data-lang.
+    // Find elements either via data-lang attribute (preferred, supports flag emojis)
+    // or by text content ('FR'/'EN'/'HE'/'RU') for back-compat.
     const candidates = document.querySelectorAll('a, button');
     candidates.forEach((el) => {
-      const txt = (el.textContent || '').trim().toUpperCase();
-      if (txt === 'FR' || txt === 'EN' || txt === 'HE' || txt === 'RU') {
-        el.dataset.lang = txt.toLowerCase();
-        el.style.cursor = 'pointer';
-        if (!el.hasAttribute('href')) el.setAttribute('href', '#');
-        el.addEventListener('click', (e) => {
-          e.preventDefault();
-          const lang = el.dataset.lang;
-          try { localStorage.setItem(STORAGE_KEY, lang); } catch (_) {}
-          applyLang(lang);
-        });
+      let lang = (el.dataset.lang || '').toLowerCase();
+      if (!lang) {
+        const txt = (el.textContent || '').trim().toUpperCase();
+        if (txt === 'FR' || txt === 'EN' || txt === 'HE' || txt === 'RU') {
+          lang = txt.toLowerCase();
+          el.dataset.lang = lang;
+        }
       }
+      if (!SUPPORTED.includes(lang)) return;
+      if (el.dataset.langWired === '1') return;
+      el.dataset.langWired = '1';
+      el.style.cursor = 'pointer';
+      if (!el.hasAttribute('href')) el.setAttribute('href', '#');
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        try { localStorage.setItem(STORAGE_KEY, lang); } catch (_) {}
+        applyLang(lang);
+      });
     });
   }
 

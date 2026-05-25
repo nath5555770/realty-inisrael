@@ -219,6 +219,7 @@
         '<div class="row-actions">' +
           '<button class="icon-btn" data-act="edit" title="Modifier">✎</button>' +
           '<button class="icon-btn" data-act="duplicate" title="Dupliquer">⎘</button>' +
+          '<button class="icon-btn icon-btn-danger" data-act="delete" title="Supprimer">🗑</button>' +
         '</div>' +
       '</div>';
     }).join('');
@@ -226,10 +227,26 @@
       row.addEventListener('click', e => {
         const i = parseInt(row.dataset.i, 10);
         const act = e.target.closest('[data-act]')?.dataset.act;
-        if (act === 'duplicate') return duplicateListing(i);
+        if (act === 'duplicate') { e.stopPropagation(); return duplicateListing(i); }
+        if (act === 'delete')    { e.stopPropagation(); return deleteListingByIndex(i); }
         openListingEditor(i);
       });
     });
+  }
+
+  async function deleteListingByIndex(i) {
+    const l = STATE.listings[i];
+    if (!l) return;
+    const title = (l.title_main + ' ' + (l.title_accent || '')).trim() || l.ref || 'Cette annonce';
+    const ok = await confirmModal('Supprimer cette annonce ?', '"' + title + '" sera définitivement retirée. Cette action est irréversible.');
+    if (!ok) return;
+    const { error } = await sb.from('listings').delete().eq('id', l.id);
+    if (error) { toast(error.message, 'error', 'Échec'); return; }
+    toast('Annonce supprimée.', 'success');
+    await loadListings();
+    listingsStats();
+    renderListingsTable();
+    renderListingsAuthorFilter();
   }
 
   async function duplicateListing(i) {
