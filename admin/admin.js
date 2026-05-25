@@ -29,6 +29,7 @@
     profilesById: {},      // id => profile (for author display)
     profilesList: [],
     listings: [],
+    viewMode: 'active',    // 'active' | 'trash'
     currentListing: null,  // index | 'new'
     pendingListingFile: null,
     articles: [],
@@ -163,11 +164,18 @@
 
   function listingsStats() {
     const s = STATE.listings;
-    $('#statTotal').textContent = s.length;
-    $('#statVisible').textContent = s.filter(x => x.visible !== false).length;
-    $('#statFeatured').textContent = s.filter(x => x.featured).length;
-    $('#statHidden').textContent = s.filter(x => x.visible === false).length;
-    $('#statOff').textContent = s.filter(x => x.off_market).length;
+    const active = s.filter(x => !x.archived_at);
+    $('#statTotal').textContent = active.length;
+    $('#statVisible').textContent = active.filter(x => x.visible !== false).length;
+    $('#statFeatured').textContent = active.filter(x => x.featured).length;
+    $('#statHidden').textContent = active.filter(x => x.visible === false).length;
+    $('#statOff').textContent = active.filter(x => x.off_market).length;
+    const trashCount = s.filter(x => x.archived_at).length;
+    const trashBtn = $('#trashToggleBtn');
+    if (trashBtn) {
+      trashBtn.textContent = (STATE.viewMode === 'trash' ? '↩ Voir les actives' : '🗑 Corbeille (' + trashCount + ')');
+      trashBtn.classList.toggle('btn-active', STATE.viewMode === 'trash');
+    }
   }
 
   function renderListingsAuthorFilter() {
@@ -186,7 +194,11 @@
     const city = $('#filterCity').value;
     const type = $('#filterType').value;
     const author = $('#filterAuthor').value;
+    const inTrash = STATE.viewMode === 'trash';
     const filtered = STATE.listings.map((l, i) => ({ l, i })).filter(({ l }) => {
+      // View mode: 'active' hides archived; 'trash' shows only archived
+      if (inTrash) { if (!l.archived_at) return false; }
+      else         { if (l.archived_at)  return false; }
       if (city && l.city !== city) return false;
       if (type && l.type !== type) return false;
       if (author && l.created_by !== author) return false;
@@ -217,9 +229,12 @@
         '<div class="badges">' + badges.join('') + '</div>' +
         '<div class="price">' + priceLabel(l) + '</div>' +
         '<div class="row-actions">' +
-          '<button class="icon-btn" data-act="edit" title="Modifier">✎</button>' +
-          '<button class="icon-btn" data-act="duplicate" title="Dupliquer">⎘</button>' +
-          '<button class="icon-btn icon-btn-danger" data-act="delete" title="Supprimer">🗑</button>' +
+          (inTrash
+            ? '<button class="icon-btn" data-act="restore" title="Restaurer">↩</button>' +
+              '<button class="icon-btn icon-btn-danger" data-act="purge" title="Supprimer définitivement">⨯</button>'
+            : '<button class="icon-btn" data-act="edit" title="Modifier">✎</button>' +
+              '<button class="icon-btn" data-act="duplicate" title="Dupliquer">⎘</button>' +
+              '<button class="icon-btn icon-btn-danger" data-act="delete" title="Mettre à la corbeille">🗑</button>') +
         '</div>' +
       '</div>';
     }).join('');
@@ -229,6 +244,9 @@
         const act = e.target.closest('[data-act]')?.dataset.act;
         if (act === 'duplicate') { e.stopPropagation(); return duplicateListing(i); }
         if (act === 'delete')    { e.stopPropagation(); return deleteListingByIndex(i); }
+        if (act === 'restore')   { e.stopPropagation(); return restoreListingByIndex(i); }
+        if (act === 'purge')     { e.stopPropagation(); return purgeListingByIndex(i); }
+        if (inTrash) return; // No editor for archived listings — restore first
         openListingEditor(i);
       });
     });
@@ -238,15 +256,44 @@
     const l = STATE.listings[i];
     if (!l) return;
     const title = (l.title_main + ' ' + (l.title_accent || '')).trim() || l.ref || 'Cette annonce';
-    const ok = await confirmModal('Supprimer cette annonce ?', '"' + title + '" sera définitivement retirée. Cette action est irréversible.');
+    const ok = await confirmModal('Mettre cette annonce à la corbeille ?', '"' + title + '" sera retirée du site public mais reste récupérable depuis la corbeille pendant 30 jours.');
     if (!ok) return;
-    const { error } = await sb.from('listings').delete().eq('id', l.id);
+    const userId = STATE.user?.id || null;
+    const { error } = await sb.from('listings').update({ archived_at: new Date().toISOString(), archived_by: userId, visible: false }).eq('id', l.id);
     if (error) { toast(error.message, 'error', 'Échec'); return; }
-    toast('Annonce supprimée.', 'success');
+    toast('Annonce mise à la corbeille.', 'success');
     await loadListings();
     listingsStats();
     renderListingsTable();
     renderListingsAuthorFilter();
+  }
+
+  async function restoreListingByIndex(i) {
+    const l = STATE.listings[i];
+    if (!l) return;
+    const title = (l.title_main + ' ' + (l.title_accent || '')).trim() || l.ref || 'Cette annonce';
+    const ok = await confirmModal('Restaurer cette annonce ?', '"' + title + '" repartira dans les annonces actives. Elle restera masquée du public jusqu’à ce que vous la passiez en "Publiée".');
+    if (!ok) return;
+    const { error } = await sb.from('listings').update({ archived_at: null, archived_by: null }).eq('id', l.id);
+    if (error) { toast(error.message, 'error', 'Échec'); return; }
+    toast('Annonce restaurée.', 'success');
+    await loadListings();
+    listingsStats();
+    renderListingsTable();
+  }
+
+  async function purgeListingByIndex(i) {
+    const l = STATE.listings[i];
+    if (!l) return;
+    const title = (l.title_main + ' ' + (l.title_accent || '')).trim() || l.ref || 'Cette annonce';
+    const ok = await confirmModal('Suppression DÉFINITIVE ?', '"' + title + '" sera supprimée pour de bon — impossible à récupérer ensuite. Continuer ?');
+    if (!ok) return;
+    const { error } = await sb.from('listings').delete().eq('id', l.id);
+    if (error) { toast(error.message, 'error', 'Échec'); return; }
+    toast('Annonce supprimée définitivement.', 'success');
+    await loadListings();
+    listingsStats();
+    renderListingsTable();
   }
 
   async function duplicateListing(i) {
@@ -449,11 +496,13 @@
   async function deleteListing() {
     if (STATE.currentListing === 'new') return backToDashboard();
     const l = STATE.listings[STATE.currentListing];
-    const ok = await confirmModal('Supprimer cette annonce ?', '"' + (l.title_main + ' ' + (l.title_accent || '')).trim() + '" sera définitivement retirée.');
+    const title = (l.title_main + ' ' + (l.title_accent || '')).trim() || l.ref || 'Cette annonce';
+    const ok = await confirmModal('Mettre cette annonce à la corbeille ?', '"' + title + '" sera retirée du site public mais reste récupérable depuis la corbeille pendant 30 jours.');
     if (!ok) return;
-    const { error } = await sb.from('listings').delete().eq('id', l.id);
+    const userId = STATE.user?.id || null;
+    const { error } = await sb.from('listings').update({ archived_at: new Date().toISOString(), archived_by: userId, visible: false }).eq('id', l.id);
     if (error) { toast(error.message, 'error', 'Échec'); return; }
-    toast('Annonce supprimée.', 'success');
+    toast('Annonce mise à la corbeille.', 'success');
     await loadListings();
     listingsStats();
     renderListingsTable();
@@ -1153,6 +1202,12 @@
 
     // Listings tab
     $('#reloadBtn').addEventListener('click', async () => { try { await loadListings(); listingsStats(); renderListingsTable(); renderListingsAuthorFilter(); toast('Annonces rechargées.', 'success'); } catch (_) {} });
+    const trashBtn = $('#trashToggleBtn');
+    if (trashBtn) trashBtn.addEventListener('click', () => {
+      STATE.viewMode = STATE.viewMode === 'trash' ? 'active' : 'trash';
+      listingsStats();
+      renderListingsTable();
+    });
     $('#newListingBtn').addEventListener('click', () => openListingEditor('new'));
     $('#searchInput').addEventListener('input', renderListingsTable);
     $('#filterCity').addEventListener('change', renderListingsTable);

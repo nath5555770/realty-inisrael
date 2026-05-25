@@ -466,6 +466,7 @@ body {
 }
 .icon-btn:hover { background: var(--paper-deep); border-color: var(--gold); }
 .icon-btn-danger:hover { background: #fee; border-color: #d44; color: #d44; }
+.btn-ghost.btn-active { background: var(--teal); color: var(--gold); border-color: var(--teal); }
 
 /* Rich text toolbar (article editor) */
 .rte-toolbar {
