@@ -343,7 +343,6 @@
     $('#fFeatured').checked = !!l.featured;
     $('#fSignature').checked = !!l.signature;
     $('#fOffMarket').checked = !!l.off_market;
-    $('#fHasElevator').checked = !!l.has_elevator;
     setListingPreview(imageUrl(BUCKET_LISTINGS, l.image));
     $('#uploadProgress').hidden = true;
     // Load gallery
@@ -438,7 +437,7 @@
       images: Array.isArray(STATE.currentImages) ? STATE.currentImages : [],
       visible: $('#fVisible').checked, featured: $('#fFeatured').checked,
       signature: $('#fSignature').checked, off_market: $('#fOffMarket').checked,
-      has_elevator: $('#fHasElevator').checked
+      has_elevator: false
     };
   }
 
