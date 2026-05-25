@@ -63,6 +63,11 @@
     if (s == null) return '';
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
+  // Same as escapeHtml but keeps line breaks (\n → <br>). Use for any
+  // user-edited multi-line text field (descriptions, long-form notes…).
+  function escapeHtmlMultiline(s) {
+    return escapeHtml(s).replace(/\r?\n/g, '<br>');
+  }
   // Prices are stored and displayed in shekels everywhere. The DB column is
   // still named price_usd for legacy reasons (renaming requires a Postgres
   // migration with reference updates), but the value is treated as ILS.
@@ -208,7 +213,7 @@
         '      <h3 class="display mt-4" style="font-size: clamp(2.25rem, 4vw, 3.5rem); line-height: 0.95">',
         escapeHtml(l.title_main), ' <span class="display-i text-[var(--gold-deep)]">', escapeHtml(l.title_accent || ''), '</span>',
         '      </h3>',
-        '      <p class="text-base text-[var(--ink-soft)] mt-5 leading-relaxed">', escapeHtml(l.description || ''), '</p>',
+        '      <p class="text-base text-[var(--ink-soft)] mt-5 leading-relaxed">', escapeHtmlMultiline(l.description || ''), '</p>',
         '      <div class="grid grid-cols-3 gap-4 mt-6 border-t border-[var(--line)] pt-5">',
         '        <div><div class="label">SURFACE</div><div class="display text-xl mt-1.5">', escapeHtml(l.surface || ''), '</div></div>',
         '        <div><div class="label">PIÈCES</div><div class="display text-xl mt-1.5">', escapeHtml(l.rooms || ''), '</div></div>',
@@ -234,7 +239,7 @@
       '  <div>',
       '    <div class="label-teal">', cityLabel(l.city), ' · ', escapeHtml((l.neighborhood || '').toUpperCase()), '</div>',
       '    <h3 class="display text-2xl mt-3 leading-tight">', escapeHtml(l.title_main), ' <span class="display-i text-[var(--gold-deep)]">', escapeHtml(l.title_accent || ''), '</span></h3>',
-      '    <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtml(l.description || ''), '</p>',
+      '    <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtmlMultiline(l.description || ''), '</p>',
       '    <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">',
       '      <span class="label !tracking-[0.2em]">', escapeHtml(l.rooms || ''), l.extra_label ? ' · ' + escapeHtml(l.extra_label) : '', l.has_elevator ? ' · <span class="elev-tag" title="Ascenseur">⇡ ASC</span>' : '', '</span>',
       '      <span class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">DÉTAILS →</span>',
@@ -466,7 +471,7 @@
       '  </div>',
       '  <div class="label-teal">', cityLabel(l.city), ' · ', escapeHtml((l.neighborhood || '').toUpperCase()), '</div>',
       '  <h3 class="display text-3xl mt-3 leading-tight">', escapeHtml(l.title_main), ' <span class="display-i text-[var(--gold-deep)]">', escapeHtml(l.title_accent || ''), '</span></h3>',
-      '  <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtml(l.description || ''), '</p>',
+      '  <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtmlMultiline(l.description || ''), '</p>',
       '  <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">',
       '    <span class="label !tracking-[0.2em]">', escapeHtml(l.rooms || ''), l.extra_label ? ' · ' + escapeHtml(l.extra_label) : '', '</span>',
       '    <span class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">DÉTAILS →</span>',
@@ -894,7 +899,7 @@
       '<div class="listing-reader-meta">RÉF. ' + escapeHtml(l.ref || '') + ' · ' + escapeHtml(cityLabel(l.city)) + (l.neighborhood ? ' · ' + escapeHtml(l.neighborhood) : '') + '</div>' +
       '<h1 class="listing-reader-title">' + escapeHtml(l.title_main || '') + (l.title_accent ? ' <em>' + escapeHtml(l.title_accent) + '</em>' : '') + '</h1>' +
       (tags.length ? '<div class="listing-reader-tags">' + tags.join('') + '</div>' : '') +
-      (l.description ? '<p class="listing-reader-desc">' + escapeHtml(l.description) + '</p>' : '') +
+      (l.description ? '<p class="listing-reader-desc">' + escapeHtmlMultiline(l.description) + '</p>' : '') +
       (stats.length ? '<div class="listing-reader-stats">' + stats.map(s => '<div class="listing-reader-stat"><span class="lbl">' + s[0] + '</span><span class="val">' + s[1] + '</span></div>').join('') + '</div>' : '') +
       '<div class="listing-reader-price-row">' +
         '<div>' +
