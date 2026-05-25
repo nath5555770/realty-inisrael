@@ -62,7 +62,7 @@
 
       // Sélection
       'Sélection · printemps MMXXVI': 'Spring MMXXVI selection',
-      'Trois pièces': 'Three pieces',
+      'Les biens récents': 'Recent properties',
       'de notre portefeuille.': 'from our portfolio.',
       'Un aperçu des dix-neuf biens disponibles. Chaque pièce porte une référence, une provenance, et l\'accord explicite des propriétaires.': 'A preview of the nineteen available properties. Each piece carries a reference, provenance, and the explicit consent of its owners.',
       'VOIR TOUT LE PORTEFEUILLE (19) →': 'VIEW THE FULL PORTFOLIO (19) →',
@@ -563,7 +563,7 @@
 
       // Sélection
       'Sélection · printemps MMXXVI': 'מבחר · אביב MMXXVI',
-      'Trois pièces': 'שלושה נכסים',
+      'Les biens récents': 'נכסים חדשים',
       'de notre portefeuille.': 'מתיק הנכסים שלנו.',
       "Un aperçu des dix-neuf biens disponibles. Chaque pièce porte une référence, une provenance, et l'accord explicite des propriétaires.": 'סקירה של תשעה-עשר הנכסים הזמינים. לכל נכס יש מספר ייחודי, מקור והסכמה מפורשת מהבעלים.',
       'VOIR TOUT LE PORTEFEUILLE (19) →': '← צפו בתיק הנכסים המלא (19)',
@@ -1062,7 +1062,7 @@
 
       // Sélection
       'Sélection · printemps MMXXVI': 'Подборка · весна MMXXVI',
-      'Trois pièces': 'Три объекта',
+      'Les biens récents': 'Недавние объекты',
       'de notre portefeuille.': 'из нашего портфолио.',
       "Un aperçu des dix-neuf biens disponibles. Chaque pièce porte une référence, une provenance, et l'accord explicite des propriétaires.": 'Обзор девятнадцати доступных объектов. Каждый объект имеет номер, происхождение и явное согласие владельцев.',
       'VOIR TOUT LE PORTEFEUILLE (19) →': 'СМОТРЕТЬ ВСЁ ПОРТФОЛИО (19) →',
