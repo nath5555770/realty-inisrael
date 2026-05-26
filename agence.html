@@ -296,13 +296,15 @@
 
   <div class="page">
 
-    <!-- Language switcher -->
-    <nav class="lang-bar" aria-label="Choisir la langue">
-      <a href="#" role="button" data-lang="fr" class="is-active" aria-current="true" aria-label="Français">🇫🇷</a>
-      <a href="#" role="button" data-lang="en" aria-label="English">🇬🇧</a>
-      <a href="#" role="button" data-lang="he" aria-label="עברית — Hebrew">🇮🇱</a>
-      <a href="#" role="button" data-lang="ru" aria-label="Русский — Russian">🇷🇺</a>
-    </nav>
+    <header role="banner">
+      <!-- Language switcher -->
+      <nav class="lang-bar" aria-label="Choisir la langue">
+        <a href="#" role="button" data-lang="fr" class="is-active" aria-current="true" aria-label="Français">🇫🇷</a>
+        <a href="#" role="button" data-lang="en" aria-label="English">🇬🇧</a>
+        <a href="#" role="button" data-lang="he" aria-label="עברית — Hebrew">🇮🇱</a>
+        <a href="#" role="button" data-lang="ru" aria-label="Русский — Russian">🇷🇺</a>
+      </nav>
+    </header>
 
     <main class="center" id="main-content">
       <!-- Logo -->
@@ -333,11 +335,11 @@
     </main>
 
     <!-- Copyright + accessibility link -->
-    <div class="copyright">
+    <footer role="contentinfo" class="copyright">
       <span data-msg="copyright">© SHAHAR LEVI &amp; NATHALIE HAIK REAL ESTATE 2026</span>
       &nbsp;·&nbsp;
-      <a href="accessibilite.html" style="color: inherit; text-decoration: underline;" data-msg="a11y_link">Accessibilité</a>
-    </div>
+      <a href="accessibilite.html" data-msg="a11y_link">Accessibilité</a>
+    </footer>
   </div>
 
   <script src="assets/a11y.js" defer></script>
