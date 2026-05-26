@@ -26,6 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Playfair+Display:ital,wght@0,400;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/a11y.css">
 
 <style>
   :root {
@@ -283,9 +284,15 @@
       </div>
     </main>
 
-    <!-- Copyright -->
-    <div class="copyright" data-msg="copyright">© SHAHAR LEVI &amp; NATHALIE HAIK REAL ESTATE 2026</div>
+    <!-- Copyright + accessibility link -->
+    <div class="copyright">
+      <span data-msg="copyright">© SHAHAR LEVI &amp; NATHALIE HAIK REAL ESTATE 2026</span>
+      &nbsp;·&nbsp;
+      <a href="accessibilite.html" style="color: inherit; text-decoration: underline;" data-msg="a11y_link">Accessibilité</a>
+    </div>
   </div>
+
+  <script src="assets/a11y.js" defer></script>
 
   <script>
     // 4-language messages
@@ -297,6 +304,7 @@
         contact_label: 'Nous contacter',
         address: 'Shoshana Damari 10 · Ir Yamim, Netanya · Israël',
         copyright: '© SHAHAR LEVI & NATHALIE HAIK REAL ESTATE 2026',
+        a11y_link: 'Accessibilité',
         dir: 'ltr', lang: 'fr', title_doc: 'SHAHAR LEVI & NATHALIE HAIK — Real Estate'
       },
       en: {
@@ -306,6 +314,7 @@
         contact_label: 'Contact us',
         address: 'Shoshana Damari 10 · Ir Yamim, Netanya · Israel',
         copyright: '© SHAHAR LEVI & NATHALIE HAIK REAL ESTATE 2026',
+        a11y_link: 'Accessibility',
         dir: 'ltr', lang: 'en', title_doc: 'SHAHAR LEVI & NATHALIE HAIK — Real Estate'
       },
       he: {
@@ -315,6 +324,7 @@
         contact_label: 'צרו קשר',
         address: 'שושנה דמארי 10 · עיר ימים, נתניה · ישראל',
         copyright: '© SHAHAR LEVI & NATHALIE HAIK REAL ESTATE 2026',
+        a11y_link: 'נגישות',
         dir: 'rtl', lang: 'he', title_doc: 'שהר לוי & נטלי האיק — נדל״ן'
       },
       ru: {
@@ -324,6 +334,7 @@
         contact_label: 'Связаться с нами',
         address: 'Шошана Дамари 10 · Ир Ямим, Нетания · Израиль',
         copyright: '© SHAHAR LEVI & NATHALIE HAIK REAL ESTATE 2026',
+        a11y_link: 'Доступность',
         dir: 'ltr', lang: 'ru', title_doc: 'SHAHAR LEVI & NATHALIE HAIK — Недвижимость'
       }
     };

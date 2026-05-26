@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://realty-inisrael.com/accessibilite.html">
+<title>Déclaration d'accessibilité — SHAHAR LEVI &amp; NATHALIE HAIK</title>
+<meta name="description" content="Déclaration d'accessibilité numérique conforme au Standard Israélien 5568 (Hovot Negishout Atarim) — SHAHAR LEVI & NATHALIE HAIK Real Estate.">
+
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="manifest" href="assets/site.webmanifest">
+<meta name="theme-color" content="#0e2722">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Playfair+Display:ital,wght@0,400;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/a11y.css">
+
+<style>
+  :root {
+    --paper: #faf6ec;
+    --ink: #14110d;
+    --ink-soft: #4a3f33;
+    --teal: #0e2722;
+    --gold: #c4a877;
+    --gold-deep: #a78c5c;
+    --line: rgba(20,17,13,0.13);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 4rem;
+  }
+  .display { font-family: 'Playfair Display', serif; font-weight: 400; }
+  .cinzel { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.18em; }
+
+  /* Skip link (WCAG 2.4.1) */
+  .skip-link {
+    position: absolute; top: -40px; left: 0;
+    background: var(--teal); color: var(--paper);
+    padding: 0.5rem 1rem; z-index: 1000;
+    text-decoration: none;
+  }
+  .skip-link:focus { top: 0; }
+
+  header.top {
+    background: var(--teal);
+    color: var(--paper);
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+  }
+  header.top .logo .name { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.18em; color: var(--gold); font-size: 0.95rem; }
+  header.top .logo .desc { font-family: 'Cinzel', serif; font-weight: 400; letter-spacing: 0.45em; color: var(--gold-deep); font-size: 0.6rem; margin-top: 0.45rem; }
+  header.top a { color: inherit; text-decoration: none; }
+
+  /* Language tabs */
+  .lang-tabs {
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .lang-tabs button {
+    flex: 1;
+    min-width: 110px;
+    padding: 1rem 1.5rem;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--ink-soft);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .lang-tabs button:hover { color: var(--ink); }
+  .lang-tabs button.is-active { color: var(--teal); border-bottom-color: var(--gold); font-weight: 600; }
+  .lang-tabs button:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+
+  main { max-width: 760px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+  .doc { display: none; }
+  .doc.is-active { display: block; animation: fade-in 0.3s; }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  .doc[dir="rtl"] { text-align: right; }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    color: var(--teal);
+    margin-bottom: 0.6rem;
+    line-height: 1.2;
+  }
+  h1 em { font-style: italic; color: var(--gold-deep); }
+  .meta { color: var(--ink-soft); font-size: 0.9rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 1.4rem;
+    color: var(--teal);
+    margin-top: 2.5rem;
+    margin-bottom: 0.8rem;
+  }
+  p { margin-bottom: 1rem; color: var(--ink); }
+  p strong { color: var(--teal); }
+  ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+  .doc[dir="rtl"] ul, .doc[dir="rtl"] ol { padding-left: 0; padding-right: 1.5rem; }
+  ul li, ol li { margin-bottom: 0.5rem; }
+  a { color: var(--gold-deep); text-decoration: underline; }
+  a:hover { color: var(--teal); }
+  a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+  .contact-card {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+  }
+  .contact-card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    margin-bottom: 0.8rem;
+  }
+  .contact-card .info { font-size: 0.95rem; line-height: 1.9; }
+  .contact-card a { font-weight: 500; }
+
+  .back {
+    display: inline-block;
+    margin-top: 3rem;
+    padding: 0.7rem 1.4rem;
+    background: var(--teal);
+    color: var(--paper);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+  .back:hover { background: #061814; color: var(--paper); }
+</style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu principal</a>
+
+  <header class="top">
+    <a href="index.html" class="logo">
+      <div class="name">SHAHAR LEVI &amp; NATHALIE HAIK</div>
+      <div class="desc">REAL ESTATE</div>
+    </a>
+  </header>
+
+  <nav class="lang-tabs" role="tablist" aria-label="Choisir la langue">
+    <button role="tab" data-tab="fr" class="is-active" aria-selected="true">🇫🇷 Français</button>
+    <button role="tab" data-tab="en" aria-selected="false">🇬🇧 English</button>
+    <button role="tab" data-tab="he" aria-selected="false">🇮🇱 עברית</button>
+    <button role="tab" data-tab="ru" aria-selected="false">🇷🇺 Русский</button>
+  </nav>
+
+  <main id="main">
+
+    <!-- ============ FRANÇAIS ============ -->
+    <article class="doc is-active" data-doc="fr" dir="ltr">
+      <h1>Déclaration <em>d'accessibilité</em></h1>
+      <div class="meta">SHAHAR LEVI &amp; NATHALIE HAIK Real Estate · Mis à jour le 25 mai 2026</div>
+
+      <p>SHAHAR LEVI &amp; NATHALIE HAIK Real Estate s'engage à rendre son site internet <strong>realty-inisrael.com</strong> accessible au plus grand nombre, y compris aux personnes en situation de handicap, conformément à la <strong>Loi israélienne sur l'égalité des droits des personnes handicapées (1998)</strong> et à la <strong>Norme Israélienne IS 5568</strong> (basée sur les directives WCAG 2.0 niveau AA).</p>
+
+      <h2>Niveau de conformité</h2>
+      <p>Le site est <strong>conforme aux exigences de la Norme Israélienne IS 5568</strong> (équivalent WCAG 2.0 AA). Un widget d'accessibilité est disponible en permanence (bouton bleu en bas à gauche / en bas à droite en hébreu) permettant à chaque visiteur d'ajuster :</p>
+      <ul>
+        <li>La taille du texte (Normal / Grand / Très grand)</li>
+        <li>Le contraste (élevé ou couleurs inversées)</li>
+        <li>L'affichage en police lisible (Arial à haut interlignage)</li>
+        <li>Le soulignement des liens et la mise en évidence des titres</li>
+        <li>L'arrêt des animations</li>
+        <li>L'agrandissement du curseur</li>
+        <li>L'indicateur de focus renforcé pour la navigation au clavier</li>
+      </ul>
+      <p>Les préférences sont mémorisées entre les pages.</p>
+
+      <h2>Mesures prises</h2>
+      <ul>
+        <li>Structure HTML sémantique avec balises ARIA</li>
+        <li>Contrastes de couleurs vérifiés (ratio minimum 4,5:1)</li>
+        <li>Navigation entièrement possible au clavier</li>
+        <li>Textes alternatifs sur toutes les images</li>
+        <li>Formulaires correctement étiquetés</li>
+        <li>Compatibilité avec les lecteurs d'écran (NVDA, JAWS, VoiceOver)</li>
+        <li>Compatibilité avec les zooms jusqu'à 200%</li>
+        <li>Lien d'évitement pour aller directement au contenu principal</li>
+      </ul>
+
+      <h2>Limitations connues</h2>
+      <p>Malgré nos efforts, certaines pages peuvent comporter des éléments encore non totalement accessibles. Nous travaillons continuellement à améliorer leur conformité. Si vous rencontrez une difficulté, n'hésitez pas à nous contacter (coordonnées ci-dessous).</p>
+
+      <h2>Compatibilité technique</h2>
+      <p>Le site est conçu pour fonctionner avec les navigateurs récents (Chrome, Safari, Firefox, Edge) sur ordinateur, tablette et téléphone. Il est compatible avec les technologies d'assistance courantes.</p>
+
+      <div class="contact-card">
+        <h3>Coordinateur d'accessibilité (Rakaz Negishout)</h3>
+        <div class="info">
+          <strong>Nathalie Haik</strong><br>
+          📞 <a href="tel:+972547831152">+972 54 783 11 52</a><br>
+          ✉ <a href="mailto:Nathhaik.realestate@gmail.com">Nathhaik.realestate@gmail.com</a><br>
+          📍 Shoshana Damari 10 · Ir Yamim, Netanya · Israël
+        </div>
+      </div>
+
+      <h2>En cas de difficulté</h2>
+      <p>Si vous rencontrez un problème d'accessibilité sur ce site, contactez notre coordinateur d'accessibilité par téléphone ou email. Nous nous engageons à répondre <strong>sous 5 jours ouvrés</strong> et à proposer une solution sous 30 jours.</p>
+      <p>Vous pouvez également déposer une réclamation auprès de la <strong>Commission israélienne pour l'égalité des droits des personnes handicapées</strong> : <a href="https://www.gov.il/he/Departments/people_with_disabilities_rights_commission" target="_blank" rel="noopener">gov.il</a></p>
+
+      <a class="back" href="index.html">← Retour à l'accueil</a>
+    </article>
+
+    <!-- ============ ENGLISH ============ -->
+    <article class="doc" data-doc="en" dir="ltr">
+      <h1><em>Accessibility</em> Statement</h1>
+      <div class="meta">SHAHAR LEVI &amp; NATHALIE HAIK Real Estate · Updated May 25, 2026</div>
+
+      <p>SHAHAR LEVI &amp; NATHALIE HAIK Real Estate is committed to making its website <strong>realty-inisrael.com</strong> accessible to the widest possible audience, including people with disabilities, in accordance with the <strong>Israeli Equal Rights for Persons with Disabilities Law (1998)</strong> and the <strong>Israeli Standard IS 5568</strong> (based on WCAG 2.0 Level AA guidelines).</p>
+
+      <h2>Compliance level</h2>
+      <p>This site <strong>conforms to the requirements of Israeli Standard IS 5568</strong> (equivalent to WCAG 2.0 AA). An accessibility widget is permanently available (blue button at bottom-left / bottom-right in Hebrew), allowing each visitor to adjust:</p>
+      <ul>
+        <li>Text size (Normal / Large / Very large)</li>
+        <li>Contrast (high contrast or inverted colors)</li>
+        <li>Readable font display (high-leading Arial)</li>
+        <li>Underlined links and highlighted headings</li>
+        <li>Pause animations</li>
+        <li>Bigger cursor</li>
+        <li>Enhanced focus indicator for keyboard navigation</li>
+      </ul>
+      <p>Preferences are remembered across pages.</p>
+
+      <h2>Measures taken</h2>
+      <ul>
+        <li>Semantic HTML structure with ARIA tags</li>
+        <li>Color contrast verified (minimum 4.5:1 ratio)</li>
+        <li>Full keyboard navigation</li>
+        <li>Alt text on all images</li>
+        <li>Properly labeled forms</li>
+        <li>Compatible with screen readers (NVDA, JAWS, VoiceOver)</li>
+        <li>Compatible with zoom up to 200%</li>
+        <li>Skip link to jump to main content</li>
+      </ul>
+
+      <h2>Known limitations</h2>
+      <p>Despite our efforts, some pages may contain elements that are not yet fully accessible. We continuously work to improve compliance. If you encounter difficulties, please contact us (details below).</p>
+
+      <h2>Technical compatibility</h2>
+      <p>The site is designed to work with recent browsers (Chrome, Safari, Firefox, Edge) on desktop, tablet, and mobile. It is compatible with common assistive technologies.</p>
+
+      <div class="contact-card">
+        <h3>Accessibility Coordinator (Rakaz Negishut)</h3>
+        <div class="info">
+          <strong>Nathalie Haik</strong><br>
+          📞 <a href="tel:+972547831152">+972 54 783 11 52</a><br>
+          ✉ <a href="mailto:Nathhaik.realestate@gmail.com">Nathhaik.realestate@gmail.com</a><br>
+          📍 Shoshana Damari 10 · Ir Yamim, Netanya · Israel
+        </div>
+      </div>
+
+      <h2>If you encounter difficulties</h2>
+      <p>If you experience an accessibility problem on this site, please contact our accessibility coordinator by phone or email. We are committed to responding <strong>within 5 business days</strong> and proposing a solution within 30 days.</p>
+      <p>You may also file a complaint with the <strong>Israeli Commission for Equal Rights of Persons with Disabilities</strong>: <a href="https://www.gov.il/en/Departments/people_with_disabilities_rights_commission" target="_blank" rel="noopener">gov.il</a></p>
+
+      <a class="back" href="index.html">← Back to home</a>
+    </article>
+
+    <!-- ============ עברית ============ -->
+    <article class="doc" data-doc="he" dir="rtl">
+      <h1>הצהרת <em>נגישות</em></h1>
+      <div class="meta">SHAHAR LEVI &amp; NATHALIE HAIK Real Estate · עודכן: 25 במאי 2026</div>
+
+      <p>חברת SHAHAR LEVI &amp; NATHALIE HAIK Real Estate פועלת להנגשת אתר האינטרנט <strong>realty-inisrael.com</strong> לאנשים עם מוגבלות, בהתאם ל<strong>חוק שוויון זכויות לאנשים עם מוגבלות (1998)</strong>, תקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), ולפי <strong>תקן ישראלי 5568</strong> (המבוסס על הנחיות WCAG 2.0 רמה AA).</p>
+
+      <h2>רמת הנגישות</h2>
+      <p>האתר <strong>תואם לדרישות התקן הישראלי 5568</strong> (שווה ערך ל-WCAG 2.0 ברמה AA). פעיל באתר באופן קבוע <strong>תפריט נגישות</strong> (כפתור כחול בפינה השמאלית התחתונה / הימנית בעברית), המאפשר לכל גולש להתאים:</p>
+      <ul>
+        <li>גודל טקסט (רגיל / גדול / גדול מאוד)</li>
+        <li>ניגודיות (גבוהה או צבעים הפוכים)</li>
+        <li>גופן קריא (Arial עם ריווח גדול)</li>
+        <li>הדגשת קישורים והדגשת כותרות</li>
+        <li>עצירת אנימציות</li>
+        <li>הגדלת הסמן</li>
+        <li>סימן פוקוס מודגש לניווט במקלדת</li>
+      </ul>
+      <p>ההעדפות נשמרות בין דפים.</p>
+
+      <h2>צעדים שננקטו</h2>
+      <ul>
+        <li>מבנה HTML סמנטי עם תגיות ARIA</li>
+        <li>ניגודיות צבעים נבדקה (יחס מינימלי 4.5:1)</li>
+        <li>ניווט מלא במקלדת</li>
+        <li>טקסט חלופי על כל התמונות</li>
+        <li>טפסים עם תיוג נכון</li>
+        <li>תאימות לקוראי מסך (NVDA, JAWS, VoiceOver)</li>
+        <li>תאימות עם הגדלה עד 200%</li>
+        <li>קישור דילוג לתוכן הראשי</li>
+      </ul>
+
+      <h2>הגבלות ידועות</h2>
+      <p>למרות מאמצינו, ייתכן ובחלק מהדפים נותרו רכיבים שאינם נגישים במלואם. אנחנו עובדים באופן רציף לשיפור התאימות. אם נתקלת בקושי, אנא צור איתנו קשר (פרטים למטה).</p>
+
+      <h2>תאימות טכנית</h2>
+      <p>האתר תוכנן לעבוד עם דפדפנים עדכניים (Chrome, Safari, Firefox, Edge) במחשב, טאבלט וטלפון. הוא תואם לטכנולוגיות סיוע נפוצות.</p>
+
+      <div class="contact-card">
+        <h3>רכז נגישות</h3>
+        <div class="info">
+          <strong>Nathalie Haik</strong><br>
+          📞 <a href="tel:+972547831152">+972 54 783 11 52</a><br>
+          ✉ <a href="mailto:Nathhaik.realestate@gmail.com">Nathhaik.realestate@gmail.com</a><br>
+          📍 שושנה דמארי 10 · עיר ימים, נתניה · ישראל
+        </div>
+      </div>
+
+      <h2>במקרה של קושי</h2>
+      <p>אם נתקלת בבעיית נגישות באתר, אנא צור קשר עם רכז הנגישות בטלפון או באימייל. אנו מתחייבים להגיב <strong>תוך 5 ימי עסקים</strong> ולהציע פתרון תוך 30 יום.</p>
+      <p>תוכל גם להגיש תלונה ל<strong>נציבות שוויון זכויות לאנשים עם מוגבלות</strong>: <a href="https://www.gov.il/he/Departments/people_with_disabilities_rights_commission" target="_blank" rel="noopener">gov.il</a></p>
+
+      <a class="back" href="index.html">חזרה לדף הבית →</a>
+    </article>
+
+    <!-- ============ РУССКИЙ ============ -->
+    <article class="doc" data-doc="ru" dir="ltr">
+      <h1>Декларация о <em>доступности</em></h1>
+      <div class="meta">SHAHAR LEVI &amp; NATHALIE HAIK Real Estate · Обновлено 25 мая 2026 г.</div>
+
+      <p>Компания SHAHAR LEVI &amp; NATHALIE HAIK Real Estate стремится сделать сайт <strong>realty-inisrael.com</strong> доступным для самой широкой аудитории, включая людей с инвалидностью, в соответствии с <strong>Израильским законом о равных правах для лиц с инвалидностью (1998)</strong> и <strong>Израильским стандартом IS 5568</strong> (основан на рекомендациях WCAG 2.0 уровня AA).</p>
+
+      <h2>Уровень соответствия</h2>
+      <p>Сайт <strong>соответствует требованиям Израильского стандарта IS 5568</strong> (эквивалент WCAG 2.0 AA). Постоянно доступен <strong>виджет доступности</strong> (синяя кнопка внизу слева / справа на иврите), позволяющий каждому посетителю настроить:</p>
+      <ul>
+        <li>Размер текста (Нормальный / Большой / Очень большой)</li>
+        <li>Контраст (высокий или инвертированные цвета)</li>
+        <li>Читаемый шрифт (Arial с большим межстрочным расстоянием)</li>
+        <li>Подчёркивание ссылок и выделение заголовков</li>
+        <li>Остановку анимаций</li>
+        <li>Увеличенный курсор</li>
+        <li>Усиленный индикатор фокуса для навигации с клавиатуры</li>
+      </ul>
+      <p>Настройки сохраняются между страницами.</p>
+
+      <h2>Принятые меры</h2>
+      <ul>
+        <li>Семантическая структура HTML с тегами ARIA</li>
+        <li>Контраст цветов проверен (минимум 4,5:1)</li>
+        <li>Полная навигация с клавиатуры</li>
+        <li>Альтернативный текст на всех изображениях</li>
+        <li>Правильно размеченные формы</li>
+        <li>Совместимость со скринридерами (NVDA, JAWS, VoiceOver)</li>
+        <li>Совместимость с увеличением до 200%</li>
+        <li>Ссылка пропуска к основному контенту</li>
+      </ul>
+
+      <h2>Известные ограничения</h2>
+      <p>Несмотря на наши усилия, некоторые страницы могут содержать элементы, которые пока не полностью доступны. Мы непрерывно работаем над улучшением соответствия. Если вы столкнётесь с трудностями, пожалуйста, свяжитесь с нами (контакты ниже).</p>
+
+      <h2>Техническая совместимость</h2>
+      <p>Сайт спроектирован для работы с современными браузерами (Chrome, Safari, Firefox, Edge) на компьютере, планшете и телефоне. Он совместим со стандартными вспомогательными технологиями.</p>
+
+      <div class="contact-card">
+        <h3>Координатор по доступности (Rakaz Negishut)</h3>
+        <div class="info">
+          <strong>Nathalie Haik</strong><br>
+          📞 <a href="tel:+972547831152">+972 54 783 11 52</a><br>
+          ✉ <a href="mailto:Nathhaik.realestate@gmail.com">Nathhaik.realestate@gmail.com</a><br>
+          📍 Шошана Дамари 10 · Ир Ямим, Нетания · Израиль
+        </div>
+      </div>
+
+      <h2>В случае затруднений</h2>
+      <p>Если вы столкнулись с проблемой доступности на этом сайте, пожалуйста, свяжитесь с координатором по доступности по телефону или электронной почте. Мы обязуемся ответить <strong>в течение 5 рабочих дней</strong> и предложить решение в течение 30 дней.</p>
+      <p>Вы также можете подать жалобу в <strong>Израильскую комиссию по равным правам для лиц с инвалидностью</strong>: <a href="https://www.gov.il/he/Departments/people_with_disabilities_rights_commission" target="_blank" rel="noopener">gov.il</a></p>
+
+      <a class="back" href="index.html">← Вернуться на главную</a>
+    </article>
+
+  </main>
+
+  <script src="assets/a11y.js" defer></script>
+  <script>
+    // Tabs switching
+    const tabs = document.querySelectorAll('.lang-tabs button');
+    const docs = document.querySelectorAll('.doc');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.dataset.tab;
+        tabs.forEach(b => { b.classList.toggle('is-active', b === btn); b.setAttribute('aria-selected', b === btn ? 'true' : 'false'); });
+        docs.forEach(d => d.classList.toggle('is-active', d.dataset.doc === lang));
+        document.documentElement.lang = lang;
+        document.documentElement.dir = (lang === 'he') ? 'rtl' : 'ltr';
+        try { localStorage.setItem('sl-lang', lang); } catch (_) {}
+        document.dispatchEvent(new CustomEvent('sl-lang-changed', { detail: { lang } }));
+      });
+    });
+    // Apply current language preference on load
+    try {
+      const saved = localStorage.getItem('sl-lang');
+      if (saved && document.querySelector('[data-tab="' + saved + '"]')) {
+        document.querySelector('[data-tab="' + saved + '"]').click();
+      }
+    } catch (_) {}
+  </script>
+</body>
+</html>

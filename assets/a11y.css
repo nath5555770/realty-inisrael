@@ -1,0 +1,206 @@
+/* ==========================================================================
+   SHAHAR LEVI · Widget d'accessibilité (conforme Loi israélienne 5568)
+   - Bouton flottant qui ouvre un panneau de réglages utilisateur
+   - Stocke les préférences dans localStorage (persiste entre pages)
+   - Compatible RTL pour l'hébreu
+   ========================================================================== */
+
+/* ---------- Bouton flottant ---------- */
+.a11y-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 9999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: #1d6cd1;        /* bleu standard accessibilité */
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  transition: transform 0.2s ease, background 0.2s ease;
+  padding: 0;
+}
+.a11y-btn:hover { background: #1456a6; transform: scale(1.05); }
+.a11y-btn:focus-visible { outline: 3px solid #ffcb00; outline-offset: 3px; }
+.a11y-btn svg { width: 30px; height: 30px; }
+
+/* RTL : passer le bouton à droite */
+html[dir="rtl"] .a11y-btn { left: auto; right: 24px; }
+
+/* ---------- Panneau ---------- */
+.a11y-panel {
+  position: fixed;
+  bottom: 90px;
+  left: 24px;
+  z-index: 10000;
+  width: 320px;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  background: #fff;
+  color: #1a1a1a;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  padding: 1.25rem;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  display: none;
+}
+html[dir="rtl"] .a11y-panel { left: auto; right: 24px; }
+.a11y-panel.is-open { display: block; animation: a11y-slide-in 0.2s ease-out; }
+
+@keyframes a11y-slide-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.a11y-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.a11y-panel-title { font-size: 16px; font-weight: 600; color: #1d6cd1; }
+.a11y-panel-close {
+  background: none;
+  border: 0;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  color: #666;
+  padding: 4px 8px;
+}
+.a11y-panel-close:hover { color: #1a1a1a; }
+
+.a11y-section { margin-bottom: 1rem; }
+.a11y-section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #666;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.a11y-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.a11y-btn-action {
+  flex: 1;
+  min-width: 70px;
+  padding: 0.6rem 0.5rem;
+  background: #f4f4f4;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #1a1a1a;
+  font-family: inherit;
+  transition: background 0.15s, border-color 0.15s;
+}
+.a11y-btn-action:hover { background: #e8e8e8; }
+.a11y-btn-action:focus-visible { outline: 3px solid #1d6cd1; outline-offset: 2px; }
+.a11y-btn-action.is-active { background: #1d6cd1; color: #fff; border-color: #1d6cd1; }
+
+.a11y-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  user-select: none;
+}
+.a11y-toggle input { margin: 0; width: 18px; height: 18px; cursor: pointer; }
+.a11y-toggle-label { font-size: 14px; }
+
+.a11y-reset-row {
+  border-top: 1px solid #eee;
+  padding-top: 0.85rem;
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.a11y-reset-btn {
+  flex: 1;
+  padding: 0.65rem;
+  background: #fff;
+  border: 1px solid #d44;
+  color: #d44;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+}
+.a11y-reset-btn:hover { background: #d44; color: #fff; }
+
+.a11y-statement-link {
+  display: block;
+  margin-top: 0.85rem;
+  padding: 0.5rem;
+  background: #f4f4f4;
+  text-align: center;
+  color: #1d6cd1;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.a11y-statement-link:hover { background: #e8e8e8; text-decoration: underline; }
+
+/* ---------- Modes appliqués au <html> ---------- */
+html.a11y-font-large { font-size: 117% !important; }
+html.a11y-font-xlarge { font-size: 135% !important; }
+
+html.a11y-high-contrast,
+html.a11y-high-contrast body,
+html.a11y-high-contrast .page {
+  background: #000 !important;
+  color: #ffff00 !important;
+}
+html.a11y-high-contrast * { background-color: transparent !important; color: #ffff00 !important; border-color: #ffff00 !important; }
+html.a11y-high-contrast a, html.a11y-high-contrast a * { color: #00ffff !important; }
+html.a11y-high-contrast .a11y-btn { background: #ffff00 !important; color: #000 !important; }
+html.a11y-high-contrast .a11y-panel { background: #000 !important; }
+html.a11y-high-contrast .a11y-panel * { color: #ffff00 !important; }
+
+html.a11y-inverse,
+html.a11y-inverse body { filter: invert(1) hue-rotate(180deg); }
+html.a11y-inverse img, html.a11y-inverse video, html.a11y-inverse .a11y-btn, html.a11y-inverse .a11y-panel { filter: invert(1) hue-rotate(180deg); }
+
+html.a11y-readable * {
+  font-family: 'Arial', 'Helvetica', sans-serif !important;
+  letter-spacing: 0.04em !important;
+  word-spacing: 0.16em !important;
+  line-height: 1.8 !important;
+}
+
+html.a11y-underline-links a { text-decoration: underline !important; }
+
+html.a11y-highlight-headings h1, html.a11y-highlight-headings h2, html.a11y-highlight-headings h3,
+html.a11y-highlight-headings h4, html.a11y-highlight-headings h5, html.a11y-highlight-headings h6 {
+  background: #ffcb00 !important;
+  color: #000 !important;
+  padding: 0.2em 0.4em !important;
+}
+
+html.a11y-pause-animations *, html.a11y-pause-animations *::before, html.a11y-pause-animations *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+html.a11y-big-cursor, html.a11y-big-cursor * {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><path d='M5 5 L5 38 L13 30 L20 45 L26 42 L19 27 L30 27 Z' fill='black' stroke='white' stroke-width='2'/></svg>") 5 5, auto !important;
+}
+
+/* Sticky focus indicator pour navigation clavier (WCAG 2.4.7) */
+.a11y-focus-visible *:focus-visible {
+  outline: 3px solid #1d6cd1 !important;
+  outline-offset: 3px !important;
+}

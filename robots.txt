@@ -1,5 +1,7 @@
 User-agent: *
 Disallow: /
+Allow: /accessibilite.html
 
 # Site temporairement en construction.
 # Réouverture prochaine — l'admin reste accessible privément à /admin/
+# La déclaration d'accessibilité reste indexable (obligation légale IL 5568).
