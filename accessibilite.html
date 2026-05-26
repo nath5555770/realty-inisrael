@@ -166,11 +166,11 @@
     </a>
   </header>
 
-  <nav class="lang-tabs" role="tablist" aria-label="Choisir la langue">
-    <button role="tab" data-tab="fr" class="is-active" aria-selected="true">🇫🇷 Français</button>
-    <button role="tab" data-tab="en" aria-selected="false">🇬🇧 English</button>
-    <button role="tab" data-tab="he" aria-selected="false">🇮🇱 עברית</button>
-    <button role="tab" data-tab="ru" aria-selected="false">🇷🇺 Русский</button>
+  <nav class="lang-tabs" aria-label="Choisir la langue">
+    <button data-tab="fr" class="is-active" aria-current="true">🇫🇷 Français</button>
+    <button data-tab="en">🇬🇧 English</button>
+    <button data-tab="he">🇮🇱 עברית</button>
+    <button data-tab="ru">🇷🇺 Русский</button>
   </nav>
 
   <main id="main">
@@ -409,7 +409,11 @@
     tabs.forEach(btn => {
       btn.addEventListener('click', () => {
         const lang = btn.dataset.tab;
-        tabs.forEach(b => { b.classList.toggle('is-active', b === btn); b.setAttribute('aria-selected', b === btn ? 'true' : 'false'); });
+        tabs.forEach(b => {
+          b.classList.toggle('is-active', b === btn);
+          if (b === btn) b.setAttribute('aria-current', 'true');
+          else b.removeAttribute('aria-current');
+        });
         docs.forEach(d => d.classList.toggle('is-active', d.dataset.doc === lang));
         document.documentElement.lang = lang;
         document.documentElement.dir = (lang === 'he') ? 'rtl' : 'ltr';
