@@ -1,6 +1,5 @@
 User-agent: *
-Allow: /
-Disallow: /admin/
-Disallow: /admin
+Disallow: /
 
-Sitemap: https://realty-inisrael.com/sitemap.xml
+# Site temporairement en construction.
+# Réouverture prochaine — l'admin reste accessible privément à /admin/
