@@ -219,10 +219,16 @@
       if (l.featured) badges.push('<span class="badge badge-featured">À la une</span>');
       if (l.visible === false) badges.push('<span class="badge badge-hidden">Masquée</span>');
       if (l.off_market) badges.push('<span class="badge badge-off">Off-market</span>');
+      const trState = listingTranslationState(l);
+      const trBadge = trState === 'done'
+        ? '<span class="tr-badge" data-tr="done" title="Traduit dans les 3 langues">🌐 ✓</span>'
+        : trState === 'stale'
+        ? '<span class="tr-badge" data-tr="stale" title="Traduction à rafraîchir">🌐 …</span>'
+        : '';
       return '<div class="listing-row" data-i="' + i + '">' +
         '<div class="thumb" style="background-image:url(\'' + escapeHtml(imageUrl(BUCKET_LISTINGS, l.image)) + '\')"></div>' +
         '<div class="info">' +
-          '<div class="title">' + escapeHtml(l.title_main || '') + ' <em>' + escapeHtml(l.title_accent || '') + '</em></div>' +
+          '<div class="title">' + escapeHtml(l.title_main || '') + ' <em>' + escapeHtml(l.title_accent || '') + '</em>' + trBadge + '</div>' +
           '<div class="sub">' + escapeHtml(l.ref || '') + ' · ' + escapeHtml(l.neighborhood || '') + ' · par <em>' + escapeHtml(authorLabel(l.created_by)) + '</em></div>' +
         '</div>' +
         '<div class="city-tag">' + cityLabel(l.city) + '</div>' +
@@ -469,11 +475,13 @@
       if (payload.signature && !base?.signature) {
         await sb.from('listings').update({ signature: false }).neq('id', base?.id || '00000000-0000-0000-0000-000000000000').eq('signature', true);
       }
+      let savedId = base?.id;
       if (isNew) {
         const maxPos = STATE.listings.reduce((m, x) => Math.max(m, x.position || 0), 0);
         payload.position = maxPos + 1;
-        const { error } = await sb.from('listings').insert(payload).select().single();
+        const { data, error } = await sb.from('listings').insert(payload).select().single();
         if (error) throw error;
+        savedId = data?.id;
       } else {
         const { error } = await sb.from('listings').update(payload).eq('id', base.id).select().single();
         if (error) throw error;
@@ -482,8 +490,10 @@
       listingsStats();
       renderListingsTable();
       renderListingsAuthorFilter();
-      toast('Annonce enregistrée. Le site se met à jour immédiatement.', 'success', 'Enregistré');
+      toast('Annonce enregistrée. Traduction automatique en cours…', 'success', 'Enregistré');
       backToDashboard();
+      // Fire-and-forget translation (FR -> EN/HE/RU). Non-blocking.
+      if (savedId) translateAfterSave(savedId);
     } catch (e) {
       console.error(e);
       toast(e.message || 'Erreur', 'error', 'Échec');
@@ -510,69 +520,122 @@
   }
 
   // ------------------------------------------------------------------
-  // TRANSLATE LISTING — OpenAI via Edge Function (FR → EN / HE / RU)
+  // AUTO-TRANSLATION — OpenAI via Edge Function (FR → EN / HE / RU)
   // ------------------------------------------------------------------
-  async function translateCurrentListing() {
-    if (STATE.currentListing === 'new') {
-      toast('Enregistrez d\'abord l\'annonce, puis cliquez sur Traduire.', 'error');
-      return;
-    }
-    const l = STATE.listings[STATE.currentListing];
-    if (!l || !l.id) { toast('Annonce introuvable.', 'error'); return; }
+  // No manual button: translation runs automatically:
+  //   1. After every successful save in the listing editor
+  //   2. On admin dashboard load — scans for untranslated listings and
+  //      queues them up sequentially (with throttling)
+  // ------------------------------------------------------------------
+  STATE.translation = {
+    queue: [],           // array of listing ids
+    running: false,
+    catchupDone: false,  // session-level flag
+    keyMissing: false,   // stops the queue cleanly if the key isn't set
+  };
 
-    const hasFR = ($('#fTitleMain').value.trim() || $('#fDescription').value.trim());
-    if (!hasFR) { toast('Rien à traduire — remplissez d\'abord les champs en français.', 'error'); return; }
+  function setEditorTrStatus(state, label) {
+    const el = $('#editorTrStatus');
+    if (!el) return;
+    if (!state) { el.hidden = true; return; }
+    el.hidden = false;
+    el.setAttribute('data-state', state);
+    el.innerHTML = '<span class="dot"></span><span>' + label + '</span>';
+  }
 
-    const btn = $('#translateBtn');
-    const old = btn.textContent;
-    btn.disabled = true;
-    btn.textContent = '🌐 Traduction…';
-
+  async function translateOne(listingId, opts) {
+    opts = opts || {};
+    if (STATE.translation.keyMissing) return { skipped: true, reason: 'no-key' };
     try {
-      // Auto-save FR fields before calling the edge function, so the function
-      // reads the latest text from the DB (not the previously-saved version).
-      const dirty = ['#fTitleMain', '#fTitleAccent', '#fDescription', '#fNeighborhood', '#fExtra']
-        .some(sel => $(sel) && $(sel).dataset.originalValue !== undefined && $(sel).value !== $(sel).dataset.originalValue);
-      if (dirty) {
-        const ok = await confirmModal('Sauvegarder avant traduction ?', 'Les modifications FR vont être enregistrées, puis traduites en anglais, hébreu et russe.');
-        if (!ok) { btn.disabled = false; btn.textContent = old; return; }
-        await saveListing(/* silent */ true);
-      }
-
       const { data, error } = await sb.functions.invoke('translate-listing', {
-        body: { listing_id: l.id, target_langs: ['en', 'he', 'ru'] },
+        body: { listing_id: listingId, target_langs: ['en', 'he', 'ru'] },
       });
-
       if (error) {
-        // Common case : key not yet configured
         const msg = (error.message || String(error)).toLowerCase();
-        if (msg.includes('openai_api_key') || msg.includes('not configured')) {
-          toast('La clé OpenAI n\'est pas encore configurée sur Supabase. (voir docs)', 'error', 'Configuration requise');
-        } else {
-          toast('Erreur traduction : ' + (error.message || 'inconnue'), 'error');
+        if (msg.includes('openai_api_key') || msg.includes('not configured') || msg.includes('503')) {
+          STATE.translation.keyMissing = true;
+          if (opts.verbose) console.warn('[translate] OpenAI key not configured, queue paused');
+          return { error: 'no-key' };
         }
-        return;
+        if (opts.verbose) console.warn('[translate]', error);
+        return { error: error.message || 'unknown' };
       }
-
-      if (data?.languages_translated?.length) {
-        toast('Traduit en : ' + data.languages_translated.join(', ').toUpperCase() + ' ✓', 'success');
-        if (data.languages_failed?.length) {
-          console.warn('[translate] partial failures:', data.errors);
-          toast('Échecs partiels : ' + data.languages_failed.join(', '), 'warning');
-        }
-        await loadListings();
-        renderListingsTable();
-      } else {
-        toast('Aucune langue traduite — voir la console.', 'error');
-        console.error('[translate]', data);
-      }
+      return { ok: true, data };
     } catch (e) {
-      console.error('[translate]', e);
-      toast('Erreur réseau : ' + e.message, 'error');
-    } finally {
-      btn.disabled = false;
-      btn.textContent = old;
+      if (opts.verbose) console.warn('[translate]', e);
+      return { error: e.message || 'network' };
     }
+  }
+
+  // Fire-and-forget translation triggered right after a save. Updates the
+  // editor badge so the user sees progress without blocking.
+  async function translateAfterSave(listingId) {
+    if (!listingId) return;
+    setEditorTrStatus('running', 'Traduction…');
+    const res = await translateOne(listingId, { verbose: true });
+    if (res.ok) {
+      setEditorTrStatus('done', 'Traduit EN · HE · RU ✓');
+      // Refresh the in-memory listing so the row badge updates
+      const idx = STATE.listings.findIndex(x => x.id === listingId);
+      if (idx >= 0) {
+        const { data } = await sb.from('listings').select('translations, translated_at').eq('id', listingId).maybeSingle();
+        if (data) {
+          STATE.listings[idx].translations = data.translations;
+          STATE.listings[idx].translated_at = data.translated_at;
+        }
+      }
+      renderListingsTable();
+    } else if (res.skipped || res.error === 'no-key') {
+      setEditorTrStatus('missing-key', 'Clé OpenAI non configurée');
+    } else {
+      setEditorTrStatus('error', 'Échec traduction');
+    }
+  }
+
+  // Background catch-up: scan all listings, queue the ones missing
+  // translation, process them one at a time with a short delay between
+  // calls to be gentle on the OpenAI rate limit.
+  async function catchupTranslations() {
+    if (STATE.translation.catchupDone) return;
+    STATE.translation.catchupDone = true;
+    const needs = (STATE.listings || []).filter(l =>
+      !l.archived_at &&
+      !l.translated_at &&
+      (l.title_main || l.description)
+    );
+    if (!needs.length) return;
+    console.log('[translate] catch-up: ' + needs.length + ' annonce(s) à traduire');
+    let done = 0, failed = 0;
+    for (const l of needs) {
+      if (STATE.translation.keyMissing) break;
+      const res = await translateOne(l.id, { verbose: false });
+      if (res.ok) {
+        done++;
+        // Update in-memory cache + re-render row
+        const fresh = res.data?.translations;
+        if (fresh) {
+          l.translations = Object.assign({}, l.translations || {}, fresh);
+          l.translated_at = new Date().toISOString();
+        }
+        renderListingsTable();
+      } else if (res.error === 'no-key') {
+        break;
+      } else {
+        failed++;
+      }
+      // Throttle : 600ms between calls (gentle on OpenAI rate limits)
+      await new Promise(r => setTimeout(r, 600));
+    }
+    if (done > 0 && !STATE.translation.keyMissing) {
+      toast(done + ' annonce(s) traduite(s) en arrière-plan ✓', 'success');
+    }
+    if (failed > 0) console.warn('[translate] catch-up: ' + failed + ' échec(s)');
+  }
+
+  function listingTranslationState(l) {
+    if (!l.title_main && !l.description) return 'none';
+    if (!l.translated_at) return 'stale';
+    return 'done';
   }
 
   // ------------------------------------------------------------------
@@ -1283,8 +1346,6 @@
     $('#editorBackBtn').addEventListener('click', backToDashboard);
     $('#saveBtn').addEventListener('click', saveListing);
     $('#deleteBtn').addEventListener('click', deleteListing);
-    const trBtn = $('#translateBtn');
-    if (trBtn) trBtn.addEventListener('click', translateCurrentListing);
     $('#fileUpload').addEventListener('change', e => handleListingFile(e.target.files[0]));
     $('#fImage').addEventListener('change', () => { if ($('#fImage').value && !STATE.pendingListingFile && !$('#fImage').value.startsWith('(')) setListingPreview($('#fImage').value); });
     // Gallery uploads (multi-file)
@@ -1371,6 +1432,9 @@
         membersStats();
         renderAgencyTable();
       }
+      // Background : translate any listing that was never translated yet.
+      // Silent : no toast unless something actually got done.
+      setTimeout(() => { catchupTranslations().catch(e => console.warn('[translate] catch-up failed:', e)); }, 1500);
     } catch (e) { console.error(e); }
   }
 
