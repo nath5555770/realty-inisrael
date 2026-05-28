@@ -62,6 +62,24 @@
     if (s == null) return '';
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
+  // Pick the user's current language and read translated fields when available.
+  // FR is the source — fall back to FR if the chosen lang isn't translated yet.
+  function currentLang() {
+    try { const s = localStorage.getItem('sl-lang'); if (s && ['fr','en','he','ru'].includes(s)) return s; } catch (_) {}
+    return 'fr';
+  }
+  function localizedListing(l) {
+    const lang = currentLang();
+    if (!l || lang === 'fr' || !l.translations || !l.translations[lang]) return l;
+    const t = l.translations[lang];
+    return Object.assign({}, l, {
+      title_main:   t.title_main   || l.title_main,
+      title_accent: t.title_accent || l.title_accent,
+      description:  t.description  || l.description,
+      neighborhood: t.neighborhood || l.neighborhood,
+      extra_label:  t.extra_label  || l.extra_label,
+    });
+  }
   // Same as escapeHtml but keeps line breaks (\n → <br>). Use for any
   // user-edited multi-line text field (descriptions, long-form notes…).
   function escapeHtmlMultiline(s) {
@@ -330,10 +348,10 @@
     const big = filtered.find(l => l.signature) || filtered[0];
     const others = filtered.filter(l => l !== big);
     const html = [];
-    if (big) html.push(cardHTML(big, { big: true }));
+    if (big) html.push(cardHTML(localizedListing(big), { big: true }));
     if (others.length) {
       html.push('<div class="grid md:grid-cols-3 gap-x-6 gap-y-12">');
-      others.forEach(l => html.push(cardHTML(l)));
+      others.forEach(l => html.push(cardHTML(localizedListing(l))));
       html.push('</div>');
     }
     root.innerHTML = html.join('');
@@ -454,7 +472,8 @@
   // ------------------------------------------------------------------
   // FEATURED HOME RENDERER
   // ------------------------------------------------------------------
-  function featuredCardHTML(l) {
+  function featuredCardHTML(rawL) {
+    const l = localizedListing(rawL);
     const img = imageUrl(l.image);
     return [
       '<article class="estate featured-card" data-ref="', escapeHtml(l.ref || ''), '" data-slug="', escapeHtml(l.slug || ''), '" data-id="', escapeHtml(l.id || ''), '">',
@@ -934,7 +953,8 @@
     });
   }
 
-  function openListingReader(l) {
+  function openListingReader(rawL) {
+    const l = localizedListing(rawL);
     buildListingReader();
     const m = document.getElementById('listingReader');
     // Build the full gallery: cover first, then any extra `images` (deduped)
@@ -1096,6 +1116,17 @@
 
     wireHeroSearch();
     wireListingClicks();
+
+    // Re-render listings when the user switches site language so the
+    // translated title/description show up immediately.
+    document.addEventListener('sl-lang-changed', () => {
+      if (document.getElementById('listings-portfolio')) renderPortfolio();
+      const f = document.getElementById('listings-featured');
+      if (f) {
+        const count = parseInt(f.dataset.listingsCount || f.dataset.count || '3', 10);
+        renderFeatured(f, count);
+      }
+    });
 
     // Add cursor:pointer hint to all listing cards so they look clickable
     if (!document.getElementById('listing-clickable-style')) {

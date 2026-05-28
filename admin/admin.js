@@ -510,6 +510,72 @@
   }
 
   // ------------------------------------------------------------------
+  // TRANSLATE LISTING — OpenAI via Edge Function (FR → EN / HE / RU)
+  // ------------------------------------------------------------------
+  async function translateCurrentListing() {
+    if (STATE.currentListing === 'new') {
+      toast('Enregistrez d\'abord l\'annonce, puis cliquez sur Traduire.', 'error');
+      return;
+    }
+    const l = STATE.listings[STATE.currentListing];
+    if (!l || !l.id) { toast('Annonce introuvable.', 'error'); return; }
+
+    const hasFR = ($('#fTitleMain').value.trim() || $('#fDescription').value.trim());
+    if (!hasFR) { toast('Rien à traduire — remplissez d\'abord les champs en français.', 'error'); return; }
+
+    const btn = $('#translateBtn');
+    const old = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '🌐 Traduction…';
+
+    try {
+      // Auto-save FR fields before calling the edge function, so the function
+      // reads the latest text from the DB (not the previously-saved version).
+      const dirty = ['#fTitleMain', '#fTitleAccent', '#fDescription', '#fNeighborhood', '#fExtra']
+        .some(sel => $(sel) && $(sel).dataset.originalValue !== undefined && $(sel).value !== $(sel).dataset.originalValue);
+      if (dirty) {
+        const ok = await confirmModal('Sauvegarder avant traduction ?', 'Les modifications FR vont être enregistrées, puis traduites en anglais, hébreu et russe.');
+        if (!ok) { btn.disabled = false; btn.textContent = old; return; }
+        await saveListing(/* silent */ true);
+      }
+
+      const { data, error } = await sb.functions.invoke('translate-listing', {
+        body: { listing_id: l.id, target_langs: ['en', 'he', 'ru'] },
+      });
+
+      if (error) {
+        // Common case : key not yet configured
+        const msg = (error.message || String(error)).toLowerCase();
+        if (msg.includes('openai_api_key') || msg.includes('not configured')) {
+          toast('La clé OpenAI n\'est pas encore configurée sur Supabase. (voir docs)', 'error', 'Configuration requise');
+        } else {
+          toast('Erreur traduction : ' + (error.message || 'inconnue'), 'error');
+        }
+        return;
+      }
+
+      if (data?.languages_translated?.length) {
+        toast('Traduit en : ' + data.languages_translated.join(', ').toUpperCase() + ' ✓', 'success');
+        if (data.languages_failed?.length) {
+          console.warn('[translate] partial failures:', data.errors);
+          toast('Échecs partiels : ' + data.languages_failed.join(', '), 'warning');
+        }
+        await loadListings();
+        renderListingsTable();
+      } else {
+        toast('Aucune langue traduite — voir la console.', 'error');
+        console.error('[translate]', data);
+      }
+    } catch (e) {
+      console.error('[translate]', e);
+      toast('Erreur réseau : ' + e.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = old;
+    }
+  }
+
+  // ------------------------------------------------------------------
   // ARTICLES (Journal)
   // ------------------------------------------------------------------
   async function loadArticles() {
@@ -1217,6 +1283,8 @@
     $('#editorBackBtn').addEventListener('click', backToDashboard);
     $('#saveBtn').addEventListener('click', saveListing);
     $('#deleteBtn').addEventListener('click', deleteListing);
+    const trBtn = $('#translateBtn');
+    if (trBtn) trBtn.addEventListener('click', translateCurrentListing);
     $('#fileUpload').addEventListener('change', e => handleListingFile(e.target.files[0]));
     $('#fImage').addEventListener('change', () => { if ($('#fImage').value && !STATE.pendingListingFile && !$('#fImage').value.startsWith('(')) setListingPreview($('#fImage').value); });
     // Gallery uploads (multi-file)
