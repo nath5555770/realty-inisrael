@@ -141,6 +141,14 @@
   .contact-card .info { font-size: 0.95rem; line-height: 1.9; }
   .contact-card a { font-weight: 500; }
 
+  /* RTL safety: phone numbers and emails are always Left-To-Right,
+     even inside the Hebrew (RTL) tab, so digits never get reordered. */
+  a[href^="tel"], a[href^="mailto"] {
+    direction: ltr;
+    unicode-bidi: isolate;
+    display: inline-block;
+  }
+
   .back {
     display: inline-block;
     margin-top: 3rem;

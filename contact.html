@@ -275,6 +275,16 @@
     border-radius: 3px;
   }
 
+  /* RTL safety: phone/email/brand are always Left-To-Right, even in Hebrew,
+     so the bidi algorithm never reorders digit groups or the ampersand. */
+  .logo,
+  .copyright,
+  .contact a[href^="tel"],
+  .contact a[href^="mailto"] {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
   @keyframes fade-in {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -308,7 +318,7 @@
 
     <main class="center" id="main-content">
       <!-- Logo -->
-      <div class="logo" role="img" aria-label="SHAHAR LEVI & NATHALIE HAIK Real Estate">
+      <div class="logo" dir="ltr" role="img" aria-label="SHAHAR LEVI & NATHALIE HAIK Real Estate">
         <div class="name" aria-hidden="true">SHAHAR LEVI &amp;<br>NATHALIE HAIK</div>
         <div class="desc" aria-hidden="true">REAL ESTATE</div>
       </div>
@@ -327,15 +337,15 @@
       <div class="contact">
         <div class="label" data-msg="contact_label">Nous contacter</div>
         <div class="info">
-          <a href="tel:+972547831152">+972 54 783 11 52</a><br>
-          <a href="mailto:Nathhaik.realestate@gmail.com">Nathhaik.realestate@gmail.com</a><br>
+          <a href="tel:+972547831152" dir="ltr">+972 54 783 11 52</a><br>
+          <a href="mailto:Nathhaik.realestate@gmail.com" dir="ltr">Nathhaik.realestate@gmail.com</a><br>
           <span data-msg="address">Shoshana Damari 10 · Ir Yamim, Netanya · Israël</span>
         </div>
       </div>
     </main>
 
     <!-- Copyright + accessibility link -->
-    <footer role="contentinfo" class="copyright">
+    <footer role="contentinfo" class="copyright" dir="ltr">
       <span data-msg="copyright">© SHAHAR LEVI &amp; NATHALIE HAIK REAL ESTATE 2026</span>
       &nbsp;·&nbsp;
       <a href="accessibilite.html" data-msg="a11y_link">Accessibilité</a>
