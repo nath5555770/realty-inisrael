@@ -3,3 +3,14 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+
+# Local a11y/audit harness (not shipped)
+_a11y-test/
+_a11y-audit.cjs
+_a11y-pptr.cjs
+_a11y-serve.py
+_diag.cjs
+_a11y-report.json
+_axe.min.js
+package-lock.json
+package.json

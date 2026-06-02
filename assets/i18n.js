@@ -1547,7 +1547,7 @@
   }
 
   // ---- Apply ---------------------------------------------------------------
-  function applyLang(lang) {
+  function applyLang(lang, opts) {
     if (!SUPPORTED.includes(lang)) lang = 'fr';
     // Always (re)take snapshot — additive, so it only picks up new nodes.
     // This makes applyLang safe to call again after dynamic DOM insertions.
@@ -1580,7 +1580,7 @@
 
     if (lang === 'fr') {
       updateSwitcher(lang);
-      fireLangChanged(lang);
+      if (!(opts && opts.silent)) fireLangChanged(lang);
       return;
     }
 
@@ -1623,7 +1623,11 @@
     });
 
     updateSwitcher(lang);
-    fireLangChanged(lang);
+    // Only notify external modules on a REAL language change. refresh() passes
+    // {silent:true} because it merely re-translates freshly inserted DOM —
+    // re-firing here would loop forever (listings/journal/agency listen to this
+    // event and call refresh() again). See SLI18n.refresh().
+    if (!(opts && opts.silent)) fireLangChanged(lang);
   }
 
   // ---- Notify external modules (e.g. site-cms.js) on language switch -----
@@ -1754,7 +1758,7 @@
       let lang = 'fr';
       try { lang = localStorage.getItem(STORAGE_KEY) || 'fr'; } catch (_) {}
       if (!SUPPORTED.includes(lang)) lang = 'fr';
-      applyLang(lang);
+      applyLang(lang, { silent: true });
     },
     // Translate a single FR string to the current language. Returns the
     // original string when no translation exists. Useful for JS-rendered UI
