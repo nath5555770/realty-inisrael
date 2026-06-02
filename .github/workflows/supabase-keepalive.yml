@@ -1,0 +1,29 @@
+name: Supabase Keep-Alive
+
+# Empêche le projet Supabase (offre gratuite) de se mettre en pause après
+# 7 jours d'inactivité. Effectue un petit GET REST chaque jour à 06:00 UTC.
+# Peut aussi être lancé manuellement depuis l'onglet Actions (workflow_dispatch).
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST (site_settings)
+        run: |
+          echo "Ping Supabase $(date -u)"
+          HTTP_CODE=$(curl -s -o /tmp/resp.txt -w "%{http_code}" \
+            "https://bqxufehuezvgmmiiijsc.supabase.co/rest/v1/site_settings?select=key&limit=1" \
+            -H "apikey: sb_publishable_zL9R060A2uRVy75XkYfh6g_TmMIawky" \
+            -H "Authorization: Bearer sb_publishable_zL9R060A2uRVy75XkYfh6g_TmMIawky")
+          echo "HTTP $HTTP_CODE"
+          cat /tmp/resp.txt
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 400 ]; then
+            echo "OK — projet actif."
+          else
+            echo "::warning::Réponse inattendue ($HTTP_CODE) — vérifier le projet Supabase."
+          fi
