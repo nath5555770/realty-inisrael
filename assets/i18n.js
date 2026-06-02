@@ -1572,6 +1572,12 @@
     document.body.classList.toggle('lang-fr', lang === 'fr');
     document.body.classList.toggle('lang-ru', lang === 'ru');
 
+    // RTL safety: phone numbers, emails and the Latin brand name are always
+    // Left-To-Right. In Hebrew (dir=rtl) the Unicode bidi algorithm would
+    // otherwise reverse digit groups (e.g. "+972 54 783 11 52" rendered as
+    // "52 11 783 54 972+") and displace the brand ampersand. Tag them LTR.
+    isolateLtrIslands();
+
     if (lang === 'fr') {
       updateSwitcher(lang);
       fireLangChanged(lang);
@@ -1625,6 +1631,54 @@
     try {
       document.dispatchEvent(new CustomEvent('sl-lang-changed', { detail: { lang: lang } }));
     } catch (_) {}
+  }
+
+  // ---- RTL safety ---------------------------------------------------------
+  // Forces phone numbers, emails and the Latin brand name to render
+  // Left-To-Right even when the document is RTL (Hebrew), so the bidi
+  // algorithm never reverses digit groups or moves the brand ampersand.
+  // Idempotent: safe to call on every language switch.
+  const RTL_PHONE = /^[+]?\d[\d\s().+\-]{6,}$/;
+  const RTL_EMAIL = /^[\w.+\-]+@[\w.\-]+\.[a-z]{2,}$/i;
+  function isolateLtrIslands() {
+    try {
+      // 1. Explicit phone/email links, brand logos, and the © brand line.
+      document.querySelectorAll(
+        'a[href^="tel"], a[href^="mailto"], .brand-logo, .brand-logo .name, .brand-strip-logo, [data-text="footer.copyright"]'
+      ).forEach((el) => { el.setAttribute('dir', 'ltr'); el.style.unicodeBidi = 'isolate'; });
+
+      // 2. Leaf elements whose entire text is a phone number or an email
+      //    (topbar phone <a>, CTA phone <a>, email <span>…).
+      document.querySelectorAll('a, span, li, td, .menu-foot').forEach((el) => {
+        if (el.children.length) return;
+        const t = (el.textContent || '').trim();
+        if (RTL_PHONE.test(t) || RTL_EMAIL.test(t)) {
+          el.setAttribute('dir', 'ltr'); el.style.unicodeBidi = 'isolate';
+        }
+      });
+
+      // 3. Bare phone-number text nodes mixed with <br> (footer/menu blocks)
+      //    have no strong directional char, so plaintext can't save them —
+      //    wrap each in a dir="ltr" span. Idempotent via the parent check.
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+      const toWrap = [];
+      let node;
+      while ((node = walker.nextNode())) {
+        const t = (node.nodeValue || '').trim();
+        if (!RTL_PHONE.test(t)) continue;
+        const p = node.parentElement;
+        if (p && (p.getAttribute('dir') === 'ltr' || p.dataset.ltrWrapped === '1')) continue;
+        toWrap.push(node);
+      }
+      toWrap.forEach((n) => {
+        const span = document.createElement('span');
+        span.setAttribute('dir', 'ltr');
+        span.dataset.ltrWrapped = '1';
+        span.style.unicodeBidi = 'isolate';
+        n.parentNode.insertBefore(span, n);
+        span.appendChild(n);
+      });
+    } catch (_) { /* never break rendering over a cosmetic RTL fix */ }
   }
 
   // ---- Switcher UI --------------------------------------------------------

@@ -718,3 +718,24 @@ body.admin-page #pwa-install-banner { display: none; }
   .featured-carousel .featured-track { transition: none; }
 }
 
+/* ==========================================================================
+   RTL safety net (Hebrew). CSS backup to the i18n.js isolateLtrIslands()
+   pass — guarantees phone/email links and the Latin brand never get their
+   digit groups or ampersand reversed by the bidi algorithm in dir=rtl.
+   ========================================================================== */
+html[dir="rtl"] a[href^="tel"],
+html[dir="rtl"] a[href^="mailto"],
+html[dir="rtl"] .brand-logo,
+html[dir="rtl"] .brand-logo .name,
+html[dir="rtl"] .brand-strip-logo,
+html[dir="rtl"] [data-text="footer.copyright"],
+html[dir="rtl"] [dir="ltr"] {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+/* Mixed contact lines (phone + email on one line): let each line pick its
+   own direction so the phone segment stays LTR next to the email. */
+html[dir="rtl"] .menu-foot {
+  unicode-bidi: plaintext;
+}
+
