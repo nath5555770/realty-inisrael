@@ -133,11 +133,11 @@
     --teal: #0e2722;
     --teal-deep: #061814;
     --gold: #c4a877;
-    --gold-deep: #a78c5c;
+    --gold-deep: #735826;
     --gold-pale: #e0c89a;
     --ink: #14110d;
     --ink-soft: #4a3f33;
-    --muted: #8a7d6a;
+    --muted: #6b6253;
     --line: rgba(20, 17, 13, 0.13);
     --line-gold: rgba(196, 168, 119, 0.3);
   }
@@ -249,7 +249,7 @@
   .mobile-menu .menu-link { display: block; font-family: 'Cinzel', serif; font-weight: 400; font-size: clamp(1.5rem, 5vw, 2.5rem); color: var(--gold); padding: 1rem 0; border-bottom: 1px solid var(--line-gold); transition: padding 0.4s, color 0.4s; letter-spacing: 0.15em; text-transform: uppercase; }
   .mobile-menu .menu-link:hover { padding-left: 1rem; color: var(--paper); }
   .mobile-menu .menu-link.active { color: var(--paper); padding-left: 1rem; }
-  .mobile-menu .menu-foot { margin-top: auto; padding-top: 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(196,168,119,0.6); }
+  .mobile-menu .menu-foot { margin-top: auto; padding-top: 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(196,168,119,0.95); }
 
   .live-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 0 4px rgba(34,197,94,0.2); }
   .num-tile { padding: 2.5rem 2rem; border-right: 1px solid var(--line); }
@@ -504,7 +504,7 @@
       <input type="hidden" name="deal" id="heroDealHidden" value="">
       <div class="hero-field">
         <span class="hero-lbl">Ville</span>
-        <select name="city">
+        <select name="city" aria-label="Ville">
           <option value="">Toutes les villes</option>
           <option value="tel-aviv">Tel Aviv</option>
           <option value="herzliya">Herzliya</option>
@@ -515,7 +515,7 @@
       </div>
       <div class="hero-field">
         <span class="hero-lbl">Type</span>
-        <select name="type">
+        <select name="type" aria-label="Type de bien">
           <option value="">Tous les types</option>
           <option value="appartement">Appartement</option>
           <option value="penthouse">Penthouse</option>
@@ -530,7 +530,7 @@
       </div>
       <div class="hero-field">
         <span class="hero-lbl">Pièces minimum</span>
-        <select name="min_r">
+        <select name="min_r" aria-label="Pièces">
           <option value="">Indifférent</option>
           <option value="3">3+</option>
           <option value="4">4+</option>
@@ -541,7 +541,7 @@
       </div>
       <div class="hero-field">
         <span class="hero-lbl">Budget</span>
-        <select name="price">
+        <select name="price" aria-label="Budget">
           <option value="">Tous budgets</option>
           <option value="0-11000000">Jusqu'à 11 M ₪</option>
           <option value="11000000-18000000">11 — 18 M ₪</option>

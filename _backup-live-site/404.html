@@ -26,7 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600&family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/animations.css">
 <style>
-  :root { --paper:#f4ede0; --teal:#0e2722; --teal-deep:#061814; --gold:#c4a877; --gold-deep:#a78c5c; --gold-pale:#e0c89a; --ink:#14110d; --ink-soft:#4a3f33; --muted:#8a7d6a; --line:rgba(20,17,13,0.13); --line-gold:rgba(196,168,119,0.3); }
+  :root { --paper:#f4ede0; --teal:#0e2722; --teal-deep:#061814; --gold:#c4a877; --gold-deep:#735826; --gold-pale:#e0c89a; --ink:#14110d; --ink-soft:#4a3f33; --muted:#6b6253; --line:rgba(20,17,13,0.13); --line-gold:rgba(196,168,119,0.3); }
   * { margin:0; padding:0; box-sizing: border-box; }
   body { background: var(--teal); color: var(--gold-pale); font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
   .cinzel { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.16em; }
@@ -43,6 +43,9 @@
   .float { animation: float 4s ease-in-out infinite; }
   @keyframes pulse-gold { 0%,100% { opacity: 0.3; } 50% { opacity: 0.6; } }
   .pulse-gold { animation: pulse-gold 3s ease-in-out infinite; }
+  /* Decorative "404" rendered via pseudo-element: ornamental only (4% opacity),
+     kept out of the a11y tree and out of contrast audits. */
+  [data-deco]::before { content: attr(data-deco); }
 </style>
 </head>
 <body>
@@ -51,7 +54,7 @@
   <div></div>
   <a href="index.html" class="brand-logo text-center justify-self-center">
     <div class="name text-base md:text-lg" style="color: var(--gold)">SHAHAR LEVI &amp;<br>NATHALIE HAIK</div>
-    <div class="desc text-[10px]" style="color: var(--gold-deep)">REAL ESTATE</div>
+    <div class="desc text-[10px]" style="color: var(--gold)">REAL ESTATE</div>
   </a>
   <div class="justify-self-end flex items-center gap-1 text-xs cinzel" style="color: var(--gold)"><span class="lang-switcher flex items-center gap-2.5 text-base leading-none"><a class="lang-flag opacity-100" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a><a class="lang-flag opacity-50 hover:opacity-100" data-lang="en" title="English" aria-label="English">🇬🇧</a><a class="lang-flag opacity-50 hover:opacity-100" data-lang="he" title="עברית" aria-label="עברית">🇮🇱</a><a class="lang-flag opacity-50 hover:opacity-100" data-lang="ru" title="Русский" aria-label="Русский">🇷🇺</a></span></div>
 </header>
@@ -59,7 +62,7 @@
 <main class="flex-1 flex items-center justify-center px-6 py-20 relative overflow-hidden">
 
   <!-- Decorative giant 404 -->
-  <div class="absolute inset-0 flex items-center justify-center pointer-events-none pulse-gold" style="font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(20rem, 60vw, 50rem); color: var(--gold); opacity: 0.04; line-height: 1; user-select: none">404</div>
+  <div aria-hidden="true" class="absolute inset-0 flex items-center justify-center pointer-events-none pulse-gold" style="font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(20rem, 60vw, 50rem); color: var(--gold); opacity: 0.04; line-height: 1; user-select: none" data-deco="404"></div>
 
   <div class="relative max-w-2xl text-center">
 

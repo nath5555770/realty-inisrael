@@ -93,7 +93,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600&family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-  :root { --paper:#f4ede0; --paper-light:#faf5ea; --paper-deep:#ebe1c5; --surface:#fff; --teal:#0e2722; --teal-deep:#061814; --gold:#c4a877; --gold-deep:#a78c5c; --gold-pale:#e0c89a; --ink:#14110d; --ink-soft:#4a3f33; --muted:#8a7d6a; --line:rgba(20,17,13,0.13); --line-gold:rgba(196,168,119,0.3); }
+  :root { --paper:#f4ede0; --paper-light:#faf5ea; --paper-deep:#ebe1c5; --surface:#fff; --teal:#0e2722; --teal-deep:#061814; --gold:#c4a877; --gold-deep:#735826; --gold-pale:#e0c89a; --ink:#14110d; --ink-soft:#4a3f33; --muted:#6b6253; --line:rgba(20,17,13,0.13); --line-gold:rgba(196,168,119,0.3); }
   * { margin:0; padding:0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body { background: var(--paper); color: var(--ink); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; overflow-x: hidden; -webkit-font-smoothing: antialiased; letter-spacing: -0.005em; opacity: 0; animation: page-in 0.8s ease forwards; }
@@ -148,7 +148,7 @@
   body.menu-open .mobile-menu { transform: translateY(0); pointer-events: auto; } body.menu-open { overflow: hidden; }
   .mobile-menu .menu-link { display: block; font-family: 'Cinzel', serif; font-weight: 400; font-size: clamp(1.5rem, 5vw, 2.5rem); color: var(--gold); padding: 1rem 0; border-bottom: 1px solid var(--line-gold); transition: all 0.4s; letter-spacing: 0.15em; text-transform: uppercase; }
   .mobile-menu .menu-link:hover, .mobile-menu .menu-link.active { padding-left: 1rem; color: var(--paper); }
-  .mobile-menu .menu-foot { margin-top: auto; padding-top: 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(196,168,119,0.6); }
+  .mobile-menu .menu-foot { margin-top: auto; padding-top: 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(196,168,119,0.95); }
 
   .live-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 0 4px rgba(34,197,94,0.2); }
   @keyframes pulse-soft { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
@@ -290,7 +290,7 @@
 
           <div>
             <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">PAYS DE RÉSIDENCE ACTUEL</label>
-            <select class="form-input">
+            <select class="form-input" aria-label="Pays de résidence actuel">
               <option>France</option>
               <option>Belgique</option>
               <option>Suisse</option>
@@ -301,7 +301,7 @@
 
           <div>
             <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">OBJET DU RENDEZ-VOUS *</label>
-            <select class="form-input" required>
+            <select class="form-input" required aria-label="Objet du rendez-vous">
               <option>Acquisition · résidence secondaire</option>
               <option>Acquisition · aliyah patrimoniale</option>
               <option>Acquisition · investissement locatif</option>
@@ -315,7 +315,7 @@
           <div class="grid md:grid-cols-2 gap-5">
             <div>
               <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">ENVELOPPE BUDGÉTAIRE</label>
-              <select class="form-input">
+              <select class="form-input" aria-label="Enveloppe budgétaire">
                 <option>Préfère ne pas dire</option>
                 <option>&lt; 7 M ₪</option>
                 <option>7 — 18 M ₪</option>
@@ -326,7 +326,7 @@
             </div>
             <div>
               <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">ZONE GÉOGRAPHIQUE</label>
-              <select class="form-input">
+              <select class="form-input" aria-label="Zone géographique">
                 <option>Pas de préférence</option>
                 <option>Tel Aviv</option>
                 <option>Herzliya Pituach</option>
