@@ -69,8 +69,10 @@
 .brand-strip-logo .desc { font-family: 'Cinzel', serif; font-weight: 400; letter-spacing: 0.55em; margin-top: 0.9em; font-size: clamp(0.7rem, 0.95vw, 0.95rem); opacity: 0.7; }
 @media (max-width: 640px) { .brand-strip { padding: 3.5rem 1.25rem; gap: 2rem; } }
 </style>
+<link rel="stylesheet" href="assets/a11y.css">
 </head>
 <body>
+<a class="skip-link" href="#main-content">Aller au contenu principal</a>
 
 <div class="page-loader" aria-hidden="true">
   <div class="page-loader-bar"></div>
@@ -99,6 +101,7 @@
     </div>
   </div>
 </header>
+<main id="main-content" tabindex="-1">
 
 <div class="mobile-menu lg:hidden">
   <div class="brand-logo mb-12 text-center"><div class="name text-base md:text-lg" style="color: var(--gold)">SHAHAR LEVI &amp;<br>NATHALIE HAIK</div><div class="desc text-[10px]" style="color: var(--gold-deep)">REAL ESTATE</div></div>
@@ -217,6 +220,7 @@
   <div class="brand-strip-rule"></div>
 </section>
 
+</main>
 <footer class="bg-[var(--teal-deep)] text-[var(--paper)] px-6 md:px-10 py-16">
   <div class="max-w-[1500px] mx-auto">
     <div class="grid md:grid-cols-3 gap-10 mb-12">
@@ -240,6 +244,7 @@
         <a href="mentions-legales.html" class="hover:text-[var(--gold)]">MENTIONS</a>
         <a href="rgpd.html" class="hover:text-[var(--gold)]">RGPD</a>
         <a href="honoraires.html" class="hover:text-[var(--gold)]">HONORAIRES</a>
+        <a href="accessibilite.html" class="hover:text-[var(--gold)]">ACCESSIBILITÉ</a>
       </div>
     </div>
   </div>
@@ -263,5 +268,6 @@ window.addEventListener('scroll', function() {
 <a href="https://wa.me/972547831152?text=Bonjour%2C%20j%27aimerais%20en%20savoir%20plus%20sur%20vos%20biens." target="_blank" rel="noopener" class="floating-wa" aria-label="Discuter sur WhatsApp" title="Discuter sur WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.7.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.2 3 .1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.7.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.4-1.7c1.7.9 3.6 1.4 5.6 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0zm0 22c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.8 1 1-3.7-.2-.4C2.5 15.7 2 13.9 2 12 2 6.5 6.5 2 12 2s10 4.5 10 10-4.5 10-10 10z"/></svg></a>
 <!-- SL_FLOATING_WA_END -->
 <script src="assets/pwa-install.js" defer></script>
+<script src="assets/a11y.js" defer></script>
 </body>
 </html>

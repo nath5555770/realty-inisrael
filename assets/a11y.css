@@ -29,6 +29,24 @@
 .a11y-btn:focus-visible { outline: 3px solid #ffcb00; outline-offset: 3px; }
 .a11y-btn svg { width: 30px; height: 30px; }
 
+/* ---------- Lien d'évitement / skip-link (WCAG 2.4.1, niveau A) ---------- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100000;
+  background: #061814;
+  color: #fff;
+  padding: 12px 22px;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  border: 2px solid #c4a877;
+}
+.skip-link:focus { left: 8px; top: 8px; outline: 3px solid #ffcb00; outline-offset: 2px; }
+html[dir="rtl"] .skip-link:focus { left: auto; right: 8px; }
+
 /* RTL : passer le bouton à droite */
 html[dir="rtl"] .a11y-btn { left: auto; right: 24px; }
 
