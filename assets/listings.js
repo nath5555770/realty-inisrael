@@ -199,6 +199,8 @@
   // ------------------------------------------------------------------
   // CARDS HTML
   // ------------------------------------------------------------------
+  function T(s) { return (window.SLI18n && window.SLI18n.translate) ? window.SLI18n.translate(s) : s; }
+
   function cardHTML(l, opts) {
     opts = opts || {};
     const big = opts.big;
@@ -220,12 +222,12 @@
         '  <div class="grid md:grid-cols-12 gap-10 items-center">',
         '    <div class="md:col-span-7 frame aspect-[16/10]">',
         '      <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
-        '      <div class="ref-tag">', escapeHtml(refTag), (l.signature ? ' · PIÈCE SIGNATURE' : ''), '</div>',
+        '      <div class="ref-tag">', escapeHtml(refTag), (l.signature ? ' · ' + T('PIÈCE SIGNATURE') : ''), '</div>',
         dealTag, kindTag,
         heart,
         '    </div>',
         '    <div class="md:col-span-5">',
-        '      <div class="label-teal">RÉF. ', escapeHtml(l.ref), ' · ', cityLabel(l.city), ' · ', escapeHtml(l.neighborhood || ''), '</div>',
+        '      <div class="label-teal">', T('RÉF.'), ' ', escapeHtml(l.ref), ' · ', cityLabel(l.city), ' · ', escapeHtml(l.neighborhood || ''), '</div>',
         '      <h3 class="display mt-4" style="font-size: clamp(2.25rem, 4vw, 3.5rem); line-height: 0.95">',
         escapeHtml(l.title_main), ' <span class="display-i text-[var(--gold-deep)]">', escapeHtml(l.title_accent || ''), '</span>',
         '      </h3>',
@@ -235,7 +237,7 @@
         '        <div><div class="label">PIÈCES</div><div class="display text-xl mt-1.5">', escapeHtml(l.rooms || ''), '</div></div>',
         '      </div>',
         '      <div class="mt-6 border-t border-[var(--line)] pt-5 flex items-end justify-end">',
-        '        <a href="#listing-' + escapeHtml(l.slug || l.ref || l.id || '') + '" class="btn-line text-[var(--teal)]" data-listing-ref="' + escapeHtml(l.slug || l.ref || l.id || '') + '">Voir l\'annonce →</a>',
+        '        <a href="#listing-' + escapeHtml(l.slug || l.ref || l.id || '') + '" class="btn-line text-[var(--teal)]" data-listing-ref="' + escapeHtml(l.slug || l.ref || l.id || '') + '">' + T('Voir l\'annonce') + ' →</a>',
         '      </div>',
         '    </div>',
         '  </div>',
@@ -257,7 +259,7 @@
       '    <p class="text-sm text-[var(--ink-soft)] mt-2">', escapeHtmlMultiline(l.description || ''), '</p>',
       '    <div class="flex items-end justify-between mt-4 pt-3 border-t border-[var(--line)]">',
       '      <span class="label !tracking-[0.2em]">', escapeHtml(l.rooms || ''), l.extra_label ? ' · ' + escapeHtml(l.extra_label) : '', '</span>',
-      '      <span class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">DÉTAILS →</span>',
+      '      <span class="cinzel text-[10px] tracking-[0.3em] text-[var(--gold-deep)]">' + T('DÉTAILS') + ' →</span>',
       '    </div>',
       '  </div>',
       '</article>'
@@ -892,7 +894,7 @@
 
   function listingReaderBody(l) {
     const tags = [];
-    if (l.signature) tags.push('<span class="listing-reader-tag is-gold">★ PIÈCE SIGNATURE</span>');
+    if (l.signature) tags.push('<span class="listing-reader-tag is-gold">★ ' + T('PIÈCE SIGNATURE') + '</span>');
     if (l.featured)  tags.push('<span class="listing-reader-tag is-gold">À LA UNE</span>');
     const d = listingDealLabel(l.deal); if (d) tags.push('<span class="listing-reader-tag">' + d + '</span>');
     const k = listingKindLabel(l.kind); if (k) tags.push('<span class="listing-reader-tag">' + k + '</span>');
@@ -907,7 +909,7 @@
     const eq = [l.price_eur_eq, l.price_ils_eq].filter(Boolean).join(' · ');
 
     return (
-      '<div class="listing-reader-meta">RÉF. ' + escapeHtml(l.ref || '') + ' · ' + escapeHtml(cityLabel(l.city)) + (l.neighborhood ? ' · ' + escapeHtml(l.neighborhood) : '') + '</div>' +
+      '<div class="listing-reader-meta">' + T('RÉF.') + ' ' + escapeHtml(l.ref || '') + ' · ' + escapeHtml(cityLabel(l.city)) + (l.neighborhood ? ' · ' + escapeHtml(l.neighborhood) : '') + '</div>' +
       '<h1 class="listing-reader-title">' + escapeHtml(l.title_main || '') + (l.title_accent ? ' <em>' + escapeHtml(l.title_accent) + '</em>' : '') + '</h1>' +
       (tags.length ? '<div class="listing-reader-tags">' + tags.join('') + '</div>' : '') +
       (l.description ? '<p class="listing-reader-desc">' + escapeHtmlMultiline(l.description) + '</p>' : '') +
