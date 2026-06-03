@@ -403,7 +403,7 @@
     const stage = document.getElementById('heroStage');
     if (!stage || !images || images.length < 2) return;
 
-    // Le premier <img> existe déjà — on le remplace seulement par la première URL si fournie
+    // Le premier <img alt=""> existe déjà — on le remplace seulement par la première URL si fournie
     const firstImg = stage.querySelector('.hero-slide');
     if (firstImg && images[0]) firstImg.src = images[0];
 
@@ -748,7 +748,7 @@
 
     <div class="border-t border-[var(--line-gold)] pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs cinzel tracking-[0.2em] text-[var(--paper)]/75">
       <div data-text="footer.copyright">© SHAHAR LEVI &amp; NATHALIE HAIK REAL ESTATE 2026</div>
-      <div class="flex gap-6">
+      <div class="flex flex-wrap gap-x-6 gap-y-2">
         <a href="mentions-legales.html" class="hover:text-[var(--gold)]">MENTIONS</a>
         <a href="rgpd.html" class="hover:text-[var(--gold)]">RGPD</a>
         <a href="honoraires.html" class="hover:text-[var(--gold)]">HONORAIRES</a>

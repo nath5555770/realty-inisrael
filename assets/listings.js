@@ -717,6 +717,7 @@
   let suppressListingPop = false;
   let galleryImages = [];      // full list of image paths for the open listing
   let galleryIndex = 0;        // which photo is currently displayed
+  let lastReaderTrigger = null; // element to refocus when the dialog closes
   let touchStartX = null;      // for swipe gesture on mobile
 
   function buildListingReader() {
@@ -724,6 +725,10 @@
     const m = document.createElement('div');
     m.id = 'listingReader';
     m.className = 'listing-reader';
+    m.setAttribute('role', 'dialog');
+    m.setAttribute('aria-modal', 'true');
+    m.setAttribute('aria-label', 'Détail du bien');
+    m.setAttribute('tabindex', '-1');
     m.hidden = true;
     m.innerHTML =
       '<div class="listing-reader-overlay" data-close></div>' +
@@ -751,6 +756,14 @@
 
     m.addEventListener('click', e => {
       if (e.target.closest('[data-close]')) { e.preventDefault(); closeListingReader(); }
+    });
+    m.addEventListener('keydown', e => {
+      if (e.key !== 'Tab' || m.hidden) return;
+      const f = [...m.querySelectorAll('a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])')].filter(el => el.offsetParent !== null);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
     document.addEventListener('keydown', e => {
       if (!isListingOpen) return;
@@ -956,6 +969,7 @@
   }
 
   function openListingReader(rawL) {
+    lastReaderTrigger = document.activeElement;
     const l = localizedListing(rawL);
     buildListingReader();
     const m = document.getElementById('listingReader');
@@ -1034,7 +1048,7 @@
     m.scrollTop = 0;
     m.hidden = false;
     document.body.classList.add('modal-open');
-    requestAnimationFrame(() => m.classList.add('is-visible'));
+    requestAnimationFrame(() => { m.classList.add('is-visible'); try { m.focus(); } catch (_) {} });
     const hashKey = l.slug || l.ref || l.id || '';
     history.pushState({ listingReader: true, key: hashKey }, '', '#listing-' + hashKey);
     isListingOpen = true;
@@ -1047,6 +1061,7 @@
     setTimeout(() => { m.hidden = true; }, 350);
     document.body.classList.remove('modal-open');
     isListingOpen = false;
+    if (lastReaderTrigger && typeof lastReaderTrigger.focus === 'function') { try { lastReaderTrigger.focus(); } catch (_) {} }
     if (!fromPopstate && location.hash.startsWith('#listing-')) {
       suppressListingPop = true;
       history.back();

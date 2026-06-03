@@ -31,9 +31,11 @@
 
 /* ---------- Lien d'évitement / skip-link (WCAG 2.4.1, niveau A) ---------- */
 .skip-link {
-  position: absolute;
-  left: -9999px;
-  top: 0;
+  position: fixed;
+  left: 8px;
+  top: 8px;
+  transform: translateY(-160%);
+  transition: transform 0.15s ease;
   z-index: 100000;
   background: #061814;
   color: #fff;
@@ -44,8 +46,7 @@
   text-decoration: none;
   border: 2px solid #c4a877;
 }
-.skip-link:focus { left: 8px; top: 8px; outline: 3px solid #ffcb00; outline-offset: 2px; }
-html[dir="rtl"] .skip-link:focus { left: auto; right: 8px; }
+.skip-link:focus { transform: translateY(0); outline: 3px solid #ffcb00; outline-offset: 2px; }
 
 /* RTL : passer le bouton à droite */
 html[dir="rtl"] .a11y-btn { left: auto; right: 24px; }

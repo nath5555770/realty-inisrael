@@ -238,7 +238,7 @@
           <div class="display text-3xl">Shoshana Damari 10</div>
           <div class="text-base text-[var(--ink-soft)] mt-1">Ir Yamim, Netanya · Israël</div>
           <div class="hr-thin my-4"></div>
-          <div class="grid grid-cols-2 gap-4 text-sm">
+          <div class="grid grid-cols-1 min-[400px]:grid-cols-2 gap-4 text-sm">
             <div><div class="label" data-text="contact.phone.label">TÉLÉPHONE</div><div class="mono mt-2 text-[var(--ink)]">+972 54 783 11 52</div></div>
             <div><div class="label">HORAIRES</div><div class="mono mt-2 text-[var(--ink)]" data-text="contact.hours.detail">DIM—JEU 9H—18H<br>VEN 9H—14H</div></div>
           </div>
@@ -246,7 +246,7 @@
 
         <div>
           <div class="label-gold mb-3" data-text="contact.email.label">EMAIL DIRECT</div>
-          <a class="display-i text-2xl text-[var(--gold-deep)] hover:text-[var(--teal)] transition">Nathhaik.realestate@gmail.com</a>
+          <a href="mailto:Nathhaik.realestate@gmail.com" class="display-i text-2xl text-[var(--gold-deep)] hover:text-[var(--teal)] transition [overflow-wrap:anywhere]">Nathhaik.realestate@gmail.com</a>
           <div class="hr-thin my-4"></div>
           <div class="text-sm text-[var(--ink-soft)] leading-relaxed">Pour les sollicitations confidentielles. Réponse personnelle de Nathalie sous 24h ouvrées.</div>
         </div>
@@ -271,23 +271,23 @@
         <form class="space-y-6">
           <div class="grid md:grid-cols-2 gap-5">
             <div>
-              <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">PRÉNOM *</label>
-              <input type="text" class="form-input" placeholder="Votre prénom" required>
+              <label for="cf-prenom" class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">PRÉNOM *</label>
+              <input type="text" id="cf-prenom" class="form-input" placeholder="Votre prénom" required>
             </div>
             <div>
-              <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">NOM *</label>
-              <input type="text" class="form-input" placeholder="Votre nom" required>
+              <label for="cf-nom" class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">NOM *</label>
+              <input type="text" id="cf-nom" class="form-input" placeholder="Votre nom" required>
             </div>
           </div>
 
           <div class="grid md:grid-cols-2 gap-5">
             <div>
-              <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">EMAIL *</label>
-              <input type="email" class="form-input" placeholder="prenom@nom.fr" required>
+              <label for="cf-email" class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">EMAIL *</label>
+              <input type="email" id="cf-email" class="form-input" placeholder="prenom@nom.fr" required>
             </div>
             <div>
-              <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">TÉLÉPHONE</label>
-              <input type="tel" class="form-input" placeholder="+33 6 ...">
+              <label for="cf-tel" class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">TÉLÉPHONE</label>
+              <input type="tel" id="cf-tel" class="form-input" placeholder="+33 6 ...">
             </div>
           </div>
 
@@ -342,8 +342,8 @@
           </div>
 
           <div>
-            <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">VOTRE PROJET</label>
-            <textarea class="form-input" rows="5" placeholder="Quelques lignes sur votre projet, vos contraintes, vos questions..."></textarea>
+            <label for="cf-projet" class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">VOTRE PROJET</label>
+            <textarea id="cf-projet" class="form-input" rows="5" placeholder="Quelques lignes sur votre projet, vos contraintes, vos questions..."></textarea>
           </div>
 
           <div>
@@ -393,7 +393,7 @@
     <div class="label-gold" data-text="contact.newsletter.eyebrow">Le carnet privé</div>
     <h2 class="display mt-4" style="font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 400">Recevoir les pièces <em class="display-i text-[var(--gold-deep)]">avant publication.</em></h2>
     <div class="mt-8 flex flex-col md:flex-row gap-3 max-w-xl mx-auto">
-      <input type="email" placeholder="prenom@nom.fr" class="flex-1 bg-[var(--paper)] border border-[var(--line)] px-5 py-4 text-base outline-none focus:border-[var(--gold)] transition">
+      <input type="email" aria-label="Votre adresse email" placeholder="prenom@nom.fr" class="flex-1 bg-[var(--paper)] border border-[var(--line)] px-5 py-4 text-base outline-none focus:border-[var(--gold)] transition">
       <button class="btn-teal justify-center">S'inscrire →</button>
     </div>
   </div>
@@ -427,7 +427,7 @@
       </div>
     </div>
     <!-- SL_SOCIAL_END -->
-    <div class="border-t border-[var(--line-gold)] pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs cinzel tracking-[0.2em] text-[var(--paper)]/75"><div data-text="footer.copyright">© SHAHAR LEVI &amp; NATHALIE HAIK REAL ESTATE 2026</div><div class="flex gap-6"><a href="mentions-legales.html" class="hover:text-[var(--gold)]">MENTIONS</a><a href="rgpd.html" class="hover:text-[var(--gold)]">RGPD</a><a href="honoraires.html" class="hover:text-[var(--gold)]">HONORAIRES</a>
+    <div class="border-t border-[var(--line-gold)] pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs cinzel tracking-[0.2em] text-[var(--paper)]/75"><div data-text="footer.copyright">© SHAHAR LEVI &amp; NATHALIE HAIK REAL ESTATE 2026</div><div class="flex flex-wrap gap-x-6 gap-y-2"><a href="mentions-legales.html" class="hover:text-[var(--gold)]">MENTIONS</a><a href="rgpd.html" class="hover:text-[var(--gold)]">RGPD</a><a href="honoraires.html" class="hover:text-[var(--gold)]">HONORAIRES</a>
         <a href="accessibilite.html" class="hover:text-[var(--gold)]">ACCESSIBILITÉ</a></div></div>
   </div>
 </footer>
