@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://realty-inisrael.com/">
+
+<title>SHAHAR LEVI &amp; NATHALIE HAIK — Real Estate</title>
+<meta name="description" content="Site en construction — ouverture prochainement.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://realty-inisrael.com/">
+<meta property="og:title" content="SHAHAR LEVI & NATHALIE HAIK — Real Estate">
+<meta property="og:description" content="Site en construction — ouverture prochainement.">
+<meta property="og:image" content="https://realty-inisrael.com/assets/favicon-512.png">
+
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="assets/site.webmanifest">
+<meta name="theme-color" content="#0e2722">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Playfair+Display:ital,wght@0,400;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/a11y.css">
+
+<style>
+  :root {
+    --paper: #f4ede0;
+    --teal: #0e2722;
+    --teal-deep: #061814;
+    --gold: #c4a877;
+    --gold-deep: #a78c5c;
+    --gold-pale: #e0c89a;
+    --paper-soft: rgba(244, 237, 224, 0.85);
+    --line-gold: rgba(196, 168, 119, 0.25);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: var(--teal);
+    color: var(--paper);
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.005em;
+  }
+  .cinzel { font-family: 'Cinzel', serif; font-weight: 500; letter-spacing: 0.16em; }
+  .display { font-family: 'Playfair Display', serif; font-weight: 400; letter-spacing: -0.022em; }
+  .display-i { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; }
+
+  /* Subtle film grain */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+  }
+
+  /* Soft gold radial behind logo */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(196,168,119,0.10) 0%, transparent 70%);
+  }
+
+  .page {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+
+  /* Language switcher — top — WCAG 2.5.5 compliant (44×44 minimum) */
+  .lang-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1;
+  }
+  .lang-bar a {
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 4px;
+    font-size: 22px;
+  }
+  .lang-bar a:hover { opacity: 1; background: rgba(196,168,119,0.10); }
+  .lang-bar a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; opacity: 1; }
+  .lang-bar a.is-active { opacity: 1; background: rgba(196,168,119,0.18); transform: scale(1.08); }
+
+  /* Center block */
+  .center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    flex: 1;
+    padding: 2rem 0;
+  }
+
+  /* Logo */
+  .logo {
+    text-align: center;
+    color: var(--gold);
+    line-height: 1.18;
+    animation: fade-in 1.4s ease 0.1s both;
+  }
+  .logo .name {
+    font-family: 'Cinzel', serif;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    font-size: clamp(1.1rem, 3vw, 1.9rem);
+  }
+  .logo .desc {
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    letter-spacing: 0.5em;
+    font-size: clamp(0.6rem, 1.1vw, 0.75rem);
+    margin-top: 1.4em;
+    color: var(--gold-deep);
+  }
+
+  /* Gold rule */
+  .rule {
+    width: 80px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+    margin: 0 auto;
+    animation: rule-expand 1.6s ease 0.6s both;
+  }
+  @keyframes rule-expand {
+    from { width: 0; opacity: 0; }
+    to { width: 80px; opacity: 0.5; }
+  }
+
+  /* Main message */
+  .message {
+    max-width: 620px;
+    padding: 0 1rem;
+  }
+  .message .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    animation: fade-in 1.4s ease 0.9s both;
+  }
+  /* h1 reset — match prior visual style */
+  .message h1.title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--paper);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.15;
+    margin: 1.4rem 0 1.6rem;
+    animation: fade-in 1.6s ease 1.1s both;
+  }
+  .message .subtitle {
+    color: rgba(244, 237, 224, 0.95);   /* contrast ≥ 13:1 on teal */
+    font-size: clamp(1rem, 1.7vw, 1.15rem);
+    line-height: 1.6;
+    font-weight: 400;
+    animation: fade-in 1.6s ease 1.3s both;
+  }
+
+  /* RTL adjustments for Hebrew */
+  html[dir="rtl"] .message .title,
+  html[dir="rtl"] .message .subtitle {
+    direction: rtl;
+  }
+
+  /* Contact line */
+  .contact {
+    border-top: 1px solid var(--line-gold);
+    padding-top: 2rem;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    animation: fade-in 1.6s ease 1.5s both;
+  }
+  .contact .label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    margin-bottom: 0.9rem;
+  }
+  .contact .info {
+    color: var(--paper-soft);
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+  .contact a {
+    color: var(--gold-pale);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .contact a:hover { color: var(--gold); }
+
+  /* Footer copyright — contrast ≥ 4.5:1 on teal background (WCAG 1.4.3) */
+  .copyright {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: rgba(244, 237, 224, 0.78);
+    animation: fade-in 1.6s ease 1.7s both;
+  }
+  .copyright a {
+    color: rgba(244, 237, 224, 0.78);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 0.5rem;
+    display: inline-block;
+    border-radius: 3px;
+  }
+  .copyright a:hover { color: var(--gold); }
+  .copyright a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* Skip link — WCAG 2.4.1 */
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 1rem;
+    z-index: 100;
+    background: var(--gold);
+    color: var(--teal);
+    padding: 0.75rem 1.25rem;
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border-radius: 0 0 4px 4px;
+    transition: top 0.2s;
+  }
+  .skip-link:focus { top: 0; }
+
+  /* Focus visible on all interactive (WCAG 2.4.7) */
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+  .contact a {
+    padding: 0.3rem 0.4rem;
+    margin: -0.3rem -0.4rem;
+    border-radius: 3px;
+  }
+
+  /* RTL safety: phone/email/brand are always Left-To-Right, even in Hebrew,
+     so the bidi algorithm never reorders digit groups or the ampersand. */
+  .logo,
+  .copyright,
+  .contact a[href^="tel"],
+  .contact a[href^="mailto"] {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 540px) {
+    .page { padding: 2rem 1.25rem; }
+    .center { gap: 1.8rem; }
+    .logo .desc { margin-top: 1.2em; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content" data-msg="skip">Aller au contenu</a>
+
+  <div class="page">
+
+    <header role="banner">
+      <!-- Language switcher -->
+      <nav class="lang-bar" aria-label="Choisir la langue">
+        <a href="#" role="button" data-lang="fr" class="is-active" aria-current="true" aria-label="Français">🇫🇷</a>
+        <a href="#" role="button" data-lang="en" aria-label="English">🇬🇧</a>
+        <a href="#" role="button" data-lang="he" aria-label="עברית — Hebrew">🇮🇱</a>
+        <a href="#" role="button" data-lang="ru" aria-label="Русский — Russian">🇷🇺</a>
+      </nav>
+    </header>
+
+    <main class="center" id="main-content">
+      <!-- Logo -->
+      <div class="logo" dir="ltr" role="img" aria-label="SHAHAR LEVI & NATHALIE HAIK Real Estate">
+        <div class="name" aria-hidden="true">SHAHAR LEVI &amp;<br>NATHALIE HAIK</div>
+        <div class="desc" aria-hidden="true">REAL ESTATE</div>
+      </div>
+
+      <!-- Gold separator -->
+      <div class="rule" aria-hidden="true"></div>
+
+      <!-- Message (all 4 languages, JS shows the active one) -->
+      <div class="message">
+        <div class="eyebrow" data-msg="eyebrow">NOTRE NOUVELLE MAISON</div>
+        <h1 class="title display-i" data-msg="title">Site en construction.</h1>
+        <div class="subtitle" data-msg="subtitle">Notre nouvelle plateforme arrive prochainement. Pour toute demande, contactez-nous directement.</div>
+      </div>
+
+      <!-- Contact -->
+      <div class="contact">
+        <div class="label" data-msg="contact_label">Nous contacter</div>
+        <div class="info">
+          <a href="tel:+972547831152" dir="ltr">+972 54 783 11 52</a><br>
+          <a href="mailto:Nathhaik.realestate@gmail.com" dir="ltr">Nathhaik.realestate@gmail.com</a><br>
+          <span data-msg="address">Shoshana Damari 10 · Ir Yamim, Netanya · Israël</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Copyright + accessibility link -->
+    <footer role="contentinfo" class="copyright" dir="ltr">
+      <span data-msg="copyright">© SHAHAR LEVI &amp; NATHALIE HAIK REAL ESTATE 2026</span>
+      &nbsp;·&nbsp;
+      <a href="accessibilite.html" data-msg="a11y_link">Accessibilité</a>
+    </footer>
+  </div>
+
+  <script src="assets/a11y.js" defer></script>
+
+  <script>
+    // 4-language messages
+    const I18N = {
+      fr: {
+        eyebrow: 'NOTRE NOUVELLE MAISON',
+        title: 'Site en construction.',
+        subtitle: 'Notre nouvelle plateforme arrive prochainement. Pour toute demande, contactez-nous directement.',
+        contact_label: 'Nous contacter',
+        address: 'Shoshana Damari 10 · Ir Yamim, Netanya · Israël',
+        copyright: '© SHAHAR LEVI & NATHALIE HAIK REAL ESTATE 2026',
+        a11y_link: 'Accessibilité',
+        skip: 'Aller au contenu',
+        dir: 'ltr', lang: 'fr', title_doc: 'SHAHAR LEVI & NATHALIE HAIK — Real Estate'
+      },
+      en: {
+        eyebrow: 'OUR NEW HOME',
+        title: 'Website under construction.',
+        subtitle: 'Our new platform is launching soon. For any inquiry, please contact us directly.',
+        contact_label: 'Contact us',
+        address: 'Shoshana Damari 10 · Ir Yamim, Netanya · Israel',
+        copyright: '© SHAHAR LEVI & NATHALIE HAIK REAL ESTATE 2026',
+        a11y_link: 'Accessibility',
+        skip: 'Skip to content',
+        dir: 'ltr', lang: 'en', title_doc: 'SHAHAR LEVI & NATHALIE HAIK — Real Estate'
+      },
+      he: {
+        eyebrow: 'הבית החדש שלנו',
+        title: 'האתר בבנייה.',
+        subtitle: 'הפלטפורמה החדשה שלנו תושק בקרוב. לכל פנייה, אנא צרו איתנו קשר ישירות.',
+        contact_label: 'צרו קשר',
+        address: 'שושנה דמארי 10 · עיר ימים, נתניה · ישראל',
+        copyright: '© SHAHAR LEVI & NATHALIE HAIK REAL ESTATE 2026',
+        a11y_link: 'נגישות',
+        skip: 'דלג לתוכן',
+        dir: 'rtl', lang: 'he', title_doc: 'שהר לוי & נטלי האיק — נדל״ן'
+      },
+      ru: {
+        eyebrow: 'НАШ НОВЫЙ ДОМ',
+        title: 'Сайт в разработке.',
+        subtitle: 'Наша новая платформа скоро будет запущена. По любым вопросам обращайтесь к нам напрямую.',
+        contact_label: 'Связаться с нами',
+        address: 'Шошана Дамари 10 · Ир Ямим, Нетания · Израиль',
+        copyright: '© SHAHAR LEVI & NATHALIE HAIK REAL ESTATE 2026',
+        a11y_link: 'Доступность',
+        skip: 'Перейти к содержимому',
+        dir: 'ltr', lang: 'ru', title_doc: 'SHAHAR LEVI & NATHALIE HAIK — Недвижимость'
+      }
+    };
+
+    const STORAGE_KEY = 'sl-lang';
+    function currentLang() {
+      try { const s = localStorage.getItem(STORAGE_KEY); if (I18N[s]) return s; } catch (_) {}
+      const b = (navigator.language || 'fr').slice(0, 2).toLowerCase();
+      return I18N[b] ? b : 'fr';
+    }
+    function applyLang(lang) {
+      const d = I18N[lang] || I18N.fr;
+      document.documentElement.lang = d.lang;
+      document.documentElement.dir = d.dir;
+      document.title = d.title_doc;
+      document.querySelectorAll('[data-msg]').forEach(el => {
+        const k = el.getAttribute('data-msg');
+        if (d[k] != null) el.textContent = d[k];
+      });
+      document.querySelectorAll('.lang-bar a[data-lang]').forEach(a => {
+        const isActive = a.dataset.lang === lang;
+        a.classList.toggle('is-active', isActive);
+        if (isActive) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    }
+    document.querySelectorAll('.lang-bar a[data-lang]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const lang = a.dataset.lang;
+        try { localStorage.setItem(STORAGE_KEY, lang); } catch (_) {}
+        applyLang(lang);
+      });
+    });
+    applyLang(currentLang());
+  </script>
+</body>
+</html>
