@@ -966,6 +966,74 @@
     });
   }
 
+  // ------------------------------------------------------------------
+  // DEMANDES DE CONTACT (leads du formulaire public)
+  // ------------------------------------------------------------------
+  async function loadLeadsAndRender() {
+    const root = $('#leadsTable');
+    if (root) root.innerHTML = '<div class="loading">Chargement…</div>';
+    try {
+      const { data, error } = await sb.from('contact_requests').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      STATE.leads = data || [];
+      renderLeadsTable();
+    } catch (e) {
+      if (root) root.innerHTML = '<div class="loading">Erreur de chargement.</div>';
+      toast('Impossible de charger les demandes.', 'error');
+    }
+  }
+
+  function renderLeadsTable() {
+    const root = $('#leadsTable'); if (!root) return;
+    const list = STATE.leads || [];
+    const cnt = $('#leadsCount');
+    if (cnt) cnt.textContent = list.length
+      ? (list.length + ' demande' + (list.length > 1 ? 's' : '') + ' · ' + list.filter(l => !l.handled).length + ' à traiter')
+      : 'Aucune demande pour le moment.';
+    if (!list.length) { root.innerHTML = '<div class="loading">Aucune demande pour le moment.</div>'; return; }
+    root.innerHTML = list.map((l) => {
+      const name = ((l.first_name || '') + ' ' + (l.last_name || '')).trim() || '(sans nom)';
+      const meta = [l.phone, l.country, l.budget, l.zone].filter(Boolean).map(escapeHtml).join(' · ');
+      return '<div class="lead-card" style="border:1px solid var(--line,#e6e0d6);border-radius:6px;padding:15px 18px;margin-bottom:12px;' + (l.handled ? 'opacity:.55;' : '') + '">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">' +
+          '<div><strong style="font-size:15px">' + escapeHtml(name) + '</strong> ' +
+            (l.handled ? '<span class="badge badge-off">traité</span>' : '<span class="badge badge-signature">nouveau</span>') +
+            '<div class="sub" style="font-size:13px;margin-top:3px"><a href="mailto:' + escapeHtml(l.email || '') + '">' + escapeHtml(l.email || '') + '</a>' + (meta ? ' · ' + meta : '') + '</div></div>' +
+          '<div class="sub" style="font-size:12px;white-space:nowrap">' + fmtDate(l.created_at) + '</div>' +
+        '</div>' +
+        (l.subject ? '<div style="margin-top:9px;font-size:13px"><strong>Objet :</strong> ' + escapeHtml(l.subject) + (l.format ? '  ·  <strong>Format :</strong> ' + escapeHtml(l.format) : '') + '</div>' : '') +
+        (l.project ? '<div style="margin-top:6px;font-size:13px;white-space:pre-wrap;line-height:1.5">' + escapeHtml(l.project) + '</div>' : '') +
+        '<div style="margin-top:11px;display:flex;gap:8px">' +
+          '<button class="btn-ghost" data-act="toggle" data-id="' + escapeHtml(String(l.id)) + '">' + (l.handled ? 'Rouvrir' : '✓ Marquer traité') + '</button>' +
+          '<button class="btn-ghost" data-act="del" data-id="' + escapeHtml(String(l.id)) + '" style="color:#a4332a">Supprimer</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    root.querySelectorAll('[data-act="toggle"]').forEach(b => b.addEventListener('click', () => toggleLead(b.dataset.id)));
+    root.querySelectorAll('[data-act="del"]').forEach(b => b.addEventListener('click', () => deleteLead(b.dataset.id)));
+  }
+
+  async function toggleLead(id) {
+    const lead = (STATE.leads || []).find(l => String(l.id) === String(id));
+    if (!lead) return;
+    try {
+      const { error } = await sb.from('contact_requests').update({ handled: !lead.handled }).eq('id', id);
+      if (error) throw error;
+      lead.handled = !lead.handled; renderLeadsTable();
+    } catch (e) { toast('Action impossible.', 'error'); }
+  }
+
+  async function deleteLead(id) {
+    const ok = await confirmModal('Supprimer cette demande ?', 'Cette action est définitive.');
+    if (!ok) return;
+    try {
+      const { error } = await sb.from('contact_requests').delete().eq('id', id);
+      if (error) throw error;
+      STATE.leads = (STATE.leads || []).filter(l => String(l.id) !== String(id));
+      renderLeadsTable(); toast('Demande supprimée.', 'success');
+    } catch (e) { toast('Suppression impossible.', 'error'); }
+  }
+
   function genStrongPassword() {
     const alpha = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     const sym = '!@-_+';
@@ -1326,10 +1394,12 @@
       if ((tab === 'team' || tab === 'agency') && STATE.profile?.role !== 'admin') return;
       showView('dashboard');
       showTab(tab);
+      if (tab === 'leads') loadLeadsAndRender();
     }));
 
     // Listings tab
     $('#reloadBtn').addEventListener('click', async () => { try { await loadListings(); listingsStats(); renderListingsTable(); renderListingsAuthorFilter(); toast('Annonces rechargées.', 'success'); } catch (_) {} });
+    { const rlb = $('#reloadLeadsBtn'); if (rlb) rlb.addEventListener('click', loadLeadsAndRender); }
     const trashBtn = $('#trashToggleBtn');
     if (trashBtn) trashBtn.addEventListener('click', () => {
       STATE.viewMode = STATE.viewMode === 'trash' ? 'active' : 'trash';

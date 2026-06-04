@@ -56,6 +56,7 @@
     <button class="nav-btn" data-tab="journal">Journal</button>
     <button class="nav-btn" data-tab="texts">Textes</button>
     <button class="nav-btn" data-tab="settings">Réglages</button>
+    <button class="nav-btn" data-tab="leads">Demandes</button>
     <button class="nav-btn" data-tab="agency" data-admin-only>Agence</button>
     <button class="nav-btn" data-tab="team" data-admin-only>Équipe</button>
   </nav>
@@ -404,6 +405,23 @@
       <div class="settings-save-bar">
         <span class="settings-status" id="settingsStatus"></span>
         <button class="btn-primary" id="saveSettingsBtn">Enregistrer les réglages</button>
+      </div>
+    </div>
+
+    <!-- Tab: Demandes (leads de contact) -->
+    <div class="tab-pane" data-tab-pane="leads" hidden>
+      <div class="dash-head">
+        <div>
+          <div class="eyebrow">— CONTACT</div>
+          <h2>Les <em>demandes.</em></h2>
+          <p class="dash-sub" id="leadsCount">Les messages envoyés via le formulaire de contact du site.</p>
+        </div>
+        <div class="dash-actions">
+          <button class="btn-ghost" id="reloadLeadsBtn">↻ Actualiser</button>
+        </div>
+      </div>
+      <div class="listings-table" id="leadsTable">
+        <div class="loading">Chargement…</div>
       </div>
     </div>
 
