@@ -1,7 +1,6 @@
 User-agent: *
-Disallow: /
-Allow: /accessibilite.html
+Allow: /
+Disallow: /admin/
+Disallow: /admin
 
-# Site temporairement en construction.
-# Réouverture prochaine — l'admin reste accessible privément à /admin/
-# La déclaration d'accessibilité reste indexable (obligation légale IL 5568).
+Sitemap: https://realty-inisrael.com/sitemap.xml
