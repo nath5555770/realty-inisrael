@@ -136,13 +136,14 @@
 
   // ---------- Reader overlay (with proper history support) ----------
   let isReaderOpen = false;
+  let lastReaderTrigger = null;
   let suppressNextPopstate = false;
 
   function buildReader() {
     if (document.getElementById('articleReader')) return;
     const m = document.createElement('div');
     m.id = 'articleReader';
-    m.className = 'article-reader';
+    m.className = 'article-reader'; m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true'); m.setAttribute('aria-label', 'Article du journal'); m.setAttribute('tabindex', '-1');
     m.hidden = true;
     m.innerHTML =
       '<div class="article-reader-overlay" data-close></div>' +
@@ -187,6 +188,14 @@
     });
 
     // ESC closes
+    m.addEventListener('keydown', e => {
+      if (e.key !== 'Tab' || m.hidden) return;
+      const f = [...m.querySelectorAll('a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])')].filter(el => el.offsetParent !== null);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && isReaderOpen) closeReader();
     });
@@ -267,6 +276,7 @@
   }
 
   function openReader(a, fromHash) {
+    lastReaderTrigger = document.activeElement;
     buildReader();
     const m = document.getElementById('articleReader');
     m.querySelector('.article-reader-cover').style.backgroundImage = a.cover_image ? "url('" + imageUrl(a.cover_image).replace(/'/g, "\\'") + "')" : '';
@@ -285,7 +295,7 @@
     m.scrollTop = 0;
     m.hidden = false;
     document.body.classList.add('modal-open');
-    requestAnimationFrame(() => m.classList.add('is-visible'));
+    requestAnimationFrame(() => { m.classList.add('is-visible'); try { m.focus(); } catch (_) {} });
 
     // Push a history entry so Back closes the reader
     if (!fromHash) {
@@ -301,6 +311,7 @@
     setTimeout(() => { m.hidden = true; }, 350);
     document.body.classList.remove('modal-open');
     isReaderOpen = false;
+    if (lastReaderTrigger && typeof lastReaderTrigger.focus === 'function') { try { lastReaderTrigger.focus(); } catch (_) {} }
 
     // If we were closed by the user (X, overlay, ESC), pop the history entry we pushed
     if (!fromPopstate && location.hash.startsWith('#article-')) {
