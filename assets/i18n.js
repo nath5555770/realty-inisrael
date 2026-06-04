@@ -778,7 +778,7 @@
       "J'accepte que mes données soient traitées conformément à la": "אני מסכים/ה שהנתונים שלי יעובדו בהתאם ל",
       "politique RGPD": "מדיניות הפרטיות (GDPR)",
       "de la maison. Aucun partage avec des tiers.": "של המשרד. ללא שיתוף עם צד שלישי.",
-      "⊕ Réponse personnelle de Nathalie sous 24h ouvrées": "⊕ מענה אישי מאת נטלי האיק תוך 24 שעות עבודה",
+      "⊕ Réponse personnelle de Nathalie sous 24h ouvrées": "⊕ מענה אישי מאת נטלי חייק תוך 24 שעות עבודה",
       "Avant de nous contacter,": "לפני שתפנו אלינו,",
       "Faut-il être citoyen israélien pour acheter en Israël ?": "האם צריך להיות אזרח ישראלי כדי לקנות בישראל?",
       "Non. Tout étranger peut acheter librement. En revanche, un acquéreur étranger paie 8% de Mas Rechisha (taxe d'achat) au lieu de 0—5% pour un olé hadash. C'est pourquoi l'aliyah patrimoniale (acheter avant ou pendant la procédure) est intéressante.": "לא. כל זר רשאי לקנות בחופשיות. עם זאת, רוכש זר משלם 8% מס רכישה במקום 0—5% לעולה חדש. לכן רכישה לפני או במהלך תהליך העלייה משתלמת.",
