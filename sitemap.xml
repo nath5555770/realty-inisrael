@@ -51,6 +51,16 @@
       <image:title>Contact — Cabinet privé · SHAHAR LEVI &amp; NATHALIE HAIK</image:title>
     </image:image>
   </url>
+  <url>
+    <loc>https://realty-inisrael.com/faq.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://realty-inisrael.com/assets/favicon-512.png</image:loc>
+      <image:title>FAQ — Immobilier de prestige en Israël</image:title>
+    </image:image>
+  </url>
   <!--
     Legal/utility pages (honoraires, mentions-legales, rgpd) carry a
     <meta name="robots" content="noindex"> tag — they are intentionally
