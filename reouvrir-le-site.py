@@ -35,11 +35,10 @@ def main():
         shutil.copy2(f, P(os.path.basename(f))); n += 1
     print("  [1/4] " + str(n) + " vraies pages mises en ligne (racine)")
 
-    # 2) robots.txt : autoriser l'indexation
-    with open(P('robots.txt'), 'w', encoding='utf-8') as fh:
-        fh.write("User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /admin\n\n"
-                 "Sitemap: https://realty-inisrael.com/sitemap.xml\n")
-    print("  [2/4] robots.txt ouvert (indexation autorisee)")
+    # 2) robots.txt : autoriser l'indexation (+ accueil explicite des robots IA)
+    rb = open(P('_reopen-templates', 'robots.txt'), encoding='utf-8').read()
+    open(P('robots.txt'), 'w', encoding='utf-8').write(rb)
+    print("  [2/4] robots.txt ouvert (indexation + assistants IA autorises)")
 
     # 3) sitemap.xml restaure + lastmod du jour
     sm = open(P('_reopen-templates', 'sitemap.xml'), encoding='utf-8').read()
