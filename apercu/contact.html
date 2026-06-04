@@ -269,32 +269,32 @@
         <h2 class="display text-3xl md:text-4xl mt-3 leading-tight">Réponse <span class="display-i text-[var(--gold-deep)]">sous 24h ouvrées.</span></h2>
         <div class="hr-thin my-8"></div>
 
-        <form class="space-y-6">
+        <form id="contactForm" class="space-y-6">
           <div class="grid md:grid-cols-2 gap-5">
             <div>
               <label for="cf-prenom" class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">PRÉNOM *</label>
-              <input type="text" id="cf-prenom" class="form-input" placeholder="Votre prénom" required>
+              <input type="text" name="first_name" id="cf-prenom" class="form-input" placeholder="Votre prénom" required>
             </div>
             <div>
               <label for="cf-nom" class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">NOM *</label>
-              <input type="text" id="cf-nom" class="form-input" placeholder="Votre nom" required>
+              <input type="text" name="last_name" id="cf-nom" class="form-input" placeholder="Votre nom" required>
             </div>
           </div>
 
           <div class="grid md:grid-cols-2 gap-5">
             <div>
               <label for="cf-email" class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">EMAIL *</label>
-              <input type="email" id="cf-email" class="form-input" placeholder="prenom@nom.fr" required>
+              <input type="email" name="email" id="cf-email" class="form-input" placeholder="prenom@nom.fr" required>
             </div>
             <div>
               <label for="cf-tel" class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">TÉLÉPHONE</label>
-              <input type="tel" id="cf-tel" class="form-input" placeholder="+33 6 ...">
+              <input type="tel" name="phone" id="cf-tel" class="form-input" placeholder="+33 6 ...">
             </div>
           </div>
 
           <div>
             <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">PAYS DE RÉSIDENCE ACTUEL</label>
-            <select class="form-input" aria-label="Pays de résidence actuel">
+            <select name="country" class="form-input" aria-label="Pays de résidence actuel">
               <option>France</option>
               <option>Belgique</option>
               <option>Suisse</option>
@@ -305,7 +305,7 @@
 
           <div>
             <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">OBJET DU RENDEZ-VOUS *</label>
-            <select class="form-input" required aria-label="Objet du rendez-vous">
+            <select name="subject" class="form-input" required aria-label="Objet du rendez-vous">
               <option>Acquisition · résidence secondaire</option>
               <option>Acquisition · aliyah patrimoniale</option>
               <option>Acquisition · investissement locatif</option>
@@ -319,7 +319,7 @@
           <div class="grid md:grid-cols-2 gap-5">
             <div>
               <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">ENVELOPPE BUDGÉTAIRE</label>
-              <select class="form-input" aria-label="Enveloppe budgétaire">
+              <select name="budget" class="form-input" aria-label="Enveloppe budgétaire">
                 <option>Préfère ne pas dire</option>
                 <option>&lt; 7 M ₪</option>
                 <option>7 — 18 M ₪</option>
@@ -330,7 +330,7 @@
             </div>
             <div>
               <label class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">ZONE GÉOGRAPHIQUE</label>
-              <select class="form-input" aria-label="Zone géographique">
+              <select name="zone" class="form-input" aria-label="Zone géographique">
                 <option>Pas de préférence</option>
                 <option>Tel Aviv</option>
                 <option>Herzliya Pituach</option>
@@ -344,7 +344,7 @@
 
           <div>
             <label for="cf-projet" class="cinzel text-[10px] tracking-[0.3em] text-[var(--ink-soft)]">VOTRE PROJET</label>
-            <textarea id="cf-projet" class="form-input" rows="5" placeholder="Quelques lignes sur votre projet, vos contraintes, vos questions..."></textarea>
+            <textarea name="project" id="cf-projet" class="form-input" rows="5" placeholder="Quelques lignes sur votre projet, vos contraintes, vos questions..."></textarea>
           </div>
 
           <div>
@@ -358,7 +358,7 @@
           </div>
 
           <div class="flex items-start gap-3 mt-8 pt-4 border-t border-[var(--line)]">
-            <input type="checkbox" id="rgpd" class="w-4 h-4 mt-1 accent-[var(--teal)]" required>
+            <input type="checkbox" name="consent" id="rgpd" class="w-4 h-4 mt-1 accent-[var(--teal)]" required>
             <label for="rgpd" class="text-xs text-[var(--ink-soft)] leading-relaxed">J'accepte que mes données soient traitées conformément à la <a href="rgpd.html" class="underline text-[var(--gold-deep)]">politique RGPD</a> de la maison. Aucun partage avec des tiers.</label>
           </div>
 
@@ -394,8 +394,8 @@
     <div class="label-gold" data-text="contact.newsletter.eyebrow">Le carnet privé</div>
     <h2 class="display mt-4" style="font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 400">Recevoir les pièces <em class="display-i text-[var(--gold-deep)]">avant publication.</em></h2>
     <div class="mt-8 flex flex-col md:flex-row gap-3 max-w-xl mx-auto">
-      <input type="email" aria-label="Votre adresse email" placeholder="prenom@nom.fr" class="flex-1 bg-[var(--paper)] border border-[var(--line)] px-5 py-4 text-base outline-none focus:border-[var(--gold)] transition">
-      <button class="btn-teal justify-center">S'inscrire →</button>
+      <input type="email" id="newsletterEmail" aria-label="Votre adresse email" placeholder="prenom@nom.fr" class="flex-1 bg-[var(--paper)] border border-[var(--line)] px-5 py-4 text-base outline-none focus:border-[var(--gold)] transition">
+      <button type="button" id="newsletterBtn" class="btn-teal justify-center">S'inscrire →</button>
     </div>
   </div>
 </section>
@@ -450,6 +450,7 @@ window.addEventListener('scroll', function() {
 <a href="https://wa.me/972547831152?text=Bonjour%2C%20j%27aimerais%20en%20savoir%20plus%20sur%20vos%20biens." target="_blank" rel="noopener" class="floating-wa" aria-label="Discuter sur WhatsApp" title="Discuter sur WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.7.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.2 3 .1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.7.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.4-1.7c1.7.9 3.6 1.4 5.6 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0zm0 22c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.8 1 1-3.7-.2-.4C2.5 15.7 2 13.9 2 12 2 6.5 6.5 2 12 2s10 4.5 10 10-4.5 10-10 10z"/></svg></a>
 <!-- SL_FLOATING_WA_END -->
 <script src="/assets/pwa-install.js" defer></script>
+<script src="/assets/contact-forms.js" defer></script>
 <script src="/assets/a11y.js" defer></script>
 </body>
 </html>
