@@ -1048,7 +1048,7 @@
     m.scrollTop = 0;
     m.hidden = false;
     document.body.classList.add('modal-open');
-    requestAnimationFrame(() => { m.classList.add('is-visible'); try { m.focus(); } catch (_) {} });
+    requestAnimationFrame(() => { m.classList.add('is-visible'); try { m.focus(); } catch (_) {} try { if (window.SLI18n && window.SLI18n.refresh) window.SLI18n.refresh(); } catch (_) {} });
     const hashKey = l.slug || l.ref || l.id || '';
     history.pushState({ listingReader: true, key: hashKey }, '', '#listing-' + hashKey);
     isListingOpen = true;
