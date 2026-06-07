@@ -97,9 +97,9 @@
           <option value="">Toutes les villes</option>
           <option value="tel-aviv">Tel Aviv</option>
           <option value="herzliya">Herzliya</option>
-          <!-- SL-CITY-OFF: <option value="caesarea">Caesarea</option> -->
+          <option value="caesarea">Caesarea</option>
           <option value="netanya">Netanya</option>
-          <!-- SL-CITY-OFF: <option value="jerusalem">Jérusalem</option> -->
+          <option value="jerusalem">Jérusalem</option>
         </select>
         <select id="filterType">
           <option value="">Tous les types</option>
@@ -400,6 +400,18 @@
           </div>
         </div>
 
+        <div class="settings-card settings-card-wide">
+          <h3 class="settings-card-title">Villes proposées au public</h3>
+          <p class="settings-card-desc">Décochez une ville pour la <strong>retirer du filtre de recherche et du formulaire de contact</strong>. Recochez-la pour la réactiver — par exemple si vous obtenez un bien dans cette ville. <em>(Les annonces déjà publiées dans une ville ne sont pas masquées automatiquement.)</em></p>
+          <div class="settings-cities" style="display:flex;flex-wrap:wrap;gap:12px 22px;margin-top:10px">
+            <label class="settings-city" style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:15px"><input type="checkbox" name="cityActive" value="netanya"> Netanya</label>
+            <label class="settings-city" style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:15px"><input type="checkbox" name="cityActive" value="herzliya"> Herzliya</label>
+            <label class="settings-city" style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:15px"><input type="checkbox" name="cityActive" value="tel-aviv"> Tel Aviv</label>
+            <label class="settings-city" style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:15px"><input type="checkbox" name="cityActive" value="caesarea"> Caesarea</label>
+            <label class="settings-city" style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:15px"><input type="checkbox" name="cityActive" value="jerusalem"> Jérusalem</label>
+          </div>
+        </div>
+
       </div>
 
       <div class="settings-save-bar">
@@ -492,7 +504,7 @@
           <label class="field"><span class="field-label">Référence</span><input type="text" id="fRef" placeholder="SL.0020"></label>
           <label class="field"><span class="field-label">Ville</span>
             <select id="fCity">
-              <option value="tel-aviv">Tel Aviv</option><option value="herzliya">Herzliya</option><!-- SL-CITY-OFF: <option value="caesarea">Caesarea</option> --><option value="netanya">Netanya</option><!-- SL-CITY-OFF: <option value="jerusalem">Jérusalem</option> -->
+              <option value="tel-aviv">Tel Aviv</option><option value="herzliya">Herzliya</option><option value="caesarea">Caesarea</option><option value="netanya">Netanya</option><option value="jerusalem">Jérusalem</option>
             </select>
           </label>
           <label class="field"><span class="field-label">Type</span>

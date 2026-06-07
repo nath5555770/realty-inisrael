@@ -1,44 +1,37 @@
-# Villes désactivées — procédure de réactivation
+# Villes proposées au public — activer / désactiver soi-même
 
-**Désactivées le 2026-06-04 :** Césarée (`caesarea`) et Jérusalem (`jerusalem`).
+**Tu gères ça toi-même depuis l'admin, sans développeur :**
 
-Ces 2 villes ont été retirées de tout ce que le site « propose » (menus de
-recherche, formulaires, zones couvertes), mais **rien n'est supprimé** : tout
-est mis en commentaire avec le marqueur `SL-CITY-OFF` ou facilement ré-ajoutable.
+1. Connecte-toi à **realty-inisrael.com/admin/**
+2. Onglet **« Réglages »**
+3. Section **« Villes proposées au public »**
+4. **Coche** une ville pour l'activer / **décoche**-la pour la désactiver
+5. **« Enregistrer les réglages »**
 
-## Le plus simple : demander à Claude
+Une ville **décochée** disparaît automatiquement :
+- du **filtre de recherche** du portefeuille,
+- du menu **« zone »** du formulaire de contact,
+- …dans les **4 langues** (FR / EN / HE / RU).
 
-> « Réactive Jérusalem » (ou Césarée) — c'est fait en 1 minute, proprement, dans
-> les 4 langues.
+**Recoche**-la pour la réactiver — par exemple si tu obtiens un bien dans cette ville.
 
-## Réactivation manuelle (pour un développeur)
+**Par défaut : Césarée et Jérusalem sont désactivées.**
 
-Pour réactiver une ville (ex. `jerusalem`) :
+## Bon à savoir
 
-1. **Menus déroulants** — chercher `SL-CITY-OFF` et retirer le commentaire autour
-   des options de la ville, dans :
-   - `portefeuille.html` → `<select id="searchCity">` (filtre public)
-   - `admin/index.html` → `<select id="filterCity">` **et** `<select id="fCity">`
-   - `contact.html` → `<select name="zone">`
-   - …et les copies dans `_backup-live-site/` (portefeuille, contact)
+- Le changement apparaît au **prochain chargement** des pages (cache ≈ 5 min).
+- Les **annonces déjà publiées** dans une ville ne sont **pas masquées**
+  automatiquement (la désactivation concerne ce que le site *propose*, pas le
+  contenu existant). Si tu n'as pas de bien dans cette ville, il n'y a rien à cacher.
+- Le **texte SEO « zones couvertes »** (page d'accueil, FAQ) reste sur Netanya,
+  Herzliya, Tel Aviv. Si tu réactives durablement une ville et veux qu'elle
+  apparaisse aussi dans ces textes, demande-le (petite modif de contenu).
 
-2. **Contenu / SEO** — ré-ajouter la ville dans :
-   - `index.html` → JSON-LD `"areaServed"`
-   - `llms.txt` → « Zones couvertes »
-   - `portefeuille.html` → pied de page (liste de villes) + meta description
-   - FAQ « Quelles zones couvrez-vous » : `faq.html` (texte + schéma),
-     `assets/i18n.js` (DICT en/he/ru), `build-i18n-pages.js` (FAQ + HEAD)
+## Côté technique (pour un développeur)
 
-3. **Régénérer les pages traduites** :
-   ```
-   node build-i18n-pages.js
-   ```
-
-4. **Publier** : `git add -A && git commit -m "réactive jerusalem" && git push`
-
-## Note
-
-Les **annonces** déjà enregistrées dans une ville désactivée ne sont **pas
-masquées** automatiquement (elles restent visibles si elles existent). La
-désactivation concerne ce que le site **propose** comme zones, pas le contenu
-existant. En pratique, si vous n'avez pas de bien là-bas, il n'y a rien à masquer.
+- Réglage stocké dans `site_settings` → clé `cities.inactive` (tableau de slugs,
+  ex. `["caesarea","jerusalem"]`).
+- Lu et appliqué par `assets/site-cms.js` (fonction `applyCities`).
+- Défaut si la clé est absente : `['caesarea','jerusalem']` (dans site-cms.js).
+- UI : `admin/index.html` (cases `name="cityActive"`) + `admin/admin.js`
+  (`renderSettingsForm` / `saveSettings`).

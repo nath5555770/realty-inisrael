@@ -114,6 +114,36 @@
     });
   }
 
+  // ---- Villes actives (réglage admin : cities.inactive) ------------------
+  // Masque les villes désactivées des menus publics (filtre portefeuille +
+  // zone du formulaire de contact). Défaut si non réglé : Césarée + Jérusalem.
+  const DEFAULT_INACTIVE_CITIES = ['caesarea', 'jerusalem'];
+  const CITY_MATCH = {
+    'netanya': ['netanya'],
+    'herzliya': ['herzliya'],
+    'tel-aviv': ['tel-aviv', 'tel aviv'],
+    'caesarea': ['caesarea', 'césarée', 'cesaree', 'קיסריה', 'кесария'],
+    'jerusalem': ['jerusalem', 'jérusalem', 'ירושלים', 'иерусалим']
+  };
+  function inactiveCities(settings) {
+    const v = settings && settings['cities.inactive'];
+    if (Array.isArray(v)) return v;
+    if (typeof v === 'string') { try { const a = JSON.parse(v); if (Array.isArray(a)) return a; } catch (_) {} }
+    return DEFAULT_INACTIVE_CITIES.slice();
+  }
+  function applyCities(settings) {
+    const inactive = inactiveCities(settings);
+    if (!inactive.length) return;
+    const kill = new Set();
+    inactive.forEach(slug => (CITY_MATCH[slug] || [String(slug)]).forEach(s => kill.add(s.toLowerCase())));
+    document.querySelectorAll('#searchCity, select[name="zone"]').forEach(sel => {
+      Array.from(sel.options).forEach(o => {
+        const val = (o.value || o.textContent || '').trim().toLowerCase();
+        if (kill.has(val)) o.remove();
+      });
+    });
+  }
+
   // Public API
   const api = {
     texts: {},
@@ -139,6 +169,7 @@
     reapply() {
       applyTexts(this.texts);
       applyImages(this.settings);
+      applyCities(this.settings);
     }
   };
   window.SLCMS = api;
@@ -150,6 +181,7 @@
       api.ready = true;
       applyTexts(texts);
       applyImages(settings);
+      applyCities(settings);
       // Notify other modules
       document.dispatchEvent(new CustomEvent('sl-cms-ready', { detail: { isRefresh: !!isRefresh } }));
     });

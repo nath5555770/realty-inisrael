@@ -1695,6 +1695,12 @@
     STATE.settingsLoaded = true;
   }
 
+  function parseInactiveCities(v) {
+    if (Array.isArray(v)) return v;
+    if (typeof v === 'string') { try { const a = JSON.parse(v); if (Array.isArray(a)) return a; } catch (_) {} }
+    return ['caesarea', 'jerusalem']; // defaut si non regle
+  }
+
   function renderSettingsForm() {
     const layout = STATE.settings['journal.layout'] || 'magazine';
     const perRow = STATE.settings['journal.cards_per_row'] || 3;
@@ -1703,6 +1709,10 @@
     document.querySelectorAll('input[name="journalLayout"]').forEach(r => r.checked = r.value === layout);
     document.querySelectorAll('input[name="journalCardsPerRow"]').forEach(r => r.checked = parseInt(r.value, 10) === parseInt(perRow, 10));
     document.querySelectorAll('input[name="journalShowDuo"]').forEach(r => r.checked = (r.value === String(showDuo)));
+
+    // Villes proposées au public (case cochée = ville active)
+    const inactiveCities = parseInactiveCities(STATE.settings['cities.inactive']);
+    document.querySelectorAll('input[name="cityActive"]').forEach(cb => { cb.checked = inactiveCities.indexOf(cb.value) === -1; });
 
     // Hero gallery — normalize from settings into a working array
     STATE.heroImages = normalizeHeroImages(STATE.settings['home.hero.images']);
@@ -1877,7 +1887,13 @@
       // Multi-photos array (slideshow)
       { key: 'home.hero.images', value: cleanImages.length ? cleanImages : null },
       // First image kept as image_url for back-compat (data-image attribute on single img)
-      { key: 'home.hero.image_url', value: cleanImages[0] || null }
+      { key: 'home.hero.image_url', value: cleanImages[0] || null },
+      // Villes proposées au public (décochées = inactives, masquées du site)
+      { key: 'cities.inactive', value: (function () {
+        const all = ['netanya', 'herzliya', 'tel-aviv', 'caesarea', 'jerusalem'];
+        const checked = Array.from(document.querySelectorAll('input[name="cityActive"]:checked')).map(c => c.value);
+        return all.filter(c => checked.indexOf(c) === -1);
+      })() }
     ];
 
     for (const u of updates) {
