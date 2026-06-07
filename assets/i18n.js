@@ -14,6 +14,9 @@
   // Whenever you add/change French copy, add the matching EN+HE entry here.
   const DICT = {
     en: {
+      /* SL-cities-alt */
+      "Maison de prestige en Israël": "Prestige home in Israel",
+      "Appartement de standing en Israël": "Upscale apartment in Israel",
       /* SL-en-reponse */
       "Réponse": "Reply",
       /* SL-en-rest */
@@ -81,7 +84,7 @@
       ", dont les taux varient selon le statut de l'acheteur et le prix du bien. Un financement bancaire israélien reste accessible aux non-résidents, généralement jusqu'à environ 50 % de la valeur.": ", whose rates vary with the buyer's status and the property price. Israeli bank financing remains available to non-residents, generally up to around 50% of the value.",
       "Quelles zones couvrez-vous ?": "Which areas do you cover?",
       "La maison est établie à Netanya et intervient sur le littoral et les secteurs de prestige :": "The firm is based in Netanya and operates along the coast and in the prestige districts:",
-      "(dont Ir Yamim), Herzliya, Césarée, Jérusalem et Tel Aviv. Nous sommes spécialisés dans les biens résidentiels haut de gamme — appartements, penthouses, villas — ainsi que les locaux commerciaux et bureaux.": "(including Ir Yamim), Herzliya, Caesarea, Jerusalem and Tel Aviv. We specialise in high-end residential properties — apartments, penthouses, villas — as well as commercial premises and offices.",
+      "(dont Ir Yamim), Herzliya, Césarée, Jérusalem et Tel Aviv. Nous sommes spécialisés dans les biens résidentiels haut de gamme — appartements, penthouses, villas — ainsi que les locaux commerciaux et bureaux.": "(including Ir Yamim), Herzliya and Tel Aviv. We specialise in high-end residential properties — apartments, penthouses, villas — as well as commercial premises and offices.",
       "Proposez-vous des biens off-market (hors marché) ?": "Do you offer off-market (off-listing) properties?",
       "Oui. Une partie de nos biens de prestige n'est pas diffusée publiquement, à la demande des vendeurs. Ces opportunités confidentielles sont présentées directement aux acquéreurs qualifiés. Il suffit de": "Yes. Some of our prestige properties are not advertised publicly, at the sellers' request. These confidential opportunities are presented directly to qualified buyers. Simply",
       "nous contacter": "contact us",
@@ -674,6 +677,9 @@
     },
 
     he: {
+      /* SL-cities-alt */
+      "Maison de prestige en Israël": "בית יוקרה בישראל",
+      "Appartement de standing en Israël": "דירה יוקרתית בישראל",
       /* SL-he-rep */
       "Réponse": "מענה",
       /* SL-he-rest */
@@ -740,7 +746,7 @@
       ", dont les taux varient selon le statut de l'acheteur et le prix du bien. Un financement bancaire israélien reste accessible aux non-résidents, généralement jusqu'à environ 50 % de la valeur.": ", ששיעוריו משתנים לפי מעמד הרוכש ומחיר הנכס. מימון בנקאי ישראלי זמין גם לתושבי חוץ, בדרך כלל עד כ-50% מהשווי.",
       "Quelles zones couvrez-vous ?": "אילו אזורים אתם מכסים?",
       "La maison est établie à Netanya et intervient sur le littoral et les secteurs de prestige :": "המשרד ממוקם בנתניה ופועל לאורך החוף ובאזורי היוקרה:",
-      "(dont Ir Yamim), Herzliya, Césarée, Jérusalem et Tel Aviv. Nous sommes spécialisés dans les biens résidentiels haut de gamme — appartements, penthouses, villas — ainsi que les locaux commerciaux et bureaux.": "(כולל עיר ימים), הרצליה, קיסריה, ירושלים ותל אביב. אנו מתמחים בנכסי מגורים יוקרתיים — דירות, פנטהאוזים, וילות — וכן בנכסים מסחריים ומשרדים.",
+      "(dont Ir Yamim), Herzliya, Césarée, Jérusalem et Tel Aviv. Nous sommes spécialisés dans les biens résidentiels haut de gamme — appartements, penthouses, villas — ainsi que les locaux commerciaux et bureaux.": "(כולל עיר ימים), הרצליה ותל אביב. אנו מתמחים בנכסי מגורים יוקרתיים — דירות, פנטהאוזים, וילות — וכן בנכסים מסחריים ומשרדים.",
       "Proposez-vous des biens off-market (hors marché) ?": "האם אתם מציעים נכסים off-market (מחוץ לשוק)?",
       "Oui. Une partie de nos biens de prestige n'est pas diffusée publiquement, à la demande des vendeurs. Ces opportunités confidentielles sont présentées directement aux acquéreurs qualifiés. Il suffit de": "כן. חלק מנכסי היוקרה שלנו אינם מתפרסמים בפומבי, לבקשת המוכרים. הזדמנויות חסויות אלה מוצגות ישירות לרוכשים מתאימים. די ל",
       "nous contacter": "ליצור איתנו קשר",
@@ -1329,6 +1335,9 @@
     },
 
     ru: {
+      /* SL-cities-alt */
+      "Maison de prestige en Israël": "Престижный дом в Израиле",
+      "Appartement de standing en Israël": "Престижная квартира в Израиле",
       /* SL-ru-rep */
       "Réponse": "Ответ",
       /* SL-ru-rest */
@@ -1395,7 +1404,7 @@
       ", dont les taux varient selon le statut de l'acheteur et le prix du bien. Un financement bancaire israélien reste accessible aux non-résidents, généralement jusqu'à environ 50 % de la valeur.": ", ставки которого зависят от статуса покупателя и цены объекта. Израильское банковское финансирование доступно и нерезидентам, обычно до примерно 50% от стоимости.",
       "Quelles zones couvrez-vous ?": "Какие районы вы охватываете?",
       "La maison est établie à Netanya et intervient sur le littoral et les secteurs de prestige :": "Агентство находится в Нетании и работает на побережье и в престижных районах:",
-      "(dont Ir Yamim), Herzliya, Césarée, Jérusalem et Tel Aviv. Nous sommes spécialisés dans les biens résidentiels haut de gamme — appartements, penthouses, villas — ainsi que les locaux commerciaux et bureaux.": "(включая Ир-Ямим), Герцлия, Кесария, Иерусалим и Тель-Авив. Мы специализируемся на элитной жилой недвижимости — квартиры, пентхаусы, виллы — а также на коммерческих помещениях и офисах.",
+      "(dont Ir Yamim), Herzliya, Césarée, Jérusalem et Tel Aviv. Nous sommes spécialisés dans les biens résidentiels haut de gamme — appartements, penthouses, villas — ainsi que les locaux commerciaux et bureaux.": "(включая Ир-Ямим), Герцлия и Тель-Авив. Мы специализируемся на элитной жилой недвижимости — квартиры, пентхаусы, виллы — а также на коммерческих помещениях и офисах.",
       "Proposez-vous des biens off-market (hors marché) ?": "Предлагаете ли вы объекты off-market (вне рынка)?",
       "Oui. Une partie de nos biens de prestige n'est pas diffusée publiquement, à la demande des vendeurs. Ces opportunités confidentielles sont présentées directement aux acquéreurs qualifiés. Il suffit de": "Да. Часть наших элитных объектов не публикуется открыто по просьбе продавцов. Эти конфиденциальные возможности представляются напрямую квалифицированным покупателям. Достаточно",
       "nous contacter": "связаться с нами",
