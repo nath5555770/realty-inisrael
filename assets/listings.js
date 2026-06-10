@@ -221,7 +221,7 @@
         '<article class="estate mb-16" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-kind="', escapeHtml(l.kind || ''), '" data-deal="', escapeHtml(l.deal || ''), '" data-ref="', escapeHtml(l.ref || ''), '" data-slug="', escapeHtml(l.slug || ''), '" data-id="', escapeHtml(l.id || ''), '">',
         '  <div class="grid md:grid-cols-12 gap-10 items-center">',
         '    <div class="md:col-span-7 frame aspect-[16/10]">',
-        '      <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
+        '      <img loading="lazy" decoding="async" src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
         '      <div class="ref-tag">', escapeHtml(refTag), (l.signature ? ' · ' + T('PIÈCE SIGNATURE') : ''), '</div>',
         dealTag, kindTag,
         heart,
@@ -248,7 +248,7 @@
     return [
       '<article class="estate" data-city="', escapeHtml(l.city), '" data-type="', escapeHtml(l.type), '" data-kind="', escapeHtml(l.kind || ''), '" data-deal="', escapeHtml(l.deal || ''), '" data-ref="', escapeHtml(l.ref || ''), '" data-slug="', escapeHtml(l.slug || ''), '" data-id="', escapeHtml(l.id || ''), '">',
       '  <div class="frame aspect-[4/5] mb-5">',
-      '    <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
+      '    <img loading="lazy" decoding="async" src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
       '    <div class="ref-tag">', escapeHtml(refTag), '</div>',
       dealTag, kindTag,
       heart,
@@ -480,7 +480,7 @@
     return [
       '<article class="estate featured-card" data-ref="', escapeHtml(l.ref || ''), '" data-slug="', escapeHtml(l.slug || ''), '" data-id="', escapeHtml(l.id || ''), '">',
       '  <div class="frame aspect-[4/5] mb-5">',
-      '    <img src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
+      '    <img loading="lazy" decoding="async" src="', escapeHtml(img), '" class="w-full h-full object-cover" alt="', escapeHtml(l.title_main + ' ' + (l.title_accent || '')), '">',
       '    <div class="ref-tag">', (l.signature ? '★ ' : ''), escapeHtml(l.ref || ''), '</div>',
       '  </div>',
       '  <div class="label-teal">', cityLabel(l.city), ' · ', escapeHtml((l.neighborhood || '').toUpperCase()), '</div>',
