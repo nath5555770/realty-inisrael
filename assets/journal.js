@@ -157,7 +157,7 @@
         '<div class="article-reader-cover"></div>' +
         '<div class="article-reader-body">' +
           '<div class="article-reader-meta"></div>' +
-          '<h1 class="article-reader-title"></h1>' +
+          '<h2 class="article-reader-title"></h2>' +
           '<div class="article-reader-subtitle"></div>' +
           '<div class="article-reader-rule"><span></span></div>' +
           '<div class="article-reader-content"></div>' +
