@@ -136,7 +136,7 @@
     if (!inactive.length) return;
     const kill = new Set();
     inactive.forEach(slug => (CITY_MATCH[slug] || [String(slug)]).forEach(s => kill.add(s.toLowerCase())));
-    document.querySelectorAll('#searchCity, select[name="zone"]').forEach(sel => {
+    document.querySelectorAll('select').forEach(sel => {
       Array.from(sel.options).forEach(o => {
         const val = (o.value || o.textContent || '').trim().toLowerCase();
         if (kill.has(val)) o.remove();
