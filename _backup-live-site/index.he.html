@@ -636,11 +636,11 @@
     <div class="text-center mb-12">
       <div class="label-gold" data-text="home.coverage.eyebrow">כיסוי גיאוגרפי</div>
       <h2 class="mt-4 leading-[0.92]" style="font-size: clamp(2.25rem, 5vw, 4rem)">
-        <span class="display">חמש ערים,</span> <em class="display-i text-[var(--gold-deep)]">צוות אחד.</em>
+        <span class="display">Nos villes,</span> <em class="display-i text-[var(--gold-deep)]">צוות אחד.</em>
       </h2>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-      <a href="portefeuille.he.html" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
+      <a href="portefeuille.he.html" data-city="tel-aviv" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
         <img src="https://images.unsplash.com/photo-1544306094-e2dcf9479da3?w=900&amp;q=78&amp;auto=format" alt="נכס יוצא דופן בתל אביב" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" width="900" height="1200">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.1) 0%, rgba(14,39,34,0.85) 100%)"></div>
         <div class="absolute inset-0 p-5 flex flex-col justify-end text-white">
@@ -648,7 +648,7 @@
           <h3 class="display text-2xl mt-1">תל אביב</h3>
         </div>
       </a>
-      <a href="portefeuille.he.html" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
+      <a href="portefeuille.he.html" data-city="herzliya" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
         <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=900&amp;q=78&amp;auto=format" alt="וילה עכשווית בישראל" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" width="900" height="1200">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.1) 0%, rgba(14,39,34,0.85) 100%)"></div>
         <div class="absolute inset-0 p-5 flex flex-col justify-end text-white">
@@ -656,7 +656,7 @@
           <h3 class="display text-2xl mt-1">הרצליה</h3>
         </div>
       </a>
-      <a href="portefeuille.he.html" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
+      <a href="portefeuille.he.html" data-city="caesarea" class="relative aspect-[3/4] overflow-hidden cursor-pointer group sl-city-off">
         <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=900&amp;q=78&amp;auto=format" alt="פנטהאוז עם נוף לים בישראל" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" width="900" height="1200">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.1) 0%, rgba(14,39,34,0.85) 100%)"></div>
         <div class="absolute inset-0 p-5 flex flex-col justify-end text-white">
@@ -664,7 +664,7 @@
           <h3 class="display text-2xl mt-1">קיסריה</h3>
         </div>
       </a>
-      <a href="portefeuille.he.html" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
+      <a href="portefeuille.he.html" data-city="netanya" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
         <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=900&amp;q=78&amp;auto=format" alt="בית יוקרה בישראל" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" width="900" height="1200">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.1) 0%, rgba(14,39,34,0.85) 100%)"></div>
         <div class="absolute inset-0 p-5 flex flex-col justify-end text-white">
@@ -672,7 +672,7 @@
           <h3 class="display text-2xl mt-1">נתניה</h3>
         </div>
       </a>
-      <a href="portefeuille.he.html" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
+      <a href="portefeuille.he.html" data-city="jerusalem" class="relative aspect-[3/4] overflow-hidden cursor-pointer group sl-city-off">
         <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900&amp;q=78&amp;auto=format" alt="דירה יוקרתית בישראל" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" width="900" height="1200">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.1) 0%, rgba(14,39,34,0.85) 100%)"></div>
         <div class="absolute inset-0 p-5 flex flex-col justify-end text-white">
@@ -731,11 +731,11 @@
       <div class="md:col-span-3">
         <div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4" data-text="footer.col_villes">ערים</div>
         <ul class="space-y-2 text-sm text-[var(--paper)]/80">
-          <li><a class="hover:text-[var(--gold)]">תל אביב</a></li>
-          <li><a class="hover:text-[var(--gold)]">הרצליה</a></li>
-          <li><a class="hover:text-[var(--gold)]">קיסריה</a></li>
-          <li><a class="hover:text-[var(--gold)]">נתניה</a></li>
-          <li><a class="hover:text-[var(--gold)]">ירושלים</a></li>
+          <li data-city="tel-aviv"><a class="hover:text-[var(--gold)]">תל אביב</a></li>
+          <li data-city="herzliya"><a class="hover:text-[var(--gold)]">הרצליה</a></li>
+          <li data-city="caesarea" class="sl-city-off"><a class="hover:text-[var(--gold)]">קיסריה</a></li>
+          <li data-city="netanya"><a class="hover:text-[var(--gold)]">נתניה</a></li>
+          <li data-city="jerusalem" class="sl-city-off"><a class="hover:text-[var(--gold)]">ירושלים</a></li>
         </ul>
       </div>
       <div class="md:col-span-6">

@@ -133,7 +133,6 @@
   }
   function applyCities(settings) {
     const inactive = inactiveCities(settings);
-    if (!inactive.length) return;
     const kill = new Set();
     inactive.forEach(slug => (CITY_MATCH[slug] || [String(slug)]).forEach(s => kill.add(s.toLowerCase())));
     document.querySelectorAll('select').forEach(sel => {
@@ -141,6 +140,11 @@
         const val = (o.value || o.textContent || '').trim().toLowerCase();
         if (kill.has(val)) o.remove();
       });
+    });
+    // Cartes/listes ville (vitrine accueil, pied de page) : masque/affiche selon le reglage
+    const inactiveSet = new Set(inactive.map(function (x) { return String(x).toLowerCase(); }));
+    document.querySelectorAll("[data-city]").forEach(function (el) {
+      el.classList.toggle("sl-city-off", inactiveSet.has((el.getAttribute("data-city") || "").toLowerCase()));
     });
   }
 

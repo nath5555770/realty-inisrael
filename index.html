@@ -637,11 +637,11 @@
     <div class="text-center mb-12">
       <div class="label-gold" data-text="home.coverage.eyebrow">Couverture territoriale</div>
       <h2 class="mt-4 leading-[0.92]" style="font-size: clamp(2.25rem, 5vw, 4rem)">
-        <span class="display">Cinq villes,</span> <em class="display-i text-[var(--gold-deep)]">une équipe.</em>
+        <span class="display">Nos villes,</span> <em class="display-i text-[var(--gold-deep)]">une équipe.</em>
       </h2>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-      <a href="portefeuille.html" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
+      <a href="portefeuille.html" data-city="tel-aviv" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
         <img src="https://images.unsplash.com/photo-1544306094-e2dcf9479da3?w=900&q=78&auto=format" alt="Bien d’exception à Tel Aviv" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" width="900" height="1200">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.1) 0%, rgba(14,39,34,0.85) 100%)"></div>
         <div class="absolute inset-0 p-5 flex flex-col justify-end text-white">
@@ -649,7 +649,7 @@
           <h3 class="display text-2xl mt-1">Tel Aviv</h3>
         </div>
       </a>
-      <a href="portefeuille.html" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
+      <a href="portefeuille.html" data-city="herzliya" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
         <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=900&q=78&auto=format" alt="Villa contemporaine en Israël" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" width="900" height="1200">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.1) 0%, rgba(14,39,34,0.85) 100%)"></div>
         <div class="absolute inset-0 p-5 flex flex-col justify-end text-white">
@@ -657,7 +657,7 @@
           <h3 class="display text-2xl mt-1">Herzliya</h3>
         </div>
       </a>
-      <a href="portefeuille.html" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
+      <a href="portefeuille.html" data-city="caesarea" class="relative aspect-[3/4] overflow-hidden cursor-pointer group sl-city-off">
         <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=900&q=78&auto=format" alt="Penthouse vue mer en Israël" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" width="900" height="1200">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.1) 0%, rgba(14,39,34,0.85) 100%)"></div>
         <div class="absolute inset-0 p-5 flex flex-col justify-end text-white">
@@ -665,7 +665,7 @@
           <h3 class="display text-2xl mt-1">Caesarea</h3>
         </div>
       </a>
-      <a href="portefeuille.html" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
+      <a href="portefeuille.html" data-city="netanya" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
         <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=900&q=78&auto=format" alt="Maison de prestige en Israël" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" width="900" height="1200">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.1) 0%, rgba(14,39,34,0.85) 100%)"></div>
         <div class="absolute inset-0 p-5 flex flex-col justify-end text-white">
@@ -673,7 +673,7 @@
           <h3 class="display text-2xl mt-1">Netanya</h3>
         </div>
       </a>
-      <a href="portefeuille.html" class="relative aspect-[3/4] overflow-hidden cursor-pointer group">
+      <a href="portefeuille.html" data-city="jerusalem" class="relative aspect-[3/4] overflow-hidden cursor-pointer group sl-city-off">
         <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900&q=78&auto=format" alt="Appartement de standing en Israël" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" width="900" height="1200">
         <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.1) 0%, rgba(14,39,34,0.85) 100%)"></div>
         <div class="absolute inset-0 p-5 flex flex-col justify-end text-white">
@@ -732,11 +732,11 @@
       <div class="md:col-span-3">
         <div class="cinzel text-[11px] tracking-[0.3em] text-[var(--gold)] mb-4" data-text="footer.col_villes">VILLES</div>
         <ul class="space-y-2 text-sm text-[var(--paper)]/80">
-          <li><a class="hover:text-[var(--gold)]">Tel Aviv</a></li>
-          <li><a class="hover:text-[var(--gold)]">Herzliya</a></li>
-          <li><a class="hover:text-[var(--gold)]">Caesarea</a></li>
-          <li><a class="hover:text-[var(--gold)]">Netanya</a></li>
-          <li><a class="hover:text-[var(--gold)]">Jérusalem</a></li>
+          <li data-city="tel-aviv"><a class="hover:text-[var(--gold)]">Tel Aviv</a></li>
+          <li data-city="herzliya"><a class="hover:text-[var(--gold)]">Herzliya</a></li>
+          <li data-city="caesarea" class="sl-city-off"><a class="hover:text-[var(--gold)]">Caesarea</a></li>
+          <li data-city="netanya"><a class="hover:text-[var(--gold)]">Netanya</a></li>
+          <li data-city="jerusalem" class="sl-city-off"><a class="hover:text-[var(--gold)]">Jérusalem</a></li>
         </ul>
       </div>
       <div class="md:col-span-6">

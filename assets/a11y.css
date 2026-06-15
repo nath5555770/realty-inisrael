@@ -223,3 +223,6 @@ html.a11y-big-cursor, html.a11y-big-cursor * {
   outline: 3px solid #1d6cd1 !important;
   outline-offset: 3px !important;
 }
+
+/* Villes désactivées (réglage admin cities.inactive) : masquées sans clignotement */
+[data-city].sl-city-off { display: none !important; }
