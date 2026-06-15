@@ -237,7 +237,7 @@
 
       // Cities
       'Couverture territoriale': 'Territorial coverage',
-      'Cinq villes,': 'Five cities,',
+      "Nos villes,": "Our cities,",
       'une équipe.': 'one team.',
       '8 BIENS': '8 PROPERTIES',
       '4 BIENS': '4 PROPERTIES',
@@ -899,7 +899,7 @@
 
       // Cities
       'Couverture territoriale': 'כיסוי גיאוגרפי',
-      'Cinq villes,': 'חמש ערים,',
+      "Nos villes,": "הערים שלנו,",
       'une équipe.': 'צוות אחד.',
       '8 BIENS': '8 נכסים',
       '4 BIENS': '4 נכסים',
@@ -1559,7 +1559,7 @@
 
       // Cities
       'Couverture territoriale': 'Территориальное покрытие',
-      'Cinq villes,': 'Пять городов,',
+      "Nos villes,": "Наши города,",
       'une équipe.': 'одна команда.',
       '8 BIENS': '8 ОБЪЕКТОВ',
       '4 BIENS': '4 ОБЪЕКТА',
