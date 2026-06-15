@@ -27,6 +27,21 @@
     });
   }
 
+  // Notification email : prévient Nathalie par email à chaque nouveau lead,
+  // EN PLUS de l'enregistrement Supabase. Via FormSubmit (aucune inscription ni
+  // clé API : la 1re soumission déclenche un email d'activation à valider une fois).
+  // Fire-and-forget : n'impacte jamais l'expérience du visiteur.
+  var NOTIFY_TO = 'Nathhaik.realestate@gmail.com';
+  function notifyEmail(fields, subject) {
+    try {
+      fetch('https://formsubmit.co/ajax/' + NOTIFY_TO, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ _subject: subject, _template: 'table', _captcha: 'false' }, fields))
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
   function banner(el, type, html) {
     var d = document.createElement('div');
     d.setAttribute('role', type === 'ok' ? 'status' : 'alert');
@@ -64,6 +79,17 @@
         lang: lang()
       };
       insert('contact_requests', payload).then(function () {
+        notifyEmail({
+          'Nom': (payload.first_name + ' ' + payload.last_name).trim(),
+          'Email': payload.email,
+          'Téléphone': payload.phone || '—',
+          'Pays': payload.country || '—',
+          'Sujet': payload.subject || '—',
+          'Budget': payload.budget || '—',
+          'Zone': payload.zone || '—',
+          'Projet': payload.project || '—',
+          'Langue': payload.lang
+        }, 'Nouvelle demande de contact — realty-inisrael.com');
         form.querySelectorAll('input,select,textarea,button').forEach(function (el) { el.style.display = 'none'; });
         banner(form, 'ok', '<strong>Merci, votre demande a bien été transmise.</strong><br>Nathalie vous répond personnellement sous 24h ouvrées.');
       }).catch(function (err) {
@@ -84,6 +110,7 @@
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { nlInput.focus(); nlInput.reportValidity && nlInput.reportValidity(); return; }
       nlBtn.disabled = true; var ol = nlBtn.textContent; nlBtn.textContent = '…';
       insert('newsletter_subscribers', { email: email, lang: lang() }).then(function () {
+        notifyEmail({ 'Email': email, 'Type': 'Inscription carnet privé / newsletter', 'Langue': lang() }, 'Nouvelle inscription newsletter — realty-inisrael.com');
         var wrap = nlInput.parentElement;
         nlInput.style.display = 'none'; nlBtn.style.display = 'none';
         banner(wrap, 'ok', '<strong>Merci, vous êtes inscrit·e au carnet privé.</strong>');
