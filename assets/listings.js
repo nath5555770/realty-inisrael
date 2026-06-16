@@ -494,9 +494,28 @@
     ].join('');
   }
 
+  // Met à jour les VRAIS compteurs d'annonces par ville sur les cartes
+  // d'accueil (remplace les chiffres codés en dur) + le compteur du CTA.
+  // "SUR DEMANDE" si la ville n'a aucune annonce visible.
+  function updateCityCounts(rows) {
+    try {
+      const counts = {};
+      (rows || []).forEach(l => { const c = (l.city || '').toLowerCase().trim(); if (c) counts[c] = (counts[c] || 0) + 1; });
+      document.querySelectorAll('[data-city] .city-count').forEach(el => {
+        const card = el.closest('[data-city]');
+        const slug = (card.getAttribute('data-city') || '').toLowerCase().trim();
+        const n = counts[slug] || 0;
+        el.textContent = n > 0 ? (n + (n > 1 ? ' BIENS' : ' BIEN')) : 'SUR DEMANDE';
+      });
+      const cta = document.getElementById('portfolioCount');
+      if (cta) cta.textContent = String((rows || []).length);
+    } catch (e) {}
+  }
+
   function renderFeatured(container, count) {
     return load().then(rows => {
       count = count || 3;
+      updateCityCounts(rows);
       // Anything flagged "Signature" (★) is auto-promoted to the home selection
       // and listed BEFORE the "À la une" picks. Deduped if a listing is both.
       const signatures = rows.filter(l => l.signature === true);
