@@ -383,7 +383,8 @@
 <!-- HERO -->
 <section class="relative min-h-[92vh] md:min-h-screen flex items-end overflow-hidden">
   <div class="hero-stage" id="heroStage" data-images="home.hero.images">
-    <img src="https://bqxufehuezvgmmiiijsc.supabase.co/storage/v1/object/public/listing-images/_site/mpl86dn2.jpg" data-image="home.hero.image_url" alt="Элитная вилла в Израиле - SHAHAR LEVI &amp; NATHALIE HAIK Real Estate" class="hero-slide is-active ken-burns" width="1600" height="1067" fetchpriority="high" decoding="async">
+    <img id="heroImg" src="https://bqxufehuezvgmmiiijsc.supabase.co/storage/v1/object/public/listing-images/_site/mpl86dn2.jpg" data-image="home.hero.image_url" alt="Элитная вилла в Израиле - SHAHAR LEVI &amp; NATHALIE HAIK Real Estate" class="hero-slide is-active ken-burns" width="1600" height="1067" fetchpriority="high" decoding="async">
+    <script>/* auto-réparation hero : applique la dernière photo mémorisée avant tout flash */(function(){try{var u=localStorage.getItem('sl-hero-url'),i=document.getElementById('heroImg');if(u&&i&&i.getAttribute('src')!==u){i.src=u;}}catch(e){}})();</script>
   </div>
   <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(14,39,34,0.45) 0%, rgba(14,39,34,0.35) 30%, rgba(14,39,34,0.78) 65%, rgba(14,39,34,0.96) 100%)"></div>
 

@@ -107,9 +107,14 @@
       const key = el.getAttribute('data-image');
       const url = settings[key];
       if (url && typeof url === 'string' && url.trim()) {
+        const clean = url.trim();
         // <img> uses src; backgrounds use style.backgroundImage
-        if (el.tagName === 'IMG') el.src = url.trim();
-        else el.style.backgroundImage = 'url("' + url.trim().replace(/"/g, '\\"') + '")';
+        if (el.tagName === 'IMG') el.src = clean;
+        else el.style.backgroundImage = 'url("' + clean.replace(/"/g, '\\"') + '")';
+        // Auto-réparation hero : mémorise la photo d'accueil pour l'afficher
+        // instantanément au prochain chargement (zéro flash, même si l'admin
+        // change la photo). Lue par le script inline en haut de index.html.
+        if (key === 'home.hero.image_url') { try { localStorage.setItem('sl-hero-url', clean); } catch (_) {} }
       }
     });
   }
