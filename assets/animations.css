@@ -427,6 +427,10 @@ html[dir="rtl"] [class*="text-left"] { text-align: right !important; }
 html[dir="rtl"] [class*="text-right"] { text-align: left !important; }
 html[dir="rtl"] .num-tile { border-right: none; border-left: 1px solid var(--line); }
 html[dir="rtl"] .num-tile:last-child { border-left: none; }
+/* Listings have no reference number yet, so the .ref-tag badge renders empty —
+   an empty beige (paper) rectangle in the top-left corner of every photo. Hide
+   it until there's actual content (a ref number or the ★ signature marker). */
+.ref-tag:empty { display: none; }
 html[dir="rtl"] .ref-tag { right: auto; left: 14px; }
 html[dir="rtl"] .arrow-after::after { content: '←'; }
 html[dir="rtl"] .arrow-before::before { content: '←'; }
