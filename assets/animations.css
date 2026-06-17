@@ -648,6 +648,29 @@ body.admin-page #pwa-install-banner { display: none; }
 .featured-carousel .featured-card {
   flex: 0 0 auto;
   min-width: 0;
+  /* Flex column so every card shares the same internal structure: image on
+     top, the rooms · DÉTAILS row pinned to the base. Cards then line up no
+     matter how long each description is. */
+  display: flex;
+  flex-direction: column;
+}
+/* Clamp the teaser description. Without this, one listing with a long
+   description makes its card very tall; the flex row stretches every other
+   card to match (leaving big empty "beige" gaps under the short ones) and the
+   arrows — centred at top:50% of that tall row — slide down into the middle of
+   the card. Clamping keeps every card a compact, even height. Full text stays
+   one tap away via "DÉTAILS →". */
+.featured-carousel .featured-card > p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+/* Pin the rooms · DÉTAILS footer to the bottom of every card so the baselines
+   align across the row. */
+.featured-carousel .featured-card > .flex {
+  margin-top: auto;
 }
 .featured-carousel .featured-controls {
   display: flex;
@@ -714,6 +737,12 @@ body.admin-page #pwa-install-banner { display: none; }
   .featured-carousel .featured-arrow { width: 38px; height: 38px; }
   .featured-carousel .featured-prev { left: 0.4rem; }
   .featured-carousel .featured-next { right: 0.4rem; }
+  /* One card per view on phones: the photo dominates the card, so centre the
+     arrows on the photo (≈35% down) instead of the geometric middle, which
+     after clamping sits near the bottom of the image. */
+  .featured-carousel .featured-arrow { top: 36%; }
+  /* Tighter clamp on the narrow phone card keeps the row perfectly even. */
+  .featured-carousel .featured-card > p { -webkit-line-clamp: 3; line-clamp: 3; }
 }
 @media (prefers-reduced-motion: reduce) {
   .featured-carousel .featured-track { transition: none; }
