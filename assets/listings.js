@@ -987,9 +987,31 @@
     });
   }
 
+  // Per-listing view counter — fire-and-forget, deduped once per listing per day
+  // per browser. Calls a SECURITY DEFINER RPC (increment_listing_view) so the
+  // anon client can only increment, never read/write the table directly. Silently
+  // no-ops if the RPC/table isn't deployed yet, so the page never breaks.
+  function trackListingView(id) {
+    if (!id) return;
+    try {
+      const k = 'sl-viewed-' + id, today = new Date().toISOString().slice(0, 10);
+      if (localStorage.getItem(k) === today) return;   // count once per day per browser
+      localStorage.setItem(k, today);
+    } catch (_) {}
+    try {
+      fetch(SB_URL + '/rest/v1/rpc/increment_listing_view', {
+        method: 'POST',
+        headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ p_listing: id }),
+        keepalive: true
+      }).catch(function () {});
+    } catch (_) {}
+  }
+
   function openListingReader(rawL) {
     lastReaderTrigger = document.activeElement;
     const l = localizedListing(rawL);
+    trackListingView(rawL && rawL.id);
     buildListingReader();
     const m = document.getElementById('listingReader');
     // Build the full gallery: cover first, then any extra `images` (deduped)

@@ -159,7 +159,22 @@
       .order('created_at', { ascending: true });
     if (error) { toast(error.message, 'error', 'Erreur'); throw error; }
     STATE.listings = data || [];
+    await loadViewCounts();
     return data;
+  }
+
+  // Per-listing view counts (table listing_views, fed by the public site's
+  // increment_listing_view RPC). Best-effort: if the table isn't deployed yet,
+  // counts stay at 0 and nothing breaks.
+  async function loadViewCounts() {
+    STATE.viewCounts = STATE.viewCounts || {};
+    try {
+      const { data, error } = await sb.from('listing_views').select('listing_id, views');
+      if (error) return;
+      const map = {};
+      (data || []).forEach(r => { map[r.listing_id] = r.views; });
+      STATE.viewCounts = map;
+    } catch (_) {}
   }
 
   function listingsStats() {
@@ -229,7 +244,7 @@
         '<div class="thumb" style="background-image:url(\'' + escapeHtml(imageUrl(BUCKET_LISTINGS, l.image)) + '\')"></div>' +
         '<div class="info">' +
           '<div class="title">' + escapeHtml(l.title_main || '') + ' <em>' + escapeHtml(l.title_accent || '') + '</em>' + trBadge + '</div>' +
-          '<div class="sub">' + escapeHtml(l.ref || '') + ' · ' + escapeHtml(l.neighborhood || '') + ' · par <em>' + escapeHtml(authorLabel(l.created_by)) + '</em></div>' +
+          '<div class="sub">' + escapeHtml(l.ref || '') + ' · ' + escapeHtml(l.neighborhood || '') + ' · par <em>' + escapeHtml(authorLabel(l.created_by)) + '</em> · <span class="views" title="Vues — comptées 1 fois par visiteur et par jour">👁 ' + ((STATE.viewCounts && STATE.viewCounts[l.id]) || 0) + '</span></div>' +
         '</div>' +
         '<div class="city-tag">' + cityLabel(l.city) + '</div>' +
         '<div class="badges">' + badges.join('') + '</div>' +
