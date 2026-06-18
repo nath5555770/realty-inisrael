@@ -1868,6 +1868,49 @@
     }
     STATE.pendingHeroFiles = {}; // index -> File (for new uploads not yet pushed)
     renderHeroGallery();
+
+    // City photos (home-page vignettes) — each stored in site_settings under home.city.<slug>
+    STATE.cityPhotos = {};
+    CITY_PHOTO_LIST.forEach(c => { STATE.cityPhotos[c[0]] = (STATE.settings['home.city.' + c[0]] || '') || null; });
+    STATE.pendingCityFiles = {};
+    renderCityPhotos();
+  }
+
+  const CITY_PHOTO_LIST = [['tel-aviv', 'Tel Aviv'], ['herzliya', 'Herzliya'], ['netanya', 'Netanya']];
+  function renderCityPhotos() {
+    const grid = $('#cityPhotosGrid'); if (!grid) return;
+    grid.innerHTML = CITY_PHOTO_LIST.map(([slug, name]) => {
+      const url = (STATE.cityPhotos && STATE.cityPhotos[slug]) || '';
+      const has = !!url;
+      const bg = url ? 'background-image:url(\'' + (url + '').replace(/'/g, "\\'") + '\')' : '';
+      return '<div class="city-photo-tile' + (has ? ' has-custom' : '') + '">' +
+        '<div class="city-photo-preview" style="' + bg + '">' + (has ? '' : '<span>défaut</span>') + '</div>' +
+        '<div class="city-photo-body">' +
+          '<div class="city-photo-name">' + escapeHtml(name) + '</div>' +
+          '<div class="city-photo-actions">' +
+            '<label class="btn-ghost btn-sm">Choisir…<input type="file" accept="image/*" data-city-file="' + slug + '" style="display:none"></label>' +
+            (has ? '<button type="button" class="btn-text" data-city-reset="' + slug + '">↺ défaut</button>' : '') +
+          '</div>' +
+          '<input type="url" data-city-url="' + slug + '" value="' + escapeHtml(url) + '" placeholder="ou coller une URL d\'image" class="field-image-url">' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    grid.querySelectorAll('[data-city-file]').forEach(inp => inp.addEventListener('change', e => {
+      const slug = inp.dataset.cityFile, file = e.target.files && e.target.files[0]; if (!file) return;
+      STATE.pendingCityFiles[slug] = file;
+      STATE.cityPhotos[slug] = URL.createObjectURL(file);
+      renderCityPhotos();
+    }));
+    grid.querySelectorAll('[data-city-url]').forEach(inp => inp.addEventListener('change', () => {
+      const slug = inp.dataset.cityUrl, v = (inp.value || '').trim();
+      STATE.cityPhotos[slug] = v || null; delete STATE.pendingCityFiles[slug];
+      renderCityPhotos();
+    }));
+    grid.querySelectorAll('[data-city-reset]').forEach(btn => btn.addEventListener('click', () => {
+      const slug = btn.dataset.cityReset;
+      STATE.cityPhotos[slug] = null; delete STATE.pendingCityFiles[slug];
+      renderCityPhotos();
+    }));
   }
 
   function normalizeHeroImages(raw) {
@@ -2025,6 +2068,30 @@
     // Strip any leftover blob:/data: URLs (would 404 publicly)
     const cleanImages = finalImages.filter(u => u && !u.startsWith('blob:') && !u.startsWith('data:'));
 
+    // City photos: upload any pending files, then build one setting per city.
+    const cityUpdates = [];
+    {
+      const cityProg = $('#cityPhotosProgress');
+      for (const [slug] of CITY_PHOTO_LIST) {
+        let val = STATE.cityPhotos ? STATE.cityPhotos[slug] : null;
+        if (STATE.pendingCityFiles && STATE.pendingCityFiles[slug]) {
+          try {
+            if (cityProg) { cityProg.hidden = false; cityProg.textContent = 'Téléversement photo (' + slug + ')…'; }
+            const path = await uploadImage(BUCKET_LISTINGS, '_site', STATE.pendingCityFiles[slug], cityProg);
+            val = window.SL_SUPABASE.url + '/storage/v1/object/public/' + BUCKET_LISTINGS + '/' + path;
+          } catch (e) {
+            btn.disabled = false; btn.textContent = old;
+            status.textContent = '✕ ' + e.message; toast('Erreur upload ville : ' + e.message, 'error');
+            return;
+          }
+        }
+        if (val && (val.startsWith('blob:') || val.startsWith('data:'))) val = null;
+        cityUpdates.push({ key: 'home.city.' + slug, value: val || null });
+      }
+      if (cityProg) cityProg.hidden = true;
+      STATE.pendingCityFiles = {};
+    }
+
     const updates = [
       { key: 'journal.layout', value: layout },
       { key: 'journal.cards_per_row', value: perRow },
@@ -2038,7 +2105,8 @@
         const all = ['netanya', 'herzliya', 'tel-aviv', 'caesarea', 'jerusalem'];
         const checked = Array.from(document.querySelectorAll('input[name="cityActive"]:checked')).map(c => c.value);
         return all.filter(c => checked.indexOf(c) === -1);
-      })() }
+      })() },
+      ...cityUpdates
     ];
 
     for (const u of updates) {

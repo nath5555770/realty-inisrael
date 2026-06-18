@@ -1909,3 +1909,17 @@ body {
 .stats-cols:last-child { margin-bottom: 0; }
 .stats-cols-3 { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 860px) { .stats-cols-3 { grid-template-columns: 1fr; } }
+
+/* Photos des villes (réglages) */
+.city-photos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 6px; }
+.city-photo-tile { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--paper-light); }
+.city-photo-preview { aspect-ratio: 3 / 4; background-size: cover; background-position: center; background-color: var(--paper-deep); display: flex; align-items: center; justify-content: center; }
+.city-photo-preview span { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+.city-photo-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.city-photo-name { font-size: 16px; font-weight: 600; color: var(--ink); }
+.city-photo-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.city-photo-actions .btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-text { background: none; border: none; color: var(--gold-deep); font-size: 12px; cursor: pointer; padding: 4px; }
+.btn-text:hover { text-decoration: underline; }
+.city-photo-body .field-image-url { width: 100%; }
+@media (max-width: 720px) { .city-photos-grid { grid-template-columns: 1fr; } }
