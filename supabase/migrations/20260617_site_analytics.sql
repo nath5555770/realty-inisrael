@@ -62,3 +62,10 @@ language sql security definer set search_path = public stable as $$
   group by 1 order by 1;
 $$;
 grant execute on function public.stats_daily(int) to authenticated;
+
+-- CREATE FUNCTION grants EXECUTE to PUBLIC by default. Revoke it so the public
+-- anon key can't read traffic stats — only logged-in admins. (track_event stays
+-- anon-callable: the public site must be able to log a view.)
+revoke execute on function public.stats_overview() from anon, public;
+revoke execute on function public.stats_top_pages(int, int) from anon, public;
+revoke execute on function public.stats_daily(int) from anon, public;
