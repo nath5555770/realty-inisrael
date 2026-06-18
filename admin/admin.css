@@ -1903,3 +1903,9 @@ body {
   .stats-chart { height: 130px; }
   .sc-day { font-size: 9px; }
 }
+
+/* stats: stacked rows + 3-col breakdown */
+.stats-cols { margin-bottom: 20px; }
+.stats-cols:last-child { margin-bottom: 0; }
+.stats-cols-3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 860px) { .stats-cols-3 { grid-template-columns: 1fr; } }

@@ -29,26 +29,66 @@
   const CACHE_SETTINGS = 'sl-cms-settings-v1';
   const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
-  // ---- First-party page-view tracking (privacy-clean: no cookie, no IP, no PII)
-  // Fires once per page load → public.track_event RPC (write-only, SECURITY
-  // DEFINER). The visitor id is an anonymous per-session value (sessionStorage)
-  // used only to estimate unique visits — it identifies no one. Never blocks the
-  // page and silently no-ops if the RPC isn't deployed. Admin pages are excluded.
+  // ---- First-party page-view tracking (privacy-clean: no cookie, no IP stored,
+  // no personal data). Captures path, an anonymous per-session id, the traffic
+  // source (referrer), device / browser / OS, language and COUNTRY. Country is
+  // geolocated anonymously — only the 2-letter code is sent; the IP is never
+  // seen or stored by us. Fires once per page load → public.track_event. Admin
+  // pages excluded. Never blocks the page; silently no-ops if the RPC is absent.
   (function trackPageView() {
     try {
       if (/\/admin(\/|$)/.test(location.pathname || '')) return;
-      var vid;
-      try {
-        vid = sessionStorage.getItem('sl-sid');
-        if (!vid) { vid = Date.now().toString(36) + Math.random().toString(36).slice(2, 10); sessionStorage.setItem('sl-sid', vid); }
-      } catch (_) { vid = 'na'; }
+      var ss = window.sessionStorage;
+      var vid; try { vid = ss.getItem('sl-sid'); if (!vid) { vid = Date.now().toString(36) + Math.random().toString(36).slice(2, 10); ss.setItem('sl-sid', vid); } } catch (_) { vid = 'na'; }
       var path = (location.pathname || '/').replace(/index\.html$/, '') || '/';
-      fetch(SB_URL + '/rest/v1/rpc/track_event', {
-        method: 'POST',
-        headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ p_path: path.slice(0, 300), p_visitor: vid }),
-        keepalive: true
-      }).catch(function () {});
+      var ua = navigator.userAgent || '';
+
+      var source = 'direct';
+      try {
+        var ref = document.referrer || '';
+        if (ref) {
+          var rh = new URL(ref).hostname.replace(/^www\./, '');
+          if (rh === location.hostname) source = 'interne';
+          else if (/(^|\.)google\./.test(rh)) source = 'google';
+          else if (/(facebook|fb\.com|fb\.me)/.test(rh)) source = 'facebook';
+          else if (/instagram/.test(rh)) source = 'instagram';
+          else if (/(t\.co|twitter|x\.com)/.test(rh)) source = 'twitter/x';
+          else if (/linkedin|lnkd\.in/.test(rh)) source = 'linkedin';
+          else if (/youtu/.test(rh)) source = 'youtube';
+          else if (/tiktok/.test(rh)) source = 'tiktok';
+          else if (/(bing|yahoo|duckduckgo|ecosia|qwant)/.test(rh)) source = 'autre moteur';
+          else source = rh;
+        }
+      } catch (_) {}
+
+      var device = /(iPad|Tablet|PlayBook|Silk)/.test(ua) ? 'tablette' : (/(Mobi|Android|iPhone|iPod)/.test(ua) ? 'mobile' : 'ordinateur');
+      var browser = /Edg/.test(ua) ? 'Edge' : /OPR|Opera/.test(ua) ? 'Opera' : /SamsungBrowser/.test(ua) ? 'Samsung' : /Chrome/.test(ua) ? 'Chrome' : /Firefox/.test(ua) ? 'Firefox' : /Safari/.test(ua) ? 'Safari' : 'autre';
+      var os = /Android/.test(ua) ? 'Android' : /(iPhone|iPad|iPod)/.test(ua) ? 'iOS' : /Mac OS X/.test(ua) ? 'macOS' : /Windows/.test(ua) ? 'Windows' : /Linux/.test(ua) ? 'Linux' : 'autre';
+      var lang = (navigator.language || '').slice(0, 2).toLowerCase();
+
+      function send(country) {
+        fetch(SB_URL + '/rest/v1/rpc/track_event', {
+          method: 'POST',
+          headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_path: path.slice(0, 300), p_visitor: vid, p_source: source, p_device: device, p_browser: browser, p_os: os, p_lang: lang, p_country: country || null }),
+          keepalive: true
+        }).catch(function () {});
+      }
+
+      var cc; try { cc = ss.getItem('sl-cc'); } catch (_) {}
+      if (cc) { send(cc === '-' ? null : cc); return; }
+      // Country geolocation sends the IP to a third party, so it runs ONLY after
+      // the visitor accepted the cookie banner. Without consent: no geo, no
+      // country — but the anonymous (no-cookie, no-IP) page view is still logged.
+      var consent; try { consent = localStorage.getItem('cookies-accepted'); } catch (_) {}
+      if (consent !== 'true') { send(null); return; }
+      var sent = false;
+      var done = function (c) { if (sent) return; sent = true; try { ss.setItem('sl-cc', c || '-'); } catch (_) {} send(c); };
+      var to = setTimeout(function () { done(null); }, 1500);
+      fetch('https://ipwho.is/?fields=country_code', { referrerPolicy: 'no-referrer' })
+        .then(function (r) { return r.json(); })
+        .then(function (g) { clearTimeout(to); done(g && g.country_code ? String(g.country_code).toUpperCase().slice(0, 2) : null); })
+        .catch(function () { clearTimeout(to); done(null); });
     } catch (_) {}
   })();
 

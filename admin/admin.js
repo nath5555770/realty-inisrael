@@ -104,6 +104,7 @@
       renderStatsChart(daily.data || []);
       renderTopPages(pages.data || []);
       renderTopListings();
+      loadStatsExtra();
     } catch (e) {
       if (note) { note.hidden = false; note.innerHTML = '⚠️ Les statistiques ne sont pas encore activées. Lancez le script SQL <code>20260617_site_analytics.sql</code> dans Supabase (SQL Editor) pour démarrer la collecte.'; }
     }
@@ -152,6 +153,57 @@
       const name = (x.l.title_main || x.l.ref || 'Annonce') + (x.l.title_accent ? ' ' + x.l.title_accent : '');
       return '<div class="stats-row"><div class="stats-bar" style="width:' + w + '%"></div><span class="stats-name">' +
         escapeHtml(name) + '</span><span class="stats-val">👁 ' + x.v + '</span></div>';
+    }).join('');
+  }
+
+  const REGION_NAMES = (() => { try { return new Intl.DisplayNames(['fr'], { type: 'region' }); } catch (_) { return null; } })();
+  function countryName(cc) { if (!cc || cc === '?') return 'Inconnu'; try { return (REGION_NAMES && REGION_NAMES.of(cc)) || cc; } catch (_) { return cc; } }
+  function flagEmoji(cc) { if (!cc || cc.length !== 2 || cc === '?') return ''; try { return String.fromCodePoint(0x1F1E6 + cc.charCodeAt(0) - 65, 0x1F1E6 + cc.charCodeAt(1) - 65); } catch (_) { return ''; } }
+
+  async function loadStatsExtra() {
+    try {
+      const [src, ctry, dev, brw, os] = await Promise.all([
+        sb.rpc('stats_top_sources', { p_days: 30, p_limit: 12 }),
+        sb.rpc('stats_breakdown', { p_field: 'country', p_days: 30, p_limit: 15 }),
+        sb.rpc('stats_breakdown', { p_field: 'device', p_days: 30, p_limit: 8 }),
+        sb.rpc('stats_breakdown', { p_field: 'browser', p_days: 30, p_limit: 8 }),
+        sb.rpc('stats_breakdown', { p_field: 'os', p_days: 30, p_limit: 8 })
+      ]);
+      if (src.error || ctry.error || dev.error) throw (src.error || ctry.error || dev.error);
+      renderSources(src.data || []);
+      renderBreakdown('statsCountries', ctry.data || [], true);
+      renderBreakdown('statsDevices', dev.data || [], false);
+      renderBreakdown('statsBrowsers', brw.data || [], false);
+      renderBreakdown('statsOs', os.data || [], false);
+    } catch (_) {
+      ['statsSources', 'statsCountries', 'statsDevices', 'statsBrowsers', 'statsOs'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.innerHTML = '<div class="stats-empty">À activer : lancez le 2ᵉ script SQL (enrichissement).</div>';
+      });
+    }
+  }
+
+  function renderSources(rows) {
+    const host = $('#statsSources'); if (!host) return;
+    if (!rows.length) { host.innerHTML = '<div class="stats-empty">—</div>'; return; }
+    const max = rows[0].views || 1;
+    host.innerHTML = rows.map(r => {
+      const w = Math.round((r.views / max) * 100);
+      return '<div class="stats-row"><div class="stats-bar" style="width:' + w + '%"></div><span class="stats-name">' +
+        escapeHtml(r.source || 'direct') + '</span><span class="stats-val">' + r.views + ' <em>vues</em> · ' + r.visitors + ' vis.</span></div>';
+    }).join('');
+  }
+
+  function renderBreakdown(hostId, rows, isCountry) {
+    const host = $('#' + hostId); if (!host) return;
+    if (!rows.length) { host.innerHTML = '<div class="stats-empty">—</div>'; return; }
+    const max = rows[0].views || 1;
+    host.innerHTML = rows.map(r => {
+      const w = Math.round((r.views / max) * 100);
+      let label = r.label;
+      if (isCountry) { const cc = String(r.label || '').toUpperCase(); const fl = flagEmoji(cc); label = (fl ? fl + ' ' : '') + countryName(cc); }
+      const vis = (r.visitors != null) ? (' · ' + r.visitors + ' vis.') : '';
+      return '<div class="stats-row"><div class="stats-bar" style="width:' + w + '%"></div><span class="stats-name">' +
+        escapeHtml(label) + '</span><span class="stats-val">' + r.views + ' <em>vues</em>' + vis + '</span></div>';
     }).join('');
   }
 
