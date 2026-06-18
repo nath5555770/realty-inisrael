@@ -79,6 +79,82 @@
     $$('.tab-pane').forEach(p => { p.hidden = p.dataset.tabPane !== name; });
   }
 
+  // ---- Statistiques (audience) ----------------------------------------------
+  function pageLabel(path) {
+    let p = (path || '/').replace(/\.html$/, ''), lang = '';
+    const m = p.match(/\.(en|he|ru)$/); if (m) { lang = ' · ' + m[1].toUpperCase(); p = p.replace(/\.(en|he|ru)$/, ''); }
+    const key = p.replace(/^\//, '') || 'accueil';
+    const names = { 'accueil': 'Accueil', 'portefeuille': 'Portefeuille', 'agence': "L'Agence", 'journal': 'Journal',
+      'contact': 'Contact', 'faq': 'FAQ', 'honoraires': 'Honoraires', 'aliyah': 'Aliyah',
+      'mentions-legales': 'Mentions légales', 'rgpd': 'RGPD', 'accessibilite': 'Accessibilité' };
+    return (names[key] || key) + lang;
+  }
+
+  async function loadStats() {
+    const note = $('#statsUnavailable');
+    try {
+      const [ov, pages, daily] = await Promise.all([
+        sb.rpc('stats_overview'),
+        sb.rpc('stats_top_pages', { p_days: 30, p_limit: 12 }),
+        sb.rpc('stats_daily', { p_days: 14 })
+      ]);
+      if (ov.error || pages.error || daily.error) throw (ov.error || pages.error || daily.error);
+      if (note) note.hidden = true;
+      renderStatsOverview(ov.data || {});
+      renderStatsChart(daily.data || []);
+      renderTopPages(pages.data || []);
+      renderTopListings();
+    } catch (e) {
+      if (note) { note.hidden = false; note.innerHTML = '⚠️ Les statistiques ne sont pas encore activées. Lancez le script SQL <code>20260617_site_analytics.sql</code> dans Supabase (SQL Editor) pour démarrer la collecte.'; }
+    }
+  }
+
+  function renderStatsOverview(o) {
+    const set = (id, v) => { const el = $('#' + id); if (el) el.textContent = (v == null ? '0' : v); };
+    set('stViewsToday', o.views_today); set('stVisitorsToday', o.visitors_today);
+    set('stViews7', o.views_7d); set('stVisitors7', o.visitors_7d);
+    set('stViews30', o.views_30d); set('stViewsTotal', o.views_total);
+  }
+
+  function renderStatsChart(rows) {
+    const host = $('#statsChart'); if (!host) return;
+    const days = [];
+    for (let i = 13; i >= 0; i--) { const d = new Date(); d.setUTCDate(d.getUTCDate() - i); days.push(d.toISOString().slice(0, 10)); }
+    const map = {}; (rows || []).forEach(r => { map[r.day] = r.views; });
+    let max = 1; days.forEach(d => { if ((map[d] || 0) > max) max = map[d]; });
+    host.innerHTML = days.map(d => {
+      const v = map[d] || 0, h = Math.round((v / max) * 100), lbl = d.slice(8) + '/' + d.slice(5, 7);
+      return '<div class="sc-bar" title="' + d + ' : ' + v + ' vues"><div class="sc-val">' + (v || '') + '</div><div class="sc-fill" style="height:' + Math.max(h, v ? 4 : 0) + '%"></div><div class="sc-day">' + lbl + '</div></div>';
+    }).join('');
+  }
+
+  function renderTopPages(rows) {
+    const host = $('#statsTopPages'); if (!host) return;
+    if (!rows.length) { host.innerHTML = '<div class="stats-empty">Aucune donnée pour l\'instant.</div>'; return; }
+    const max = rows[0].views || 1;
+    host.innerHTML = rows.map(r => {
+      const w = Math.round((r.views / max) * 100);
+      return '<div class="stats-row"><div class="stats-bar" style="width:' + w + '%"></div><span class="stats-name">' +
+        escapeHtml(pageLabel(r.path)) + '</span><span class="stats-val">' + r.views + ' <em>vues</em> · ' + r.visitors + ' vis.</span></div>';
+    }).join('');
+  }
+
+  function renderTopListings() {
+    const host = $('#statsTopListings'); if (!host) return;
+    const vc = STATE.viewCounts || {};
+    const rows = (STATE.listings || []).filter(l => !l.archived_at)
+      .map(l => ({ l, v: vc[l.id] || 0 })).filter(x => x.v > 0)
+      .sort((a, b) => b.v - a.v).slice(0, 12);
+    if (!rows.length) { host.innerHTML = '<div class="stats-empty">Aucune vue d\'annonce pour l\'instant.</div>'; return; }
+    const max = rows[0].v || 1;
+    host.innerHTML = rows.map(x => {
+      const w = Math.round((x.v / max) * 100);
+      const name = (x.l.title_main || x.l.ref || 'Annonce') + (x.l.title_accent ? ' ' + x.l.title_accent : '');
+      return '<div class="stats-row"><div class="stats-bar" style="width:' + w + '%"></div><span class="stats-name">' +
+        escapeHtml(name) + '</span><span class="stats-val">👁 ' + x.v + '</span></div>';
+    }).join('');
+  }
+
   function toast(msg, kind, title) {
     const t = document.createElement('div');
     t.className = 'toast' + (kind ? ' ' + kind : '');
@@ -1410,11 +1486,13 @@
       showView('dashboard');
       showTab(tab);
       if (tab === 'leads') loadLeadsAndRender();
+      if (tab === 'stats') loadStats();
     }));
 
     // Listings tab
     $('#reloadBtn').addEventListener('click', async () => { try { await loadListings(); listingsStats(); renderListingsTable(); renderListingsAuthorFilter(); toast('Annonces rechargées.', 'success'); } catch (_) {} });
     { const rlb = $('#reloadLeadsBtn'); if (rlb) rlb.addEventListener('click', loadLeadsAndRender); }
+    { const rsb = $('#reloadStatsBtn'); if (rsb) rsb.addEventListener('click', loadStats); }
     const trashBtn = $('#trashToggleBtn');
     if (trashBtn) trashBtn.addEventListener('click', () => {
       STATE.viewMode = STATE.viewMode === 'trash' ? 'active' : 'trash';

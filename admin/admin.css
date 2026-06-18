@@ -1871,3 +1871,35 @@ body {
 }
 .gallery-tile-x:hover { background: var(--teal-deep); transform: scale(1.1); }
 .gallery-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem 1rem; }
+
+/* ===== Statistiques (audience) ============================================= */
+.stats-note {
+  background: #fdf6e3; border: 1px solid var(--gold-pale); color: var(--ink-soft);
+  border-radius: 10px; padding: 14px 16px; margin: 0 0 20px; font-size: 14px; line-height: 1.5;
+}
+.stats-note code { background: var(--paper-deep); padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+.stats-chart-wrap {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 18px 20px 14px; margin: 8px 0 22px; box-shadow: var(--shadow);
+}
+.stats-h3 { font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; font-weight: 600; }
+.stats-h3-sub { color: var(--gold-deep); text-transform: none; letter-spacing: 0; font-weight: 400; }
+.stats-chart { display: flex; align-items: flex-end; gap: 6px; height: 160px; }
+.sc-bar { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; min-width: 0; }
+.sc-fill { width: 70%; max-width: 30px; background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%); border-radius: 4px 4px 0 0; transition: height 0.5s cubic-bezier(0.2,0.85,0.2,1); }
+.sc-val { font-size: 11px; color: var(--ink-soft); margin-bottom: 4px; min-height: 14px; font-weight: 600; }
+.sc-day { font-size: 10px; color: var(--muted); margin-top: 6px; white-space: nowrap; }
+.stats-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.stats-col { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; box-shadow: var(--shadow); }
+.stats-list { display: flex; flex-direction: column; gap: 4px; }
+.stats-row { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border-radius: 8px; overflow: hidden; }
+.stats-bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--gold-pale); opacity: 0.35; border-radius: 8px; z-index: 0; }
+.stats-name { position: relative; z-index: 1; font-size: 14px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stats-val { position: relative; z-index: 1; font-size: 13px; color: var(--ink-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.stats-val em { font-style: normal; color: var(--muted); font-size: 11px; }
+.stats-empty { color: var(--muted); font-size: 14px; padding: 16px 4px; }
+@media (max-width: 860px) {
+  .stats-cols { grid-template-columns: 1fr; }
+  .stats-chart { height: 130px; }
+  .sc-day { font-size: 9px; }
+}

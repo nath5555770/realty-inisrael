@@ -29,6 +29,29 @@
   const CACHE_SETTINGS = 'sl-cms-settings-v1';
   const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
+  // ---- First-party page-view tracking (privacy-clean: no cookie, no IP, no PII)
+  // Fires once per page load → public.track_event RPC (write-only, SECURITY
+  // DEFINER). The visitor id is an anonymous per-session value (sessionStorage)
+  // used only to estimate unique visits — it identifies no one. Never blocks the
+  // page and silently no-ops if the RPC isn't deployed. Admin pages are excluded.
+  (function trackPageView() {
+    try {
+      if (/\/admin(\/|$)/.test(location.pathname || '')) return;
+      var vid;
+      try {
+        vid = sessionStorage.getItem('sl-sid');
+        if (!vid) { vid = Date.now().toString(36) + Math.random().toString(36).slice(2, 10); sessionStorage.setItem('sl-sid', vid); }
+      } catch (_) { vid = 'na'; }
+      var path = (location.pathname || '/').replace(/index\.html$/, '') || '/';
+      fetch(SB_URL + '/rest/v1/rpc/track_event', {
+        method: 'POST',
+        headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ p_path: path.slice(0, 300), p_visitor: vid }),
+        keepalive: true
+      }).catch(function () {});
+    } catch (_) {}
+  })();
+
   function currentLang() {
     try { return localStorage.getItem('sl-lang') || 'fr'; } catch (_) { return 'fr'; }
   }

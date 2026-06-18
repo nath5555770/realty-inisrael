@@ -57,6 +57,7 @@
     <button class="nav-btn" data-tab="texts">Textes</button>
     <button class="nav-btn" data-tab="settings">Réglages</button>
     <button class="nav-btn" data-tab="leads">Demandes</button>
+    <button class="nav-btn" data-tab="stats">📊 Stats</button>
     <button class="nav-btn" data-tab="agency" data-admin-only>Agence</button>
     <button class="nav-btn" data-tab="team" data-admin-only>Équipe</button>
   </nav>
@@ -69,6 +70,43 @@
 <!-- ===== DASHBOARD VIEW ===== -->
 <section class="view view-dashboard" data-view="dashboard" hidden>
   <main class="dash">
+
+    <!-- Tab: Statistiques -->
+    <div class="tab-pane" data-tab-pane="stats" hidden>
+      <div class="dash-head">
+        <div>
+          <div class="eyebrow">— AUDIENCE</div>
+          <h2>Vos <em>statistiques.</em></h2>
+          <p class="dash-sub">Trafic du site et annonces les plus consultées. Données anonymes, sans cookie, sans donnée personnelle.</p>
+        </div>
+        <div class="dash-actions">
+          <button class="btn-ghost" id="reloadStatsBtn" title="Recharger">↻ Actualiser</button>
+        </div>
+      </div>
+      <div id="statsUnavailable" class="stats-note" hidden></div>
+      <div class="stats-strip">
+        <div class="stat"><span class="stat-num" id="stViewsToday">—</span><span class="stat-lbl">Vues aujourd'hui</span></div>
+        <div class="stat"><span class="stat-num" id="stVisitorsToday">—</span><span class="stat-lbl">Visiteurs aujourd'hui</span></div>
+        <div class="stat"><span class="stat-num" id="stViews7">—</span><span class="stat-lbl">Vues · 7 jours</span></div>
+        <div class="stat"><span class="stat-num" id="stVisitors7">—</span><span class="stat-lbl">Visiteurs · 7 jours</span></div>
+        <div class="stat"><span class="stat-num" id="stViews30">—</span><span class="stat-lbl">Vues · 30 jours</span></div>
+        <div class="stat"><span class="stat-num" id="stViewsTotal">—</span><span class="stat-lbl">Vues · total</span></div>
+      </div>
+      <div class="stats-chart-wrap">
+        <div class="stats-h3">Visites des 14 derniers jours</div>
+        <div id="statsChart" class="stats-chart"></div>
+      </div>
+      <div class="stats-cols">
+        <div class="stats-col">
+          <div class="stats-h3">Pages les plus vues <span class="stats-h3-sub">(30 jours)</span></div>
+          <div id="statsTopPages" class="stats-list"></div>
+        </div>
+        <div class="stats-col">
+          <div class="stats-h3">Annonces les plus vues</div>
+          <div id="statsTopListings" class="stats-list"></div>
+        </div>
+      </div>
+    </div>
 
     <!-- Tab: Listings -->
     <div class="tab-pane active" data-tab-pane="listings">
